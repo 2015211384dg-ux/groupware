@@ -1131,20 +1131,33 @@
   background: #ffffff;
 }
 
-.comment-card.reply {
-  margin-left: 52px;
-  background: #f7f8ff;
-  border-left: 3px solid #c7d2fe;
+.reply-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
 }
 
-.reply-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  color: #667eea;
-  font-size: 11px;
-  font-weight: 600;
-  margin-bottom: 5px;
+.reply-connector {
+  flex-shrink: 0;
+  width: 20px;
+  color: #adb5bd;
+  font-size: 16px;
+  line-height: 1;
+  padding-top: 10px;
+  user-select: none;
+}
+
+.comment-card.reply {
+  flex: 1;
+  background: #f7f8ff;
+}
+
+.mention-highlight {
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 3px;
+  padding: 0 2px;
+  font-style: normal;
 }
 
 .comment-card-top {
@@ -1243,7 +1256,8 @@
   .comments-section-v3 {
     padding: 18px 20px 22px;
   }
-  .comment-card.reply {
-    margin-left: 24px;
+  .reply-connector {
+    font-size: 14px;
+    width: 16px;
   }
 }

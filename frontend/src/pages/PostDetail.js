@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/authService';
 import './PostDetail.css';
 import { useToast } from '../components/Toast';
-import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart, IconReply } from '../components/Icons';
+import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart } from '../components/Icons';
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'HR_ADMIN'];
 
@@ -291,24 +291,27 @@ const submitReply = async () => {
   }
 };
 
+  const renderMentionText = (text) => {
+    const parts = text.split(/(@[^\s]+)/g);
+    return parts.map((part, i) =>
+      part.startsWith('@')
+        ? <mark key={i} className="mention-highlight">{part}</mark>
+        : part
+    );
+  };
+
   const renderCommentItem = (c, depth = 0) => {
     const replies = childrenMap.get(c.id) || [];
     const isReply = depth > 0;
 
-    return (
-      <div key={c.id} className={`comment-card ${isReply ? 'reply' : ''}`}>
+    const cardNode = (
+      <div className={`comment-card ${isReply ? 'reply' : ''}`}>
         <div className="comment-card-top">
           <div className="comment-avatar-v2">
             {(c.authorName || 'U').toString().charAt(0)}
           </div>
 
           <div className="comment-body">
-            {isReply && (
-              <div className="reply-indicator no-print">
-                <IconReply size={12} />
-                <span>답글</span>
-              </div>
-            )}
             <div className="comment-meta-row">
               <div className="comment-author">
                 <span className="comment-author-name">{c.authorName}</span>
@@ -320,7 +323,7 @@ const submitReply = async () => {
               <div className="comment-date">{formatDate(c.createdAt)}</div>
             </div>
 
-            <div className="comment-text">{c.content}</div>
+            <div className="comment-text">{renderMentionText(c.content)}</div>
 
             <div className="comment-actions-row no-print">
                 <button className="comment-action-btn" onClick={() => openReply(c)}>답글</button>
@@ -336,6 +339,17 @@ const submitReply = async () => {
         ) : null}
       </div>
     );
+
+    if (isReply) {
+      return (
+        <div key={c.id} className="reply-wrapper">
+          <div className="reply-connector">ㄴ</div>
+          {cardNode}
+        </div>
+      );
+    }
+
+    return <React.Fragment key={c.id}>{cardNode}</React.Fragment>;
   };
 
   if (loading) return <div style={{ padding: 24 }}>로딩 중...</div>;
