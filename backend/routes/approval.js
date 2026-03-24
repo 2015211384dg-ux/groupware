@@ -179,10 +179,10 @@ router.get('/documents', async (req, res) => {
             where = `d.drafter_id = ? AND d.status = 'DRAFT'`;
             whereParams.push(req.user.id);
         } else if (box === 'my') {
-            where = `d.drafter_id = ? AND d.status != 'DRAFT'`;
+            where = `d.drafter_id = ? AND d.status NOT IN ('DRAFT','CANCELLED')`;
             whereParams.push(req.user.id);
         } else if (box === 'home') {
-            where = `d.drafter_id = ? AND d.status != 'DRAFT'`;
+            where = `d.drafter_id = ? AND d.status NOT IN ('DRAFT','CANCELLED')`;
             whereParams.push(req.user.id);
         } else if (box === 'inbox') {
             where = `d.id IN (
