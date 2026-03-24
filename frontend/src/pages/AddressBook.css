@@ -1,0 +1,266 @@
+.addressbook-page {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+    overflow: hidden;
+}
+
+/* 헤더 */
+.ab-header {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ab-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ab-header-left h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.ab-total {
+    background: #f0f2ff;
+    color: #667eea;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.ab-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ab-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #999;
+    width: 260px;
+}
+
+.ab-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    flex: 1;
+}
+
+.ab-header-right select {
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+    color: #333;
+}
+
+.ab-sort {
+    display: flex;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ab-sort button {
+    padding: 8px 14px;
+    background: white;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.ab-sort button + button {
+    border-left: 1px solid #e5e7eb;
+}
+
+.ab-sort button.active {
+    background: #667eea;
+    color: white;
+}
+
+/* 초성 바 */
+.ab-alpha-bar {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    flex-shrink: 0;
+}
+
+.ab-alpha-bar button {
+    min-width: 32px;
+    height: 32px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.ab-alpha-bar button:hover {
+    background: #f0f2ff;
+    color: #667eea;
+}
+
+.ab-alpha-bar button.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+/* 콘텐츠 */
+.ab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+}
+
+.ab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+/* 카드 */
+.ab-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    border: 1px solid #f0f0f0;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.ab-card:hover {
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
+    border-color: #d0d5f5;
+}
+
+.ab-card-avatar {
+    flex-shrink: 0;
+}
+
+.ab-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ab-card-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.ab-card-meta {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.ab-dept {
+    font-size: 12px;
+    background: #f0f2ff;
+    color: #667eea;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.ab-position {
+    font-size: 12px;
+    background: #f0fdf4;
+    color: #059669;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.ab-card-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ab-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+a.ab-contact-item:hover .ab-contact-value {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+.ab-contact-label {
+    color: #aaa;
+    font-size: 11px;
+    font-weight: 600;
+    width: 34px;
+    flex-shrink: 0;
+}
+
+.ab-contact-value {
+    color: #444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ab-no-contact {
+    font-size: 12px;
+    color: #ccc;
+}
+
+/* 빈 상태 */
+.ab-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #ccc;
+}
+
+.ab-empty p {
+    margin-top: 12px;
+    font-size: 15px;
+}

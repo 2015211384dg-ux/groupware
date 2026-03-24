@@ -1,0 +1,811 @@
+.settings-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* 헤더 */
+.settings-header {
+    margin-bottom: 24px;
+}
+
+.settings-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+}
+
+.settings-header p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+/* 탭 */
+.settings-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.settings-tabs .tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+}
+
+.settings-tabs .tab:hover {
+    color: #667eea;
+}
+
+.settings-tabs .tab.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+/* 설정 폼 공통 */
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.form-section {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.form-section h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 14px 0;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group:last-child { margin-bottom: 0; }
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    max-width: 480px;
+    padding: 9px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1a1a1a;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+
+.form-group textarea { resize: vertical; }
+
+.help-text {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+.form-actions {
+    padding-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+/* 설정 내용 */
+.settings-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.settings-section {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 24px;
+    padding-bottom: 0;
+}
+
+.settings-section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 16px 0;
+}
+
+/* 설정 항목 */
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-item:last-child {
+    margin-bottom: 0;
+}
+
+.setting-item label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.setting-item input[type="text"],
+.setting-item input[type="number"],
+.setting-item textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.setting-item input:focus,
+.setting-item textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.setting-item textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.setting-hint {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-top: 6px;
+}
+
+/* 체크박스 라벨 */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.checkbox-label span {
+    font-weight: 500;
+}
+
+/* 토글 행 (설정 체크박스용) */
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fafafa;
+}
+
+.toggle-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.toggle-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.toggle-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+}
+
+.toggle-checkbox {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+/* 저장 버튼 */
+.save-btn {
+    padding: 12px 32px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.save-btn:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 권한 테이블 */
+.permissions-table {
+    overflow-x: auto;
+}
+
+.permissions-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.permissions-table th,
+.permissions-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.permissions-table th {
+    background: #f8f9fa;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+.permissions-table td {
+    font-size: 14px;
+}
+
+.permissions-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.permissions-table input[type="checkbox"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 로그 */
+.logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logs-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.logs-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.refresh-btn,
+.export-btn {
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.refresh-btn:hover,
+.export-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.logs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.log-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.log-item.info    { background: #f0f9ff; border-color: #e0f2fe; }
+.log-item.warning { background: #fffbeb; border-color: #fef3c7; }
+.log-item.error   { background: #fef2f2; border-color: #fee2e2; }
+.log-item.success { background: #f0fdf4; border-color: #dcfce7; }
+
+.log-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.log-item.info .log-icon { color: #0ea5e9; }
+.log-item.warning .log-icon { color: #f59e0b; }
+.log-item.error .log-icon { color: #ef4444; }
+.log-item.success .log-icon { color: #10b981; }
+
+.log-content {
+    flex: 1;
+}
+
+.log-message {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 4px 0;
+}
+
+.log-time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 로그 사용자 검색 */
+.logs-user-search {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #f8f9ff;
+    border: 1px solid #e8eaf6;
+    border-radius: 8px;
+}
+
+.logs-user-search label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.logs-user-search-row {
+    display: flex;
+    gap: 8px;
+}
+
+.logs-user-search-row input {
+    flex: 1;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.logs-user-search-row input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+
+/* 로그 툴바 */
+.logs-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.logs-filters {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.logs-filters select,
+.logs-filters input {
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.logs-filters input { flex: 1; min-width: 160px; }
+
+/* 로그 보관 기간 */
+.log-retention-info {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.log-retention-info input {
+    padding: 6px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* 로그 뱃지 */
+.log-badge {
+    flex-shrink: 0;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    align-self: flex-start;
+}
+.log-badge-info    { background: #dbeafe; color: #1d4ed8; }
+.log-badge-success { background: #d1fae5; color: #065f46; }
+.log-badge-warning { background: #fef3c7; color: #92400e; }
+.log-badge-error   { background: #fee2e2; color: #991b1b; }
+
+/* 섹션 설명 */
+.section-desc {
+    font-size: 13px;
+    color: #666;
+    margin: -8px 0 16px 0;
+}
+
+/* 공지 관리 */
+.notice-manager { }
+
+.notice-manager-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+}
+
+.notice-manager-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 4px 0;
+}
+
+.notice-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+.notice-form-card {
+    background: #f8f9ff;
+    border: 1px solid #e8eaf6;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.notice-form-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #374151;
+    margin: 0 0 14px 0;
+}
+
+.notice-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.notice-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: white;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.notice-item.active {
+    background: #f5f3ff;
+    border-color: #a5b4fc;
+}
+
+.notice-item.inactive {
+    background: #fafafa;
+    opacity: 0.7;
+}
+
+.notice-item-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+}
+
+.notice-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+.notice-status-dot.on { background: #667eea; }
+
+.notice-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.notice-item-text strong {
+    font-size: 14px;
+    color: #1a1a1a;
+}
+
+.notice-item-preview {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+}
+
+.notice-item-date {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 2px;
+}
+
+/* 공지 아이템 행 레이아웃 */
+.notice-item > *:not(.notice-edit-form) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.notice-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* 토글 스위치 */
+.notice-toggle {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.notice-toggle input { opacity: 0; width: 0; height: 0; }
+
+.notice-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.notice-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.notice-toggle input:checked + .notice-toggle-slider { background: #667eea; }
+.notice-toggle input:checked + .notice-toggle-slider::before { transform: translateX(16px); }
+
+/* 아이콘 버튼 */
+.icon-btn {
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 5px 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #555;
+    transition: all 0.15s;
+}
+
+.icon-btn:hover { background: #f3f4f6; }
+.icon-btn.danger { color: #ef4444; }
+.icon-btn.danger:hover { background: #fef2f2; border-color: #fecaca; }
+
+.notice-edit-form { width: 100%; }
+
+/* 빈 공지 상태 */
+.empty-logs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+    color: #999;
+    font-size: 14px;
+    gap: 8px;
+}
+
+/* 공지 미리보기 */
+.notice-preview {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.notice-preview h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin: 0 0 12px 0;
+}
+
+.notice-preview-box {
+    padding: 20px;
+    background: #fffbeb;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+.notice-preview-box strong {
+    font-size: 15px;
+    color: #1a1a1a;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .settings-page {
+        padding: 16px;
+    }
+
+    .settings-header h1 {
+        font-size: 24px;
+    }
+
+    .settings-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .settings-tabs .tab {
+        white-space: nowrap;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .settings-content {
+        padding: 16px;
+    }
+
+    .setting-item input[type="text"],
+    .setting-item input[type="number"],
+    .setting-item textarea {
+        max-width: 100%;
+    }
+
+    .logs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .logs-actions {
+        width: 100%;
+    }
+
+    .refresh-btn,
+    .export-btn {
+        flex: 1;
+    }
+
+    .permissions-table {
+        font-size: 12px;
+    }
+
+    .permissions-table th,
+    .permissions-table td {
+        padding: 8px;
+    }
+}

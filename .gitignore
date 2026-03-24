@@ -1,0 +1,34 @@
+# 의존성 패키지
+node_modules/
+**/node_modules/
+
+# 환경 변수 (보안)
+.env
+.env.*
+**/.env
+**/.env.*
+
+# 빌드 결과물 (배포 서버에서 직접 빌드)
+frontend/dist/
+frontend/build/
+desktop/dist/
+
+# 백업 파일
+*.zip
+Z_Backup/
+backup*/
+
+# 로그
+logs/
+*.log
+
+# Claude Code 설정
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

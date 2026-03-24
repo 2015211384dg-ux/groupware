@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹웨어 알림</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">G</div>
+            <h1>그룹웨어 알림</h1>
+            <p>계정으로 로그인하세요</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="field">
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="아이디"
+                    autocomplete="username"
+                    required
+                />
+            </div>
+            <div class="field">
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="비밀번호"
+                    autocomplete="current-password"
+                    required
+                />
+            </div>
+
+            <div class="error" id="errorMsg"></div>
+
+            <button type="submit" id="loginBtn">
+                <span id="btnText">로그인</span>
+                <span id="btnSpinner" class="spinner" style="display:none"></span>
+            </button>
+        </form>
+
+        <div class="server-toggle" id="toggleServer">▸ 서버 설정</div>
+        <div class="server-section" id="serverSection" style="display:none">
+            <div class="field">
+                <input
+                    type="text"
+                    id="serverUrl"
+                    placeholder="서버 URL (예: http://10.18.10.78:3000)"
+                />
+            </div>
+            <p class="server-hint">비워두면 기본 서버에 연결합니다.</p>
+        </div>
+    </div>
+
+    <script>
+        const form       = document.getElementById('loginForm');
+        const btnText    = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const errorMsg   = document.getElementById('errorMsg');
+        const toggle     = document.getElementById('toggleServer');
+        const serverSec  = document.getElementById('serverSection');
+
+        toggle.addEventListener('click', () => {
+            const open = serverSec.style.display !== 'none';
+            serverSec.style.display = open ? 'none' : 'block';
+            toggle.textContent = open ? '▸ 서버 설정' : '▾ 서버 설정';
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.textContent = '';
+
+            const username  = document.getElementById('username').value.trim();
+            const password  = document.getElementById('password').value;
+            const serverUrl = document.getElementById('serverUrl').value.trim() || null;
+
+            if (!username || !password) return;
+
+            btnText.style.display    = 'none';
+            btnSpinner.style.display = 'inline-block';
+            form.querySelector('button').disabled = true;
+
+            const result = await window.api.login(username, password, serverUrl);
+
+            if (result.success) {
+                const btn = form.querySelector('button');
+                btn.style.background = '#10b981';
+                btn.style.transform  = 'scale(1.03)';
+                btn.style.transition = 'all 0.2s ease';
+                btnSpinner.style.display = 'none';
+                btnText.style.display    = 'inline';
+                btnText.textContent = '✓ 로그인 성공!';
+            } else {
+                btnText.style.display    = 'inline';
+                btnSpinner.style.display = 'none';
+                form.querySelector('button').disabled = false;
+                errorMsg.textContent = result.message || '로그인에 실패했습니다.';
+            }
+        });
+    </script>
+</body>
+</html>

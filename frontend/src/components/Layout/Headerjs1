@@ -1,0 +1,104 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../../services/SettingsContext';
+import './Header.css';
+
+function Header({ user, onLogout, onToggleSidebar }) {
+    const [showUserMenu, setShowUserMenu] = useState(false);
+    const { siteSettings } = useSettings();
+    const navigate = useNavigate();
+
+    const handleMenuClick = (path) => {
+        navigate(path);
+        setShowUserMenu(false);
+    };
+
+    // 관리자 여부 확인
+    const isAdmin = user?.role === 'admin';
+
+    return (
+        <header className="header">
+            <div className="header-left">
+                <button className="menu-toggle" onClick={onToggleSidebar}>
+                    ☰
+                </button>
+                <h1 className="header-logo">{siteSettings.site_name}</h1>
+            </div>
+
+            <div className="header-right">
+                <button className="notification-button">
+                    🔔
+                    <span className="notification-badge">3</span>
+                </button>
+
+                <div className="user-menu">
+                    <button 
+                        className="user-button"
+                        onClick={() => setShowUserMenu(!showUserMenu)}
+                    >
+                        <div className="user-avatar">
+                            {user?.name?.charAt(0) || 'U'}
+                        </div>
+                        <span className="user-name">{user?.name}</span>
+                        <span className="user-dropdown">▼</span>
+                    </button>
+
+                    {showUserMenu && (
+                        <>
+                            <div 
+                                className="dropdown-overlay" 
+                                onClick={() => setShowUserMenu(false)}
+                            />
+                            <div className="user-dropdown-menu">
+                                <div className="dropdown-header">
+                                    <div className="dropdown-avatar">
+                                        {user?.name?.charAt(0) || 'U'}
+                                    </div>
+                                    <div className="dropdown-info">
+                                        <p className="dropdown-name">{user?.name}</p>
+                                        <p className="dropdown-email">{user?.email}</p>
+                                        <p className="dropdown-role">{user?.position || '직원'}</p>
+                                    </div>
+                                </div>
+                                <div className="dropdown-divider" />
+                                
+                                {/* 내 정보 */}
+                                <button 
+                                    className="dropdown-item"
+                                    onClick={() => handleMenuClick('/hr/myinfo')}
+                                >
+                                    👤 내 정보
+                                </button>
+                                
+                                {/* 내 설정 */}
+                                <button 
+                                    className="dropdown-item"
+                                    onClick={() => handleMenuClick('/my-settings')}
+                                >
+                                    ⚙️ 내 설정
+                                </button>
+                                
+                                {/* 시스템 설정 (관리자만) */}
+                                {isAdmin && (
+                                    <button 
+                                        className="dropdown-item"
+                                        onClick={() => handleMenuClick('/admin/settings')}
+                                    >
+                                        🔧 시스템 설정
+                                    </button>
+                                )}
+                                
+                                <div className="dropdown-divider" />
+                                <button className="dropdown-item logout" onClick={onLogout}>
+                                    🚪 로그아웃
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+        </header>
+    );
+}
+
+export default Header;

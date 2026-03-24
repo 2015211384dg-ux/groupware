@@ -1,0 +1,175 @@
+import React, { useState, memo, useMemo, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import './Sidebar.css';
+import { IconHome, IconBoard, IconAddressBook, IconHR, IconCalendar, IconApproval, IconAdmin, IconSearch, IconMessageSquare } from '../../components/Icons';
+
+const Sidebar = memo(({ isOpen, user }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const menuItems = useMemo(() => {
+        const items = [
+            { title: '홈',    icon: <IconHome />, path: '/' },
+            {
+                title: '게시판', icon: <IconBoard />, path: '/boards',
+                subItems: [
+                    { title: '공지사항',   path: '/boards/1' },
+                    { title: '자료실',     path: '/boards/2' },
+                    { title: '자유게시판', path: '/boards/3' },
+                    { title: 'FAQ',        path: '/boards/4' }
+                ]
+            },
+            {
+                title: '주소록', icon: <IconAddressBook />, path: '/addressbook',
+                subItems: [
+                    { title: '조직도',       path: '/addressbook/organization' },
+                    { title: '전체 주소록',  path: '/addressbook/all' },
+                    { title: '개인 주소록',  path: '/addressbook/personal' }
+                ]
+            },
+            {
+                title: 'HR', icon: <IconHR />, path: '/hr',
+                subItems: [
+                    { title: '내 정보',   path: '/hr/myinfo' },
+                    { title: '근태 관리', path: 'https://shiftee.io/ko/accounts/login', external: true },
+                    { title: '연차 신청', path: 'https://shiftee.io/ko/accounts/login', external: true }
+                ]
+            },
+            { title: '캘린더', icon: <IconCalendar />, path: '/calendar' },
+            {
+                title: '결재', icon: <IconApproval />, path: '/approval',
+                subItems: [
+                    { title: '결재 홈',    path: '/approval?box=home' },
+                    { title: '받은 결재함', path: '/approval?box=inbox' },
+                    { title: '진행/완료',  path: '/approval?box=my' },
+                    { title: '임시 저장',  path: '/approval?box=draft' },
+                ]
+            },
+        ];
+
+        items.push({ title: '피드백', icon: <IconMessageSquare />, path: '/feedback' });
+
+        if (['SUPER_ADMIN', 'HR_ADMIN', 'ADMIN'].includes(user?.role)) {
+            items.push({
+                title: '관리', icon: <IconAdmin />, path: '/admin',
+                subItems: [
+                    { title: '사용자 관리', path: '/admin/users' },
+                    { title: '부서 관리',   path: '/admin/departments' },
+                    { title: '시스템 설정', path: '/admin/settings' },
+                    { title: '결재 관리',   path: '/admin/approval' },
+                    { title: '피드백 관리', path: '/admin/feedback' }
+                ]
+            });
+        }
+
+        items.push({ title: '검색', icon: <IconSearch />, path: '/search' });
+        return items;
+    }, [user?.role]);
+
+    // 현재 경로에 해당하는 메뉴만 기본 오픈
+    const getDefaultOpen = () => {
+        const path = location.pathname;
+        const idx = menuItems.findIndex(item =>
+            item.subItems && (
+                path.startsWith(item.path + '/') ||
+                path.startsWith(item.path + '?') ||
+                (item.path !== '/' && path === item.path) ||
+                item.subItems.some(s => !s.external && path.startsWith(s.path))
+            )
+        );
+        return idx >= 0 ? idx : null;
+    };
+
+    const [openIndex, setOpenIndex] = useState(getDefaultOpen);
+
+    // 경로 변경 시 해당 메뉴 자동 열기
+    useEffect(() => {
+        const idx = getDefaultOpen();
+        if (idx !== null) setOpenIndex(idx);
+    }, [location.pathname]);
+
+    const handleToggle = (index, hasSubItems) => {
+        if (!hasSubItems) return;
+        setOpenIndex(prev => prev === index ? null : index);
+    };
+
+    return (
+        <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+            <nav className="sidebar-nav">
+                {menuItems.map((item, index) => {
+                    const isExpanded = openIndex === index;
+                    const hasSubItems = !!item.subItems;
+
+                    return hasSubItems ? (
+                        <div key={index} className="nav-item-group">
+                            {/* 부모 메뉴 - 클릭 시 토글 */}
+                            <div
+                                className={`nav-item ${isExpanded ? 'active' : ''}`}
+                                onClick={() => handleToggle(index, true)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <span className="nav-icon">{item.icon}</span>
+                                {isOpen && (
+                                    <>
+                                        <span className="nav-title">{item.title}</span>
+                                        <span className={`nav-arrow ${isExpanded ? 'open' : ''}`}>›</span>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* 서브메뉴 - 펼쳐진 경우만 렌더 */}
+                            {isOpen && isExpanded && (
+                                <div className="sub-nav">
+                                    {item.subItems.map((subItem, subIndex) => (
+                                        subItem.external ? (
+                                            <a
+                                                key={subIndex}
+                                                href={subItem.path}
+                                                className="sub-nav-item"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {subItem.title}
+                                            </a>
+                                        ) : (() => {
+                                            const [spath, squery] = subItem.path.split('?');
+                                            const isActive = squery
+                                                ? location.pathname === spath && location.search === `?${squery}`
+                                                : location.pathname === spath && !location.search;
+                                            return (
+                                                <a
+                                                    key={subIndex}
+                                                    href={subItem.path}
+                                                    className={`sub-nav-item ${isActive ? 'active' : ''}`}
+                                                    onClick={(e) => { e.preventDefault(); navigate(subItem.path); }}
+                                                >
+                                                    {subItem.title}
+                                                </a>
+                                            );
+                                        })()
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <NavLink
+                            key={index}
+                            to={item.path}
+                            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                            end
+                            onClick={() => setOpenIndex(null)}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            {isOpen && (
+                                <span className="nav-title">{item.title}</span>
+                            )}
+                        </NavLink>
+                    );
+                })}
+            </nav>
+        </aside>
+    );
+});
+
+Sidebar.displayName = 'Sidebar';
+export default Sidebar;

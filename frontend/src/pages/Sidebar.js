@@ -1,0 +1,131 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import './Sidebar.css';
+
+function Sidebar({ isOpen, user }) {
+    const menuItems = [
+        {
+            title: '홈',
+            icon: '🏠',
+            path: '/',
+            badge: null
+        },
+        {
+            title: '게시판',
+            icon: '📋',
+            path: '/boards',
+            badge: 'Phase 2',
+            subItems: [
+                { title: '공지사항', path: '/boards/1' },
+                { title: '자료실', path: '/boards/2' },
+                { title: '자유게시판', path: '/boards/3' },
+                { title: 'FAQ', path: '/boards/4' }
+            ]
+        },
+        {
+            title: '주소록',
+            icon: '📇',
+            path: '/addressbook',
+            badge: 'Phase 3',
+            subItems: [
+                { title: '조직도', path: '/addressbook/organization' },
+                { title: '전체 주소록', path: '/addressbook/all' },
+                { title: '개인 주소록', path: '/addressbook/personal' }
+            ]
+        },
+        {
+            title: 'HR',
+            icon: '👥',
+            path: '/hr',
+            badge: 'Phase 4',
+            subItems: [
+                { title: '내 정보', path: '/hr/myinfo' },
+                { 
+                    title: '근태 관리', 
+                    path: 'https://shiftee.io/ko/accounts/login',
+                    external: true 
+                },
+                { 
+                    title: '연차 신청', 
+                    path: 'https://shiftee.io/ko/accounts/login',
+                    external: true 
+                }
+            ]
+        }
+    ];
+
+    // 관리자 메뉴 추가
+    if (['SUPER_ADMIN', 'HR_ADMIN'].includes(user?.role)) {
+        menuItems.push({
+            title: '관리',
+            icon: '⚙️',
+            path: '/admin',
+            badge: null,
+            subItems: [
+                { title: '사용자 관리', path: '/admin/users' },
+                { title: '부서 관리', path: '/admin/departments' },
+                { title: '시스템 설정', path: '/admin/settings' },
+                { title: '결재 관리', path: '/admin/approval' }
+            ]
+        });
+    }
+
+    return (
+        <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+            <nav className="sidebar-nav">
+                {menuItems.map((item, index) => (
+                    <div key={index} className="nav-item-group">
+                        <NavLink
+                            to={item.path}
+                            className={({ isActive }) => 
+                                `nav-item ${isActive ? 'active' : ''}`
+                            }
+                            end={item.path === '/'}
+                        >
+                            <span className="nav-icon">{item.icon}</span>
+                            {isOpen && (
+                                <>
+                                    <span className="nav-title">{item.title}</span>
+                                    {item.badge && (
+                                        <span className="nav-badge">{item.badge}</span>
+                                    )}
+                                </>
+                            )}
+                        </NavLink>
+
+                        {/* 하위 메뉴 */}
+                        {isOpen && item.subItems && (
+                            <div className="sub-nav">
+                                {item.subItems.map((subItem, subIndex) => (
+                                    subItem.external ? (
+                                        <a
+                                            key={subIndex}
+                                            href={subItem.path}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="sub-nav-item"
+                                        >
+                                            {subItem.title} 🔗
+                                        </a>
+                                    ) : (
+                                        <NavLink
+                                            key={subIndex}
+                                            to={subItem.path}
+                                            className={({ isActive }) => 
+                                                `sub-nav-item ${isActive ? 'active' : ''}`
+                                            }
+                                        >
+                                            {subItem.title}
+                                        </NavLink>
+                                    )
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </nav>
+        </aside>
+    );
+}
+
+export default Sidebar;

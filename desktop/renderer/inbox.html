@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    font-family: -apple-system, 'Malgun Gothic', BlinkMacSystemFont, sans-serif;
+    background: transparent;
+    width: 360px; height: 480px;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+}
+
+.panel {
+    width: 360px; height: 480px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.92) translateY(10px);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), opacity 0.2s;
+}
+.panel.show { transform: scale(1) translateY(0); opacity: 1; }
+
+.header {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex; align-items: center; justify-content: space-between;
+    -webkit-app-region: drag;
+    flex-shrink: 0;
+}
+.header-left { display: flex; align-items: center; gap: 8px; }
+.bell-icon { font-size: 18px; }
+.header-title { font-size: 15px; font-weight: 700; color: #111; }
+.badge {
+    background: #ef4444; color: #fff;
+    font-size: 11px; font-weight: 700;
+    border-radius: 999px; padding: 1px 6px;
+    min-width: 20px; text-align: center;
+}
+.header-actions { display: flex; align-items: center; gap: 6px; -webkit-app-region: no-drag; }
+.read-all-btn {
+    background: none; border: 1px solid #e5e7eb;
+    border-radius: 6px; padding: 4px 10px;
+    font-size: 12px; color: #555; cursor: pointer;
+    font-family: inherit; transition: all 0.15s;
+}
+.read-all-btn:hover { background: #f9fafb; border-color: #667eea; color: #667eea; }
+.close-btn {
+    background: none; border: none; cursor: pointer;
+    color: #bbb; font-size: 20px; line-height: 1;
+    padding: 0 2px; transition: color 0.15s;
+}
+.close-btn:hover { color: #666; }
+
+.list { flex: 1; overflow-y: auto; padding: 6px 0; }
+.list::-webkit-scrollbar { width: 4px; }
+.list::-webkit-scrollbar-track { background: transparent; }
+.list::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+
+.item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer; transition: background 0.12s;
+    border-bottom: 1px solid #f9fafb;
+    -webkit-app-region: no-drag;
+}
+.item:hover { background: #f8f9ff; }
+.item:last-child { border-bottom: none; }
+
+.type-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+}
+.dot-post     { background: #667eea; }
+.dot-comment  { background: #10b981; }
+.dot-feedback { background: #f59e0b; }
+.dot-approval { background: #8b5cf6; }
+
+.item-body { flex: 1; min-width: 0; }
+.item-title {
+    font-size: 13px; font-weight: 600; color: #111;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+.item-msg {
+    font-size: 12px; color: #888;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.item-time { font-size: 11px; color: #bbb; flex-shrink: 0; margin-top: 2px; }
+
+.empty {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #bbb; gap: 10px;
+}
+.empty-icon { font-size: 40px; }
+.empty-text { font-size: 14px; }
+
+.footer {
+    padding: 10px 16px;
+    border-top: 1px solid #f3f4f6;
+    font-size: 11px; color: #bbb;
+    text-align: center;
+    flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<div class="panel" id="panel">
+    <div class="header">
+        <div class="header-left">
+            <span class="bell-icon">🔔</span>
+            <span class="header-title">알림함</span>
+            <span class="badge" id="badge" style="display:none">0</span>
+        </div>
+        <div class="header-actions">
+            <button class="read-all-btn" id="readAllBtn">모두 읽음</button>
+            <button class="close-btn" id="closeBtn">×</button>
+        </div>
+    </div>
+
+    <div class="list" id="list"></div>
+
+    <div class="footer">클릭하면 해당 페이지로 이동합니다</div>
+</div>
+
+<script>
+const TYPE_DOT = {
+    post: 'dot-post', comment: 'dot-comment',
+    feedback: 'dot-feedback', approval: 'dot-approval'
+};
+
+function timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1)  return '방금';
+    if (m < 60) return `${m}분 전`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}시간 전`;
+    return `${Math.floor(h / 24)}일 전`;
+}
+
+window.inboxApi.onData(({ notifications }) => {
+    const list  = document.getElementById('list');
+    const badge = document.getElementById('badge');
+
+    list.innerHTML = '';
+
+    if (!notifications || notifications.length === 0) {
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🎉</div>
+                <div class="empty-text">새 알림이 없습니다</div>
+            </div>`;
+        badge.style.display = 'none';
+        return;
+    }
+
+    badge.textContent = notifications.length;
+    badge.style.display = 'inline-block';
+
+    notifications.forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        const dotCls = TYPE_DOT[n.type] || 'dot-post';
+        div.innerHTML = `
+            <div class="type-dot ${dotCls}"></div>
+            <div class="item-body">
+                <div class="item-title">${escHtml(n.title || '')}</div>
+                <div class="item-msg">${escHtml(n.body || n.message || '')}</div>
+            </div>
+            <div class="item-time">${timeAgo(n.created_at)}</div>`;
+        div.addEventListener('click', () => {
+            window.inboxApi.openItem(n.source, n.id, n.url);
+        });
+        list.appendChild(div);
+    });
+
+    setTimeout(() => document.getElementById('panel').classList.add('show'), 30);
+});
+
+document.getElementById('closeBtn').addEventListener('click',   () => window.inboxApi.close());
+document.getElementById('readAllBtn').addEventListener('click', () => window.inboxApi.readAll());
+
+function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+setTimeout(() => document.getElementById('panel').classList.add('show'), 30);
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "name": "groupware-desktop",
+  "version": "1.0.0",
+  "description": "그룹웨어 데스크탑 알림 앱",
+  "author": "Groupware",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "^19.1.0",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.groupware.desktop",
+    "productName": "그룹웨어 알림",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "그룹웨어 알림",
+      "installerLanguages": ["Korean"],
+      "language": "1042",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}

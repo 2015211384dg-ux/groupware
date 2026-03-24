@@ -1,0 +1,288 @@
+/* TossFace 폰트 */
+@font-face {
+    font-family: 'TossFace';
+    src: url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/TossFace-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TossFace';
+    src: url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/TossFace-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TossFace';
+    src: url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/TossFace-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TossFace';
+    src: url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/TossFace-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* 전역 스타일 리셋 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'TossFace', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #f5f7fa;
+    color: #333;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* 로딩 스피너 */
+.loading-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #25509D 0%, #1A3D7A 100%);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-container p {
+    margin-top: 16px;
+    color: white;
+    font-size: 14px;
+}
+
+/* 유틸리티 클래스 */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-1 {
+    margin-top: 8px;
+}
+
+.mt-2 {
+    margin-top: 16px;
+}
+
+.mt-3 {
+    margin-top: 24px;
+}
+
+.mb-1 {
+    margin-bottom: 8px;
+}
+
+.mb-2 {
+    margin-bottom: 16px;
+}
+
+.mb-3 {
+    margin-bottom: 24px;
+}
+
+.p-1 {
+    padding: 8px;
+}
+
+.p-2 {
+    padding: 16px;
+}
+
+.p-3 {
+    padding: 24px;
+}
+
+/* 앱 로딩 (인증 확인 중) */
+.app-loading {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-gradient);
+    gap: 16px;
+}
+
+.app-loading .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.app-loading p {
+    color: white;
+    font-size: 14px;
+}
+
+/* 페이지 공통 로딩 */
+.page-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 12px;
+    color: #999;
+}
+
+.page-loading .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e5e7eb;
+    border-top-color: var(--primary, #25509D);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* 공통 폼 required 표시 */
+label.required::after,
+.form-group label.required::after {
+    content: ' *';
+    color: #ef4444;
+    font-weight: 700;
+}
+
+/* 공통 버튼 시스템 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.15s;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-primary {
+    background: var(--primary, #25509D);
+    color: white;
+    box-shadow: 0 2px 6px rgba(37,80,157,0.3);
+}
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark, #1A3D7A);
+    box-shadow: 0 4px 12px rgba(37,80,157,0.4);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-secondary {
+    background: white;
+    color: var(--primary, #25509D);
+    border: 1px solid #d1d5db;
+}
+.btn-secondary:hover:not(:disabled) {
+    background: var(--primary-bg, #EEF3FB);
+    border-color: var(--primary, #25509D);
+}
+.btn-secondary:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+    box-shadow: 0 2px 6px rgba(239,68,68,0.3);
+}
+.btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+    box-shadow: 0 4px 12px rgba(239,68,68,0.4);
+}
+.btn-danger:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 15px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+/* 공통 페이지 프레임 */
+.page-shell{
+  min-height: calc(100vh - 64px);
+  background: #f5f7fa;
+}
+
+/* 모든 화면의 “기준 폭” */
+.page-inner{
+  max-width: 1280px; /* 원하면 1440px로 */
+  margin: 0 auto;
+  padding: 0 24px;   /* 좌우 기준선 */
+}
+
+/* 페이지 내부 섹션 기본 간격 */
+.page-section{
+  margin-top: 16px;
+}

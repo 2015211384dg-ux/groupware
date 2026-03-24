@@ -1,0 +1,446 @@
+.feedback-page {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+    overflow: hidden;
+}
+
+.feedback-header {
+    background: white;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.feedback-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+}
+
+.feedback-header p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+.feedback-tabs {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    padding: 0 24px;
+}
+
+.feedback-tabs button {
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+}
+
+.feedback-tabs button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+.feedback-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+/* 폼 */
+.feedback-form-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.feedback-form {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.feedback-type-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 8px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #666;
+}
+
+.type-card:hover {
+    border-color: var(--type-color);
+    color: var(--type-color);
+}
+
+.type-card.selected {
+    border-color: var(--type-color);
+    background: color-mix(in srgb, var(--type-color) 8%, white);
+    color: var(--type-color);
+}
+
+.type-icon {
+    display: flex;
+}
+
+.type-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.fb-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fb-field label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #444;
+}
+
+.fb-field input,
+.fb-field textarea {
+    padding: 11px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.fb-field input:focus,
+.fb-field textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.fb-submit {
+    padding: 13px;
+    background: linear-gradient(135deg, #667eea, #5568d3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.fb-submit:hover:not(:disabled) { opacity: 0.9; }
+.fb-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* 목록 */
+.feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.fb-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+}
+
+.fb-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+.fb-item-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 6px;
+}
+
+.fb-item-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    flex-wrap: wrap;
+}
+
+.fb-item-type {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    min-width: 90px;
+}
+
+.fb-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fb-item-author {
+    font-size: 13px;
+    color: #888;
+    flex-shrink: 0;
+}
+
+.fb-item-date {
+    font-size: 12px;
+    color: #bbb;
+    flex-shrink: 0;
+}
+
+.fb-item-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.fb-item-detail {
+    padding: 0 16px 16px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 0;
+}
+
+.fb-item-content {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.7;
+    margin: 14px 0;
+    white-space: pre-wrap;
+}
+
+.fb-admin-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #065f46;
+    margin-top: 8px;
+}
+
+/* 관리자 전용 */
+.fb-status-cards {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.fb-status-card {
+    flex: 1;
+    padding: 14px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.fb-status-card:hover,
+.fb-status-card.active {
+    border-color: var(--status-color);
+    background: color-mix(in srgb, var(--status-color) 6%, white);
+}
+
+.fb-status-count {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--status-color);
+}
+
+.fb-status-label {
+    font-size: 12px;
+    color: #888;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.fb-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.fb-filters select {
+    padding: 7px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    font-size: 13px;
+    background: white;
+    outline: none;
+    cursor: pointer;
+}
+
+.fb-count-text {
+    margin-left: auto;
+    font-size: 13px;
+    color: #888;
+    font-weight: 600;
+}
+
+.feedback-list.admin {
+    max-width: 100%;
+    padding: 0 24px 24px;
+    margin-top: 16px;
+}
+
+.admin-item.open {
+    border-color: #667eea;
+}
+
+.fb-admin-actions {
+    margin-bottom: 14px;
+}
+
+.fb-admin-actions label,
+.fb-admin-note-form label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #666;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.fb-admin-note-form label span {
+    font-weight: 400;
+    color: #aaa;
+}
+
+.fb-status-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.fb-status-btns button {
+    padding: 6px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    background: white;
+    color: #666;
+    transition: all 0.15s;
+}
+
+.fb-status-btns button.active {
+    background: var(--status-bg);
+    color: var(--status-color);
+    border-color: var(--status-color);
+}
+
+.fb-admin-note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fb-admin-note-form textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+.fb-admin-note-form textarea:focus {
+    border-color: #667eea;
+}
+
+.fb-admin-note-form button {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 빈 상태 */
+.fb-loading {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+}
+
+.fb-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #ccc;
+}
+
+.fb-empty p {
+    margin: 12px 0 16px;
+    font-size: 15px;
+}
+
+.fb-empty button {
+    padding: 10px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}

@@ -1,0 +1,388 @@
+/* ============================================
+   결재 메인 페이지 - Approval.css
+   ============================================ */
+
+.approval-page {
+    display: flex;
+    height: calc(100vh - 60px);
+    background: #f5f6fa;
+    overflow: hidden;
+}
+
+/* ─── 좌측 사이드바 ─────────────────────── */
+.ap-sidebar {
+    width: 210px;
+    min-width: 210px;
+    background: #fff;
+    border-right: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.ap-sidebar-top {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ap-write-side-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: opacity 0.15s;
+}
+
+.ap-write-side-btn:hover { opacity: 0.9; }
+
+.ap-nav { padding: 8px 0; }
+
+.ap-nav-home {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+}
+
+.ap-nav-home:hover  { background: #f8f9ff; color: #667eea; }
+.ap-nav-home.active { background: #f0f3ff; color: #667eea; border-left-color: #667eea; }
+
+.ap-nav-group { margin-top: 4px; }
+
+.ap-nav-group-title {
+    padding: 10px 16px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #bbb;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ap-nav-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 20px;
+    background: none;
+    border: none;
+    border-left: 3px solid transparent;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+}
+
+.ap-nav-item:hover  { background: #f8f9ff; color: #667eea; }
+.ap-nav-item.active { background: #f0f3ff; color: #667eea; font-weight: 600; border-left-color: #667eea; }
+
+.ap-nav-icon { font-size: 14px; }
+
+/* ─── 우측 메인 ─────────────────────────── */
+.ap-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+/* ─── 대시보드 홈 ────────────────────────── */
+.ap-dashboard { max-width: 100%; 
+margin-top: -15px;   /* Layout 패딩 상쇄 */
+margin-left: 12px;
+}
+
+.ap-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.ap-summary-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.ap-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.ap-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.ap-card-value {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.ap-card-label {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+}
+
+.ap-write-section {
+    margin-bottom: 24px;
+}
+
+.ap-write-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.ap-write-btn:hover { opacity: 0.9; }
+
+.ap-recent-section {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+}
+
+.ap-section-title {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ap-recent-list { padding: 8px 0; }
+
+.ap-recent-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.ap-recent-item:hover { background: #fafbff; }
+
+.ap-recent-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.ap-recent-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ap-recent-meta {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.ap-empty-msg {
+    text-align: center;
+    padding: 32px;
+    color: #bbb;
+    font-size: 13px;
+}
+
+/* ─── 문서 목록 ─────────────────────────── */
+.ap-list-wrap { max-width: 100%; }
+
+.ap-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.ap-list-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    margin-left: 12px;
+}
+
+.ap-list-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ap-list-toolbar input {
+    padding: 8px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    width: 200px;
+    transition: border 0.2s;
+}
+
+.ap-list-toolbar input:focus { border-color: #667eea; }
+
+.ap-total { font-size: 13px; color: #888; }
+
+.ap-table-wrap {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.ap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.ap-table th {
+    padding: 11px 16px;
+    background: #fafafa;
+    font-weight: 600;
+    color: #555;
+    text-align: left;
+    border-bottom: 1px solid #ebebeb;
+    white-space: nowrap;
+}
+
+.ap-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    vertical-align: middle;
+}
+
+.ap-table tr:last-child td { border-bottom: none; }
+
+.ap-row { cursor: pointer; transition: background 0.12s; }
+.ap-row:hover td { background: #fafbff; }
+
+.ap-docnum { font-family: monospace; font-size: 12px; color: #999; }
+.ap-title  { font-weight: 500; }
+.ap-date   { color: #999; font-size: 12px; text-align: center; }
+
+.ap-tmpl-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f0f3ff;
+    color: #667eea;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.ap-empty {
+    text-align: center;
+    color: #bbb;
+    padding: 40px !important;
+}
+
+/* ─── 상태 뱃지 ─────────────────────────── */
+.ap-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ap-status.draft     { background: #f5f5f5; color: #888; }
+.ap-status.pending   { background: #fff8e1; color: #b7791f; }
+.ap-status.progress  { background: #e8f4ff; color: #2b6cb0; }
+.ap-status.approved  { background: #e6ffed; color: #2f855a; }
+.ap-status.rejected  { background: #fff0f0; color: #e53e3e; }
+.ap-status.cancelled { background: #f5f5f5; color: #aaa; }
+
+/* ─── 페이지네이션 ──────────────────────── */
+.ap-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.ap-pagination button {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.ap-pagination button:hover:not(:disabled) { border-color: #667eea; color: #667eea; }
+.ap-pagination button.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+}
+.ap-pagination button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ─── 반응형 ────────────────────────────── */
+@media (max-width: 900px) {
+    .ap-summary-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .ap-sidebar { display: none; }
+    .ap-main { padding: 16px; }
+    .ap-summary-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}

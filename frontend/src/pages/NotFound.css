@@ -1,0 +1,59 @@
+.not-found {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+}
+
+.not-found-content {
+    text-align: center;
+    padding: 48px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+}
+
+.not-found-title {
+    font-size: 96px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 16px 0;
+}
+
+.not-found-message {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+}
+
+.not-found-description {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 32px 0;
+}
+
+.not-found-button {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.not-found-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.not-found-button:active {
+    transform: translateY(0);
+}

@@ -1,0 +1,128 @@
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
+
+// Components
+import Login from './pages/Login';
+import Layout from './components/Layout/Layout';
+import Dashboard from './pages/Dashboard';
+import BoardList from './pages/BoardList';
+import PostList from './pages/PostList';
+import PostWrite from './pages/PostWrite';
+import PostDetail from './pages/PostDetail';
+import Organization from './pages/Organization';
+import PersonalContacts from './pages/PersonalContacts';
+import MyInfo from './pages/MyInfo';
+import UserManagement from './pages/UserManagement';
+import DepartmentManagement from './pages/DepartmentManagement';
+import NotFound from './pages/NotFound';
+
+// Auth 관련
+import { authService } from './services/authService';
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 인증 상태 확인
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogin = (userData, token) => {
+    localStorage.setItem('token', token);
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <Routes>
+        {/* 로그인 페이지 */}
+        <Route 
+          path="/login" 
+          element={
+            isAuthenticated ? 
+              <Navigate to="/" replace /> : 
+              <Login onLogin={handleLogin} />
+          } 
+        />
+
+        {/* 메인 레이아웃 */}
+        <Route
+          path="/*"
+          element={
+            isAuthenticated ? (
+              <Layout user={user} onLogout={handleLogout}>
+                <Routes>
+                  <Route path="/" element={<Dashboard user={user} />} />
+                  
+                  {/* Phase 2: 게시판 */}
+                  <Route path="/boards" element={<BoardList />} />
+                  <Route path="/boards/:boardId" element={<PostList />} />
+                  <Route path="/boards/:boardId/write" element={<PostWrite />} />
+                  <Route path="/boards/:boardId/posts/:postId" element={<PostDetail />} />
+                  
+                  {/* Phase 3: 주소록 */}
+                  <Route path="/addressbook/organization" element={<Organization />} />
+                  <Route path="/addressbook/all" element={<Organization />} />
+                  <Route path="/addressbook/personal" element={<PersonalContacts />} />
+                  <Route path="/addressbook/*" element={<div>개인 주소록 (개발 중)</div>} />
+                  
+                  {/* Phase 4: HR */}
+                  <Route path="/hr/myinfo" element={<MyInfo user={user} />} />
+                  <Route path="/hr/*" element={<div>HR (Phase 4)</div>} />
+                  
+                  {/* 관리 (관리자 전용) */}
+                  <Route path="/admin/users" element={<UserManagement />} />
+                  <Route path="/admin/departments" element={<DepartmentManagement />} />
+                  <Route path="/admin/settings" element={<div>시스템 설정 (개발 중)</div>} />
+                  
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;

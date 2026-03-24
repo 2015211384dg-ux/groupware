@@ -1,0 +1,24 @@
+/* src/styles/PageLayout.css */
+
+/* 페이지 배경과 전체 높이 */
+.page-shell{
+  min-height: calc(100vh - 64px);
+  background: #f5f7fa;
+}
+
+/* 모든 화면의 "공통 기준선" */
+.page-inner{
+  max-width: 1280px; /* 필요하면 1440px */
+  margin: 0 auto;
+  padding: 0 24px;   /* 좌우 기준선 */
+}
+
+/* 섹션 간격 */
+.page-section{
+  margin-top: 16px;
+}
+
+/* wide-view용 */
+.page-inner.is-wide{
+  max-width: none;
+}

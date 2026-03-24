@@ -1,0 +1,155 @@
+.sidebar {
+    width: 260px;
+    background: white;
+    border-right: 1px solid #e5e7eb;
+    overflow-y: auto;
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.sidebar.closed {
+    width: 70px;
+    overflow: hidden;
+}
+
+.sidebar-nav {
+    padding: 16px 0;
+}
+
+.nav-item-group {
+    margin-bottom: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #666;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    will-change: background-color, border-color;
+}
+
+.nav-item:hover {
+    background: #f5f7fa;
+    color: #667eea;
+}
+
+.nav-item.active {
+    background: #f0f4ff;
+    color: #667eea;
+    border-left-color: #667eea;
+    font-weight: 600;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    color: inherit;
+    opacity: 0.75;
+}
+.nav-item.active .nav-icon,
+.nav-item:hover .nav-icon {
+    opacity: 1;
+}
+
+.nav-title {
+    flex: 1;
+    font-size: 14px;
+}
+
+.nav-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    background: #fef3c7;
+    color: #d97706;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.sub-nav {
+    padding-left: 56px;
+}
+
+.sub-nav-item {
+    display: block;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: #666;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    will-change: background-color, border-color;
+}
+
+.sub-nav-item:hover {
+    background: #f5f7fa;
+    color: #667eea;
+}
+
+.sub-nav-item.active {
+    color: #667eea;
+    border-left-color: #667eea;
+    font-weight: 600;
+}
+
+.sidebar.closed .nav-title,
+.sidebar.closed .nav-badge,
+.sidebar.closed .sub-nav {
+    display: none;
+}
+
+.sidebar.closed .nav-item {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* 인쇄 시 사이드바 숨기기 */
+@media print {
+    .sidebar {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 64px;
+        bottom: 0;
+        z-index: 90;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+/* ── 토글 화살표 ── */
+.nav-arrow {
+    margin-left: auto;
+    font-size: 18px;
+    color: #aaa;
+    transition: transform 0.2s, color 0.2s;
+    line-height: 1;
+    font-style: normal;
+}
+
+.nav-arrow.open {
+    transform: rotate(90deg);
+    color: #667eea;
+}
+
+/* 부모 메뉴 클릭 가능 표시 */
+.nav-item-group > .nav-item {
+    user-select: none;
+}
+
+/* 홈버튼 - 옆 게시판 헤더 카드 높이에 맞춤 */
+.sidebar-nav > a.nav-item:first-child {
+    min-height: 67px;
+    align-items: center;
+    justify-content: center;
+}

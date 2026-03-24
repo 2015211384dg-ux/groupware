@@ -1,0 +1,444 @@
+.post-write-page-v2 {
+  height: calc(100vh - 64px);
+  background: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 상단 탭 */
+.write-tabs {
+  background: white;
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: #333;
+}
+
+.tab.active {
+  color: #1a1a1a;
+  border-bottom-color: #667eea;
+}
+
+/* 메인 폼 */
+.write-form {
+  flex: 1;
+  background: white;
+  margin: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 제목 섹션 */
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.category-selector {
+  flex-shrink: 0;
+}
+
+.category-selector select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.title-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.title-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.char-count {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: #999;
+}
+
+/* ===== Quill 에디터 영역 ===== */
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  height: auto;
+
+  /* 최종 방어 */
+  min-height: 260px !important;
+}
+
+.editor-container.hidden {
+  display: none;
+}
+
+.editor-container .quill {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.editor-container .ql-toolbar {
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8f9fa;
+  padding: 10px;
+  flex: 0 0 auto;
+  display: block;
+}
+
+.editor-container .ql-container {
+  flex: 1 1 auto;
+  border: none;
+  font-size: 15px;
+  overflow-y: auto;
+  min-height: 0;
+  display: block;
+}
+
+.editor-container .ql-editor {
+  padding: 20px;
+  min-height: 220px;
+}
+
+.editor-container .ql-editor.ql-blank::before {
+  color: #999;
+  font-style: normal;
+}
+
+/* 파일 업로드 */
+/* 파일 업로드 영역은 "작게" */
+.file-upload-section {
+  flex: 0 0 auto;
+  padding: 12px 20px;
+  border-top: 1px solid #eef0f2;
+  background: #fff;
+}
+
+.file-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.file-upload-section.hidden {
+  display: none;
+}
+
+.dropzone {
+  flex: 0 0 auto;
+  border: 2px dashed #d0d5dd;
+  border-radius: 10px;
+  padding: 28px;
+  background: #fbfbfc;
+  transition: all 0.2s;
+}
+
+.dropzone.dragover {
+  border-color: #667eea;
+  background: #f4f6ff;
+}
+
+.dropzone-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.dropzone-icon {
+  font-size: 28px;
+  opacity: 0.7;
+}
+
+.dropzone-title {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.dropzone-sub {
+  font-size: 13px;
+  color: #667085;
+}
+
+
+.file-pick-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #667eea;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: white;
+}
+
+.file-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.file-name {
+  font-weight: 700;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 520px;
+}
+
+.file-size {
+  font-size: 12px;
+  color: #667085;
+}
+
+.file-remove {
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.file-remove:hover {
+  border-color: #999;
+}
+
+
+.file-hint {
+  color: #667085;
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* 하단 액션 버튼 */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border-top: 1px solid #e5e7eb;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background: white;
+  border: 1px solid #ddd;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background: #f8f9fa;
+  border-color: #999;
+}
+
+.submit-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploaded-box {
+  margin-top: 10px;
+  border: 1px solid #eef0f2;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fbfbfc;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .write-form {
+    margin: 8px;
+  }
+
+  .title-section {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: 100px;
+  }
+
+  .file-name {
+    max-width: 240px;
+  }
+
+  .editor-container .ql-editor {
+    padding: 12px;
+  }
+}
+
+.file-upload-section {
+  padding: 14px 20px;
+  border-top: 1px solid #eef0f2;
+  background: #fff;
+}
+
+.file-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-pick-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #667eea;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+.file-upload-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.file-upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-hint {
+  color: #667085;
+  font-size: 13px;
+}
+
+.uploaded-box {
+  margin-top: 12px;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+  padding: 12px;
+  background: #fbfbfc;
+}
+
+.uploaded-title {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.uploaded-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.uploaded-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploaded-link {
+  font-weight: 700;
+}
+
+.uploaded-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.uploaded-remove {
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.uploaded-remove:hover {
+  border-color: #999;
+}

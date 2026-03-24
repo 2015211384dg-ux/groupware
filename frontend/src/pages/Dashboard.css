@@ -1,0 +1,292 @@
+.dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 32px;
+    padding-top: 16px;
+}
+
+.dashboard-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+}
+
+.dashboard-header p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-top: 3px solid;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.92;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-title {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 4px 0;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.content-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.content-section.full-width {
+    grid-column: 1 / -1;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.section-header a {
+    font-size: 14px;
+    color: #667eea;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.section-header a:hover {
+    color: #5568d3;
+}
+
+.notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.notice-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+    cursor: pointer;
+    min-height: 56px;
+}
+
+.notice-item:last-child {
+    border-bottom: none;
+}
+
+.notice-item:hover {
+    background: #f8f9fa;
+}
+
+.notice-checkbox {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.notice-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: #ede9fe;
+    color: #7c3aed;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-right: 8px;
+    line-height: 1;
+}
+
+.notice-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-width: 0;
+}
+
+.notice-title {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.6;
+}
+
+.notice-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: #999;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.notice-author {
+    color: #666;
+}
+
+.notice-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.notice-comments {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #e67e22;
+    font-weight: 500;
+}
+
+.empty-notice {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-notice p {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
+}
+
+.birthday-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.birthday-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.birthday-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.birthday-info {
+    flex: 1;
+}
+
+.birthday-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 4px 0;
+}
+
+.birthday-dept {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+.attendance-chart {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+    border-radius: 8px;
+}
+
+.chart-placeholder {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header h1 {
+        font-size: 24px;
+    }
+}

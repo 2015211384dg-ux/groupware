@@ -1,0 +1,85 @@
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
+// Axios 인스턴스 생성
+const api = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+// 요청 인터셉터: 모든 요청에 토큰 추가
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// 응답 인터셉터: 인증 오류 처리
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
+// 인증 서비스
+export const authService = {
+    // 로그인
+    login: async (username, password) => {
+        try {
+            const response = await api.post('/auth/login', { username, password });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: '로그인에 실패했습니다.' };
+        }
+    },
+
+    // 로그아웃
+    logout: async () => {
+        try {
+            await api.post('/auth/logout');
+            localStorage.removeItem('token');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    },
+
+    // 현재 사용자 정보 조회
+    getCurrentUser: async () => {
+        try {
+            const response = await api.get('/auth/me');
+            return response.data.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    // 비밀번호 변경
+    changePassword: async (currentPassword, newPassword) => {
+        try {
+            const response = await api.put('/auth/change-password', {
+                currentPassword,
+                newPassword
+            });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: '비밀번호 변경에 실패했습니다.' };
+        }
+    }
+};
+
+export default api;

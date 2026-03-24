@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    background: transparent;
+    width: 368px; height: 232px;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+}
+
+.toast {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 364px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.20), 0 4px 12px rgba(0,0,0,0.09);
+    overflow: hidden;
+    transform: translateX(380px);
+    transition: transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1);
+    cursor: pointer;
+    user-select: none;
+}
+.toast.show { transform: translateX(0); }
+
+.content { padding: 20px 20px 0 20px; }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    font-family: -apple-system, 'Malgun Gothic', sans-serif;
+    letter-spacing: 0.2px;
+}
+.post-badge     { background: #eff2ff; color: #667eea; }
+.comment-badge  { background: #ecfdf5; color: #10b981; }
+.feedback-badge { background: #fffbeb; color: #f59e0b; }
+.approval-badge { background: #f5f3ff; color: #8b5cf6; }
+
+.meta { display: flex; align-items: center; gap: 8px; }
+.time { font-size: 12px; color: #bbb; font-family: -apple-system, 'Malgun Gothic', sans-serif; }
+.close-btn {
+    background: none; border: none; cursor: pointer;
+    color: #ccc; font-size: 22px; line-height: 1;
+    padding: 0 3px; transition: color 0.15s;
+}
+.close-btn:hover { color: #888; }
+
+.title {
+    font-size: 15px; font-weight: 800;
+    color: #111;
+    font-family: -apple-system, 'Malgun Gothic', sans-serif;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+.body-text {
+    font-size: 13px; color: #555;
+    font-family: -apple-system, 'Malgun Gothic', sans-serif;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    line-height: 1.5;
+}
+
+.action-hint {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #aaa;
+    font-family: -apple-system, 'Malgun Gothic', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.action-hint .arrow { font-size: 14px; }
+
+.progress-wrap { margin-top: 16px; height: 4px; background: #f3f4f6; }
+.progress-fill {
+    height: 100%;
+    width: 100%;
+    transition: width 5s linear;
+    border-radius: 2px;
+}
+.post-bar     { background: linear-gradient(90deg, #667eea, #764ba2); }
+.comment-bar  { background: linear-gradient(90deg, #10b981, #059669); }
+.feedback-bar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.approval-bar { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+</style>
+</head>
+<body>
+<div class="toast" id="toast">
+    <div class="content">
+        <div class="header">
+            <span class="type-badge" id="typeBadge">그룹웨어 알림</span>
+            <div class="meta">
+                <span class="time" id="time"></span>
+                <button class="close-btn" id="closeBtn">×</button>
+            </div>
+        </div>
+        <div class="title" id="title"></div>
+        <div class="body-text" id="bodyText"></div>
+        <div class="action-hint"><span class="arrow">↗</span> 클릭하여 바로 이동</div>
+    </div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+</div>
+
+<script>
+let autoTimer;
+let currentUrl = null;
+
+const TYPE_INFO = {
+    post:     { label: '📢 새 게시글',   cls: 'post' },
+    comment:  { label: '💬 새 댓글',     cls: 'comment' },
+    feedback: { label: '📋 피드백',      cls: 'feedback' },
+    approval: { label: '✅ 결재 알림',   cls: 'approval' }
+};
+
+window.notifApi.onShow(data => {
+    currentUrl = data.url || null;
+    const info = TYPE_INFO[data.type] || TYPE_INFO.post;
+
+    document.getElementById('typeBadge').textContent  = info.label;
+    document.getElementById('typeBadge').className    = `type-badge ${info.cls}-badge`;
+    document.getElementById('title').textContent      = data.title || '';
+    document.getElementById('bodyText').textContent   = data.body  || '';
+    document.getElementById('time').textContent       =
+        new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
+    const bar = document.getElementById('progress');
+    bar.className = `progress-fill ${info.cls}-bar`;
+
+    playChime(info.cls);
+
+    const toast = document.getElementById('toast');
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+        setTimeout(() => { bar.style.width = '0%'; }, 80);
+    });
+
+    startTimer(5000);
+});
+
+function startTimer(ms) {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(slideOut, ms);
+}
+
+function slideOut() {
+    clearTimeout(autoTimer);
+    const toast = document.getElementById('toast');
+    toast.classList.remove('show');
+    setTimeout(() => window.notifApi.close(), 400);
+}
+
+document.getElementById('closeBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    slideOut();
+});
+
+document.getElementById('toast').addEventListener('click', e => {
+    if (currentUrl) window.notifApi.openUrl(currentUrl);
+    slideOut();
+});
+
+document.getElementById('toast').addEventListener('mouseenter', () => {
+    clearTimeout(autoTimer);
+    document.getElementById('progress').style.transitionDuration = '0s';
+});
+
+document.getElementById('toast').addEventListener('mouseleave', () => {
+    const bar = document.getElementById('progress');
+    bar.style.transitionDuration = '2s';
+    bar.style.width = '0%';
+    startTimer(2000);
+});
+
+function playChime(type) {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const freqs = type === 'approval'
+            ? [523, 659]
+            : type === 'comment'
+            ? [440, 554]
+            : [659, 880];
+
+        freqs.forEach((freq, i) => {
+            const osc  = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            const t = ctx.currentTime + i * 0.12;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+            osc.start(t);
+            osc.stop(t + 0.35);
+        });
+    } catch(e) {}
+}
+</script>
+</body>
+</html>
