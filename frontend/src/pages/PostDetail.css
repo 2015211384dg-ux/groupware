@@ -1134,6 +1134,17 @@
 .comment-card.reply {
   margin-left: 52px;
   background: #f7f8ff;
+  border-left: 3px solid #c7d2fe;
+}
+
+.reply-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #667eea;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
 .comment-card-top {

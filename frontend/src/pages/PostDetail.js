@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/authService';
 import './PostDetail.css';
 import { useToast } from '../components/Toast';
-import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart } from '../components/Icons';
+import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart, IconReply } from '../components/Icons';
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'HR_ADMIN'];
 
@@ -303,6 +303,12 @@ const submitReply = async () => {
           </div>
 
           <div className="comment-body">
+            {isReply && (
+              <div className="reply-indicator no-print">
+                <IconReply size={12} />
+                <span>답글</span>
+              </div>
+            )}
             <div className="comment-meta-row">
               <div className="comment-author">
                 <span className="comment-author-name">{c.authorName}</span>
