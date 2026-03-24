@@ -194,16 +194,13 @@
 }
 
 .author-position-badge {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     color: #667eea;
     background: #f0f4ff;
-    padding: 2px 7px;
-    border-radius: 4px;
+    padding: 0px 5px;
+    border-radius: 3px;
     white-space: nowrap;
-    vertical-align: baseline;
-    position: relative;
-    top: -1px;
 }
 
 .meta-sep {
