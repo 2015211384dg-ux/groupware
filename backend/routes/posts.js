@@ -323,7 +323,7 @@ router.post('/', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) =>
                 title: `[${boardName}] ${title}`,
                 body: `${req.user.name}님이 새 글을 등록했습니다.`,
                 url: `/boards/${board_id}/posts/${postId}`
-            });
+            }, 'post_notifications');
         }
 
         res.status(201).json({

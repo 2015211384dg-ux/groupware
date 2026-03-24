@@ -222,7 +222,7 @@ router.post('/', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) =>
         title: `댓글: ${post.title}`,
         body: `${req.user.name}님이 댓글을 남겼습니다.`,
         url: `/boards/${post.board_id}/posts/${post_id}`
-      });
+      }, 'comment_notifications');
     }
     // 대댓글인 경우 부모 댓글 작성자에게도 알림
     if (parent_id) {
@@ -236,7 +236,7 @@ router.post('/', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) =>
           title: `대댓글: ${post?.title || '게시글'}`,
           body: `${req.user.name}님이 대댓글을 남겼습니다.`,
           url: `/boards/${post?.board_id}/posts/${post_id}`
-        });
+        }, 'comment_notifications');
       }
     }
 

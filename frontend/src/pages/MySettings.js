@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/authService';
 import './MySettings.css';
 import { useToast } from '../components/Toast';
+import { applyTheme } from '../App';
 
 function MySettings() {
     const toast = useToast();
@@ -55,13 +56,9 @@ function MySettings() {
             setSaving(true);
             await api.put('/users/my-settings', settings);
             toast.success('설정이 저장되었습니다.');
-            
-            // 테마 적용
-            if (settings.theme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
+            // 테마 즉시 적용 + 캐싱
+            localStorage.setItem('groupware_theme', settings.theme);
+            applyTheme(settings.theme);
         } catch (error) {
             console.error('설정 저장 실패:', error);
             toast.error('설정 저장에 실패했습니다.');

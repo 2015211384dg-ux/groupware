@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import './styles/dark-theme.css';
 
 // Components
 import Login from './pages/Login';
@@ -32,6 +33,21 @@ import MagicLogin from './pages/MagicLogin';
 
 // Auth 관련
 import { authService } from './services/authService';
+import api from './services/authService';
+
+// 테마 적용 유틸 (새로고침 시 깜빡임 방지: localStorage 즉시 적용)
+export function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.body.classList.add('dark-theme');
+  } else if (theme === 'auto') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.toggle('dark-theme', prefersDark);
+  } else {
+    document.body.classList.remove('dark-theme');
+  }
+}
+// 로딩 전 즉시 적용 (flash 방지)
+applyTheme(localStorage.getItem('groupware_theme') || 'light');
 import { SettingsProvider } from './services/SettingsContext';
 import { ToastProvider } from './components/Toast';
 import PopupNotice from './components/PopupNotice';
@@ -65,10 +81,16 @@ function App() {
 
   const checkAuth = async () => {
     try {
-      // 토큰은 httpOnly 쿠키로 관리 — 쿠키가 있으면 자동 전송됨
       const userData = await authService.getCurrentUser();
       setUser(userData);
       setIsAuthenticated(true);
+      // 저장된 테마 서버에서 로드 후 적용
+      try {
+        const res = await api.get('/users/my-settings');
+        const theme = res.data.data?.theme || 'light';
+        localStorage.setItem('groupware_theme', theme);
+        applyTheme(theme);
+      } catch (e) { /* 설정 없으면 기본값 유지 */ }
     } catch (error) {
       // 미인증 상태 (401) — 정상 케이스
     } finally {

@@ -1,0 +1,383 @@
+/* ============================================================
+   다크 테마 오버라이드
+   body.dark-theme 에 적용
+   ============================================================ */
+
+body.dark-theme {
+    background: #13131f;
+    color: #e1e1e8;
+}
+
+/* ── CSS 변수 오버라이드 ── */
+body.dark-theme {
+    --bg-page:    #13131f;
+    --bg-card:    #1e1e2e;
+    --bg-hover:   #252538;
+    --text-primary:   #e1e1e8;
+    --text-secondary: #9898aa;
+    --text-muted:     #666680;
+    --border:         #2e2e42;
+    --border-light:   #252538;
+}
+
+/* ── 레이아웃 ── */
+body.dark-theme .layout,
+body.dark-theme .layout-content {
+    background: #13131f;
+}
+
+body.dark-theme .main-content,
+body.dark-theme .main-content--home {
+    background: #13131f;
+}
+
+/* ── 헤더 ── */
+body.dark-theme .header {
+    background: #1a1a2e;
+    border-bottom-color: #2e2e42;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+body.dark-theme .header-logo {
+    color: #e1e1e8;
+}
+
+body.dark-theme .menu-toggle {
+    color: #9898aa;
+}
+
+body.dark-theme .header-icon-btn {
+    color: #9898aa;
+}
+
+body.dark-theme .header-icon-btn:hover {
+    background: #252538;
+    color: #e1e1e8;
+}
+
+body.dark-theme .user-name {
+    color: #e1e1e8;
+}
+
+/* 헤더 드롭다운 */
+body.dark-theme .notif-panel,
+body.dark-theme .user-dropdown {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+body.dark-theme .notif-item:hover,
+body.dark-theme .dropdown-item:hover {
+    background: #252538;
+}
+
+body.dark-theme .notif-item-title,
+body.dark-theme .dropdown-item {
+    color: #e1e1e8;
+}
+
+body.dark-theme .notif-item-body,
+body.dark-theme .notif-item-time {
+    color: #9898aa;
+}
+
+body.dark-theme .notif-panel-header,
+body.dark-theme .notif-panel-footer {
+    border-color: #2e2e42;
+    color: #9898aa;
+}
+
+/* ── 사이드바 ── */
+body.dark-theme .sidebar {
+    background: #1a1a2e;
+    border-right-color: #2e2e42;
+}
+
+body.dark-theme .nav-item {
+    color: #9898aa;
+}
+
+body.dark-theme .nav-item:hover {
+    background: #252538;
+    color: #e1e1e8;
+}
+
+body.dark-theme .nav-item.active {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+body.dark-theme .sub-nav-item {
+    color: #7878a0;
+}
+
+body.dark-theme .sub-nav-item:hover {
+    color: #e1e1e8;
+    background: #252538;
+}
+
+body.dark-theme .sub-nav-item.active {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+/* ── 카드 공통 ── */
+body.dark-theme .dash-card,
+body.dark-theme .dash-profile-card,
+body.dark-theme .stat-card,
+body.dark-theme .content-section,
+body.dark-theme .board-card,
+body.dark-theme .comment-card,
+body.dark-theme .post-container-v2,
+body.dark-theme .post-list-wrap,
+body.dark-theme .detail-header,
+body.dark-theme .post-header-block,
+body.dark-theme .post-content-v2,
+body.dark-theme .post-bottom-actions,
+body.dark-theme .comments-section-v3,
+body.dark-theme .approval-card,
+body.dark-theme .approval-list-item,
+body.dark-theme .calendar-container,
+body.dark-theme .address-card,
+body.dark-theme .my-info-card,
+body.dark-theme .settings-section,
+body.dark-theme .my-settings-page .settings-section {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .board-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+/* ── 텍스트 ── */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme .dash-card-title,
+body.dark-theme .board-card-name,
+body.dark-theme .boardlist-title,
+body.dark-theme .post-title-v2,
+body.dark-theme .stats-cell-value,
+body.dark-theme .profile-name-lg,
+body.dark-theme .profile-hello-lg,
+body.dark-theme .comment-author-name,
+body.dark-theme .notice-title,
+body.dark-theme .post-title,
+body.dark-theme .author-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme td,
+body.dark-theme .comment-text,
+body.dark-theme .post-body,
+body.dark-theme .ql-editor {
+    color: #c8c8d8;
+}
+
+body.dark-theme .stats-cell-label,
+body.dark-theme .boardlist-subtitle,
+body.dark-theme .board-card-desc,
+body.dark-theme .profile-date,
+body.dark-theme .profile-dept,
+body.dark-theme .notice-meta,
+body.dark-theme .notice-author,
+body.dark-theme .notice-date,
+body.dark-theme .comment-date,
+body.dark-theme .meta-date,
+body.dark-theme .meta-views,
+body.dark-theme .meta-sep {
+    color: #66667a;
+}
+
+/* ── 구분선 ── */
+body.dark-theme .notice-item,
+body.dark-theme .notice-item:last-child,
+body.dark-theme .stats-grid-2x2 {
+    border-color: #2e2e42;
+}
+
+body.dark-theme .stats-cell {
+    background: #1e1e2e;
+}
+
+body.dark-theme .stats-cell:hover {
+    background: #252538;
+}
+
+body.dark-theme .post-header-block {
+    border-bottom-color: #2e2e42;
+}
+
+/* ── 입력 폼 ── */
+body.dark-theme input[type="text"],
+body.dark-theme input[type="password"],
+body.dark-theme input[type="email"],
+body.dark-theme input[type="search"],
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme .comment-textarea-v3,
+body.dark-theme .search-box-v2,
+body.dark-theme .search-box-v2 input {
+    background: #252538 !important;
+    border-color: #3a3a52 !important;
+    color: #e1e1e8 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #55556a !important;
+}
+
+body.dark-theme input:focus,
+body.dark-theme textarea:focus,
+body.dark-theme select:focus {
+    border-color: #667eea !important;
+    outline: none;
+}
+
+/* ── 테이블 ── */
+body.dark-theme table thead {
+    background: #252538;
+    border-color: #2e2e42;
+}
+
+body.dark-theme table th {
+    color: #9898aa;
+    border-color: #2e2e42;
+}
+
+body.dark-theme table td {
+    border-color: #2e2e42;
+    color: #c8c8d8;
+}
+
+body.dark-theme table tbody tr:hover {
+    background: #252538;
+}
+
+body.dark-theme .post-table-row:hover {
+    background: #252538;
+}
+
+/* ── 버튼 ── */
+body.dark-theme .back-button,
+body.dark-theme .wide-view-toggle,
+body.dark-theme .options-button,
+body.dark-theme .pin-post-btn,
+body.dark-theme .comment-action-btn {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .comment-action-btn:hover,
+body.dark-theme .back-button:hover,
+body.dark-theme .wide-view-toggle:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .comment-action-btn.danger {
+    color: #f87171;
+    border-color: #3a3a52;
+}
+
+/* ── 게시판 설정 페이지 배경 ── */
+body.dark-theme .boardlist-page,
+body.dark-theme .my-settings-page,
+body.dark-theme .page-header {
+    background: transparent;
+}
+
+body.dark-theme .page-header h1,
+body.dark-theme .section-header h2 {
+    color: #e1e1e8;
+}
+
+/* ── 내 설정 페이지 ── */
+body.dark-theme .settings-container {
+    background: transparent;
+}
+
+body.dark-theme .setting-item {
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .setting-info label {
+    color: #e1e1e8;
+}
+
+body.dark-theme .setting-description {
+    color: #66667a;
+}
+
+/* ── 알림 뱃지 ── */
+body.dark-theme .author-position-badge,
+body.dark-theme .comment-author-badge {
+    background: #252548;
+    color: #8888cc;
+    border: none;
+}
+
+/* ── reply 카드 ── */
+body.dark-theme .comment-card.reply {
+    background: #1a1a2e;
+    border-left-color: #3a3a6a;
+}
+
+body.dark-theme .reply-connector {
+    color: #55556a;
+}
+
+/* ── mention ── */
+body.dark-theme .mention-highlight {
+    background: #3a3a00;
+    color: #d4c060;
+}
+
+/* ── 스크롤바 ── */
+body.dark-theme ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+body.dark-theme ::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+    background: #3a3a52;
+    border-radius: 3px;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background: #4a4a6a;
+}
+
+/* ── 다크 테마 프리뷰 (설정 페이지) ── */
+.theme-preview.dark {
+    background: #1e1e2e;
+}
+
+.theme-preview.dark .preview-header {
+    background: #1a1a2e;
+}
+
+.theme-preview.dark .preview-body {
+    background: #252538;
+}
+
+.theme-preview.auto {
+    background: linear-gradient(135deg, #fff 50%, #1e1e2e 50%);
+}
+
+.theme-preview.auto .preview-header {
+    background: linear-gradient(135deg, #f0f0f0 50%, #1a1a2e 50%);
+}
