@@ -608,13 +608,11 @@ router.get('/summary', async (req, res) => {
             `SELECT COUNT(*) AS cnt FROM approval_lines al
              JOIN approval_documents ad ON al.document_id = ad.id
              WHERE al.approver_id=? AND al.status='PENDING'
-             AND ad.status NOT IN ('CANCELLED')
-             AND ad.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
+             AND ad.status NOT IN ('CANCELLED')`, [req.user.id]
         );
         const [[myPending]] = await db.query(
             `SELECT COUNT(*) AS cnt FROM approval_documents
-             WHERE drafter_id=? AND status IN ('PENDING','IN_PROGRESS')
-             AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
+             WHERE drafter_id=? AND status IN ('PENDING','IN_PROGRESS')`, [req.user.id]
         );
         const [[myApproved]] = await db.query(
             `SELECT COUNT(*) AS cnt FROM approval_documents
