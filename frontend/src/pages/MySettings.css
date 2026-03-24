@@ -10,6 +10,9 @@
 }
 
 .page-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 28px;
     font-weight: 700;
     color: #1a1a1a;
@@ -38,6 +41,9 @@
 }
 
 .settings-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 18px;
     font-weight: 700;
     color: #1a1a1a;
@@ -255,6 +261,9 @@ input:checked + .slider:before {
 }
 
 .save-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 14px 32px;
     background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
     color: white;

@@ -75,14 +75,14 @@ function MySettings() {
     return (
         <div className="my-settings-page">
             <div className="page-header">
-                <h1><IconSettings size={26} style={{verticalAlign:'middle', marginRight:8}} />내 설정</h1>
+                <h1><IconSettings size={26} />내 설정</h1>
                 <p>개인 알림 및 환경 설정을 관리합니다</p>
             </div>
 
             <div className="settings-container">
                 {/* 알림 설정 */}
                 <div className="settings-section">
-                    <h2><IconBell size={18} style={{verticalAlign:'middle', marginRight:6}} />알림 설정</h2>
+                    <h2><IconBell size={18} />알림 설정</h2>
                     <p className="section-description">
                         받고 싶은 알림을 선택하세요
                     </p>
@@ -158,7 +158,7 @@ function MySettings() {
 
                 {/* 언어 설정 */}
                 <div className="settings-section">
-                    <h2><IconGlobe size={18} style={{verticalAlign:'middle', marginRight:6}} />언어 설정</h2>
+                    <h2><IconGlobe size={18} />언어 설정</h2>
                     <p className="section-description">
                         사용할 언어를 선택하세요
                     </p>
@@ -189,7 +189,7 @@ function MySettings() {
 
                 {/* 프라이버시 설정 */}
                 <div className="settings-section">
-                    <h2><IconLock size={18} style={{verticalAlign:'middle', marginRight:6}} />프라이버시 설정</h2>
+                    <h2><IconLock size={18} />프라이버시 설정</h2>
                     <p className="section-description">
                         공개 정보를 관리합니다
                     </p>
@@ -236,7 +236,7 @@ function MySettings() {
                         onClick={handleSave}
                         disabled={saving}
                     >
-                        {saving ? '저장 중...' : <><IconSave size={16} style={{verticalAlign:'middle', marginRight:6}} />설정 저장</>}
+                        {saving ? '저장 중...' : <><IconSave size={16} />설정 저장</>}
                     </button>
                 </div>
             </div>
