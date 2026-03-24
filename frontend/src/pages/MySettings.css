@@ -9,6 +9,10 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+.page-header h1 svg {
+    margin-top: 2px;
+}
+
 .page-header h1 {
     display: flex;
     align-items: center;
@@ -38,6 +42,10 @@
     padding: 24px;
     margin-bottom: 24px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.settings-section h2 svg {
+    margin-top: 2px;
 }
 
 .settings-section h2 {
