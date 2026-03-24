@@ -404,3 +404,1139 @@ body.dark-theme ::-webkit-scrollbar-thumb:hover {
 .theme-preview.auto .preview-header {
     background: linear-gradient(135deg, #f0f0f0 50%, #1a1a2e 50%);
 }
+
+/* ================================================================
+   이하: 홈 이외의 모든 페이지 다크 테마 오버라이드
+   ================================================================ */
+
+/* ── 공통 페이지 래퍼 ── */
+body.dark-theme .page-wrap,
+body.dark-theme .page-container,
+body.dark-theme .inner-page {
+    background: #13131f;
+}
+
+/* ── 섹션 헤더 ── */
+body.dark-theme .section-header h2,
+body.dark-theme .section-title {
+    color: #e1e1e8;
+}
+
+/* ================================================================
+   게시판 목록 (PostList)
+   ================================================================ */
+body.dark-theme .post-list-page-v2 {
+    background: #13131f;
+}
+
+body.dark-theme .post-list-header,
+body.dark-theme .post-list-controls {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .post-list-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .post-list-wrap {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .posts-table,
+body.dark-theme .post-table-wrap {
+    background: #1e1e2e;
+}
+
+body.dark-theme .post-table-header {
+    background: #252538;
+    color: #9898aa;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .post-table-row {
+    border-bottom-color: #2e2e42;
+    color: #c8c8d8;
+}
+
+body.dark-theme .post-table-row:hover {
+    background: #252538;
+}
+
+body.dark-theme .post-table-row .post-title-cell a,
+body.dark-theme .post-table-row .post-title-link {
+    color: #e1e1e8;
+}
+
+body.dark-theme .post-table-row .post-author,
+body.dark-theme .post-table-row .post-date,
+body.dark-theme .post-table-row .post-views {
+    color: #66667a;
+}
+
+body.dark-theme .post-notice-badge,
+body.dark-theme .post-pinned-badge {
+    background: #252548;
+    color: #8888cc;
+    border-color: #3a3a6a;
+}
+
+body.dark-theme .write-btn,
+body.dark-theme .post-write-btn {
+    background: #667eea;
+    color: #fff;
+}
+
+body.dark-theme .search-box-v2 {
+    background: #252538;
+    border-color: #3a3a52;
+}
+
+body.dark-theme .search-box-v2 input {
+    color: #e1e1e8;
+    background: transparent;
+}
+
+body.dark-theme .category-tabs,
+body.dark-theme .filter-tabs {
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .category-tab,
+body.dark-theme .filter-tab {
+    color: #9898aa;
+    border-color: transparent;
+}
+
+body.dark-theme .category-tab.active,
+body.dark-theme .filter-tab.active {
+    color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-theme .pagination-btn {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .pagination-btn:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .pagination-btn.active {
+    background: #667eea;
+    color: #fff;
+    border-color: #667eea;
+}
+
+/* ================================================================
+   게시글 상세 (PostDetail)
+   ================================================================ */
+body.dark-theme .post-detail-page {
+    background: #13131f;
+}
+
+body.dark-theme .post-container-v2 {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .post-header-block {
+    background: #1e1e2e;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .post-title-v2 {
+    color: #e1e1e8;
+}
+
+body.dark-theme .post-meta-row .author-name,
+body.dark-theme .post-meta-row .meta-author {
+    color: #e1e1e8;
+}
+
+body.dark-theme .post-meta-row .meta-date,
+body.dark-theme .post-meta-row .meta-views,
+body.dark-theme .post-meta-row .meta-sep {
+    color: #66667a;
+}
+
+body.dark-theme .post-content-v2 {
+    background: #1e1e2e;
+    color: #c8c8d8;
+}
+
+body.dark-theme .post-bottom-actions {
+    background: #1e1e2e;
+    border-top-color: #2e2e42;
+}
+
+body.dark-theme .like-btn {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .like-btn:hover,
+body.dark-theme .like-btn.liked {
+    background: rgba(102, 126, 234, 0.15);
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .file-attachment-section {
+    background: #1e1e2e;
+    border-top-color: #2e2e42;
+}
+
+body.dark-theme .file-attachment-item {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .file-attachment-item:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+}
+
+body.dark-theme .comments-section-v3 {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .comments-section-v3 h3,
+body.dark-theme .comments-count-title {
+    color: #e1e1e8;
+}
+
+/* ================================================================
+   전자결재 (Approval)
+   ================================================================ */
+body.dark-theme .approval-page {
+    background: #13131f;
+}
+
+body.dark-theme .ap-layout {
+    background: #13131f;
+}
+
+body.dark-theme .ap-sidebar {
+    background: #1a1a2e;
+    border-right-color: #2e2e42;
+}
+
+body.dark-theme .ap-sidebar-title {
+    color: #e1e1e8;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .ap-nav-item {
+    color: #9898aa;
+}
+
+body.dark-theme .ap-nav-item:hover {
+    background: #252538;
+    color: #e1e1e8;
+}
+
+body.dark-theme .ap-nav-item.active {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+body.dark-theme .ap-main {
+    background: #13131f;
+}
+
+body.dark-theme .ap-summary-cards {
+    background: transparent;
+}
+
+body.dark-theme .ap-summary-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .ap-summary-card .card-label {
+    color: #9898aa;
+}
+
+body.dark-theme .ap-summary-card .card-count {
+    color: #e1e1e8;
+}
+
+body.dark-theme .ap-section-title,
+body.dark-theme .ap-list-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .approval-list-item {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .approval-list-item:hover {
+    background: #252538;
+    border-color: #667eea;
+}
+
+body.dark-theme .approval-list-item .ap-doc-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .approval-list-item .ap-doc-meta {
+    color: #9898aa;
+}
+
+body.dark-theme .ap-status-badge {
+    background: #252538;
+    color: #9898aa;
+    border: 1px solid #3a3a52;
+}
+
+body.dark-theme .ap-status-badge.pending {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+body.dark-theme .ap-status-badge.approved {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+body.dark-theme .ap-status-badge.rejected {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+body.dark-theme .ap-write-btn,
+body.dark-theme .approval-write-btn {
+    background: #667eea;
+    color: #fff;
+}
+
+/* 결재 상세 */
+body.dark-theme .approval-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .approval-detail-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .approval-field-label {
+    color: #9898aa;
+}
+
+body.dark-theme .approval-field-value {
+    color: #e1e1e8;
+}
+
+body.dark-theme .approval-line-item {
+    background: #252538;
+    border-color: #3a3a52;
+}
+
+body.dark-theme .approval-line-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .approval-line-status {
+    color: #9898aa;
+}
+
+body.dark-theme .approval-content-area {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+/* 결재 작성 */
+body.dark-theme .approval-write-page {
+    background: #13131f;
+}
+
+body.dark-theme .ap-write-section {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .ap-write-section-title {
+    color: #e1e1e8;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .ap-write-field label {
+    color: #9898aa;
+}
+
+/* ================================================================
+   캘린더 (Calendar / FullCalendar)
+   ================================================================ */
+body.dark-theme .naver-calendar-page,
+body.dark-theme .calendar-page {
+    background: #13131f;
+}
+
+body.dark-theme .calendar-container {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .fc {
+    color: #c8c8d8;
+}
+
+body.dark-theme .fc .fc-toolbar-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .fc .fc-button,
+body.dark-theme .fc .fc-button-primary {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .fc .fc-button:hover,
+body.dark-theme .fc .fc-button-primary:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .fc .fc-button-active,
+body.dark-theme .fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: #667eea;
+    border-color: #667eea;
+    color: #fff;
+}
+
+body.dark-theme .fc .fc-col-header-cell {
+    background: #252538;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .fc .fc-col-header-cell-cushion {
+    color: #9898aa;
+}
+
+body.dark-theme .fc .fc-daygrid-day {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .fc .fc-daygrid-day:hover {
+    background: #252538;
+}
+
+body.dark-theme .fc .fc-daygrid-day-number {
+    color: #c8c8d8;
+}
+
+body.dark-theme .fc .fc-day-today {
+    background: rgba(102, 126, 234, 0.1) !important;
+}
+
+body.dark-theme .fc .fc-day-today .fc-daygrid-day-number {
+    color: #667eea;
+    font-weight: 700;
+}
+
+body.dark-theme .fc .fc-scrollgrid {
+    border-color: #2e2e42;
+}
+
+body.dark-theme .fc .fc-scrollgrid td,
+body.dark-theme .fc .fc-scrollgrid th {
+    border-color: #2e2e42;
+}
+
+body.dark-theme .fc .fc-event {
+    background: #667eea;
+    border-color: #5a6fd6;
+    color: #fff;
+}
+
+body.dark-theme .fc .fc-list-event:hover td {
+    background: #252538;
+}
+
+body.dark-theme .fc .fc-list-day-cushion {
+    background: #252538;
+    color: #9898aa;
+}
+
+body.dark-theme .fc .fc-list-table td {
+    border-color: #2e2e42;
+    color: #c8c8d8;
+}
+
+/* 캘린더 사이드 패널 */
+body.dark-theme .calendar-sidebar,
+body.dark-theme .cal-sidebar {
+    background: #1a1a2e;
+    border-right-color: #2e2e42;
+}
+
+body.dark-theme .mini-calendar .mc-header {
+    color: #e1e1e8;
+}
+
+body.dark-theme .mini-calendar .mc-day {
+    color: #c8c8d8;
+}
+
+body.dark-theme .mini-calendar .mc-day:hover {
+    background: #252538;
+}
+
+body.dark-theme .mini-calendar .mc-day.today {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+}
+
+body.dark-theme .mini-calendar .mc-day.selected {
+    background: #667eea;
+    color: #fff;
+}
+
+body.dark-theme .mini-calendar .mc-day-name {
+    color: #9898aa;
+}
+
+/* 이벤트 모달 */
+body.dark-theme .event-modal,
+body.dark-theme .cal-event-modal {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .event-modal h3,
+body.dark-theme .cal-event-modal h3 {
+    color: #e1e1e8;
+}
+
+/* ================================================================
+   주소록 (AddressBook)
+   ================================================================ */
+body.dark-theme .addressbook-page {
+    background: #13131f;
+}
+
+body.dark-theme .ab-layout {
+    background: #13131f;
+}
+
+body.dark-theme .ab-sidebar {
+    background: #1a1a2e;
+    border-right-color: #2e2e42;
+}
+
+body.dark-theme .ab-search-wrap input {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #e1e1e8;
+}
+
+body.dark-theme .ab-group-item {
+    color: #9898aa;
+}
+
+body.dark-theme .ab-group-item:hover {
+    background: #252538;
+    color: #e1e1e8;
+}
+
+body.dark-theme .ab-group-item.active {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+body.dark-theme .ab-main {
+    background: #13131f;
+}
+
+body.dark-theme .ab-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .ab-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+body.dark-theme .ab-card .ab-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .ab-card .ab-dept,
+body.dark-theme .ab-card .ab-position {
+    color: #9898aa;
+}
+
+body.dark-theme .ab-card .ab-contact {
+    color: #66667a;
+}
+
+body.dark-theme .address-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .address-card .contact-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .address-card .contact-info {
+    color: #9898aa;
+}
+
+/* ================================================================
+   조직도 (Organization)
+   ================================================================ */
+body.dark-theme .organization-page {
+    background: #13131f;
+}
+
+body.dark-theme .org-layout {
+    background: #13131f;
+}
+
+body.dark-theme .org-sidebar {
+    background: #1a1a2e;
+    border-right-color: #2e2e42;
+}
+
+body.dark-theme .org-dept-item {
+    color: #9898aa;
+}
+
+body.dark-theme .org-dept-item:hover {
+    background: #252538;
+    color: #e1e1e8;
+}
+
+body.dark-theme .org-dept-item.active {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+body.dark-theme .org-main {
+    background: #13131f;
+}
+
+body.dark-theme .org-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .org-card:hover {
+    border-color: #667eea;
+}
+
+body.dark-theme .org-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .org-position,
+body.dark-theme .org-dept {
+    color: #9898aa;
+}
+
+/* ================================================================
+   내 정보 (MyInfo)
+   ================================================================ */
+body.dark-theme .myinfo-page {
+    background: #13131f;
+}
+
+body.dark-theme .my-info-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .info-section {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .info-section-title {
+    color: #e1e1e8;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .info-field-label {
+    color: #9898aa;
+}
+
+body.dark-theme .info-field-value {
+    color: #e1e1e8;
+}
+
+body.dark-theme .profile-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .profile-avatar-area {
+    background: #252538;
+}
+
+body.dark-theme .profile-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .profile-position,
+body.dark-theme .profile-dept {
+    color: #9898aa;
+}
+
+body.dark-theme .edit-profile-btn {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .edit-profile-btn:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+/* ================================================================
+   사용자 관리 (UserManagement)
+   ================================================================ */
+body.dark-theme .user-management-page {
+    background: #13131f;
+}
+
+body.dark-theme .users-table-wrap {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .users-table {
+    background: #1e1e2e;
+}
+
+body.dark-theme .users-table thead {
+    background: #252538;
+}
+
+body.dark-theme .users-table th {
+    color: #9898aa;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .users-table td {
+    border-color: #2e2e42;
+    color: #c8c8d8;
+}
+
+body.dark-theme .users-table tbody tr:hover {
+    background: #252538;
+}
+
+body.dark-theme .user-action-btn {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .user-action-btn:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .user-role-badge {
+    background: #252548;
+    color: #8888cc;
+    border-color: #3a3a6a;
+}
+
+/* ================================================================
+   부서 관리 (DepartmentManagement)
+   ================================================================ */
+body.dark-theme .dept-management-page {
+    background: #13131f;
+}
+
+body.dark-theme .dept-tree-wrap {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .dept-tree-item {
+    color: #c8c8d8;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .dept-tree-item:hover {
+    background: #252538;
+}
+
+body.dark-theme .dept-tree-item.selected {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+/* ================================================================
+   관리자 설정 (Settings admin)
+   ================================================================ */
+body.dark-theme .admin-settings-page,
+body.dark-theme .settings-page {
+    background: #13131f;
+}
+
+body.dark-theme .settings-section {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .settings-section h2 {
+    color: #e1e1e8;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .settings-field-label {
+    color: #9898aa;
+}
+
+body.dark-theme .settings-field-value {
+    color: #e1e1e8;
+}
+
+body.dark-theme .settings-save-btn {
+    background: #667eea;
+    color: #fff;
+}
+
+/* ================================================================
+   검색 (Search)
+   ================================================================ */
+body.dark-theme .search-page {
+    background: #13131f;
+}
+
+body.dark-theme .search-header {
+    background: #1e1e2e;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .search-input-wrap input {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #e1e1e8;
+}
+
+body.dark-theme .search-result-item {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .search-result-item:hover {
+    background: #252538;
+    border-color: #667eea;
+}
+
+body.dark-theme .search-result-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .search-result-body {
+    color: #9898aa;
+}
+
+body.dark-theme .search-result-meta {
+    color: #66667a;
+}
+
+/* ================================================================
+   피드백 (Feedback)
+   ================================================================ */
+body.dark-theme .feedback-page {
+    background: #13131f;
+}
+
+body.dark-theme .feedback-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .feedback-card:hover {
+    border-color: #667eea;
+}
+
+body.dark-theme .feedback-title {
+    color: #e1e1e8;
+}
+
+body.dark-theme .feedback-meta {
+    color: #9898aa;
+}
+
+body.dark-theme .feedback-body {
+    color: #c8c8d8;
+}
+
+/* ================================================================
+   모달 / 다이얼로그 공통
+   ================================================================ */
+body.dark-theme .modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-theme .modal,
+body.dark-theme .modal-content,
+body.dark-theme .dialog {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+    color: #e1e1e8;
+}
+
+body.dark-theme .modal-header,
+body.dark-theme .dialog-header {
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .modal-header h2,
+body.dark-theme .modal-header h3,
+body.dark-theme .dialog-header h2,
+body.dark-theme .dialog-header h3 {
+    color: #e1e1e8;
+}
+
+body.dark-theme .modal-footer,
+body.dark-theme .dialog-footer {
+    border-top-color: #2e2e42;
+}
+
+body.dark-theme .modal-close-btn,
+body.dark-theme .dialog-close-btn {
+    color: #9898aa;
+}
+
+body.dark-theme .modal-close-btn:hover,
+body.dark-theme .dialog-close-btn:hover {
+    color: #e1e1e8;
+    background: #252538;
+}
+
+/* ================================================================
+   버튼 공통 추가
+   ================================================================ */
+body.dark-theme .btn-primary {
+    background: #667eea;
+    border-color: #667eea;
+    color: #fff;
+}
+
+body.dark-theme .btn-secondary {
+    background: #252538;
+    border-color: #3a3a52;
+    color: #c8c8d8;
+}
+
+body.dark-theme .btn-secondary:hover {
+    background: #2e2e48;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+body.dark-theme .btn-danger {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
+
+/* ================================================================
+   선택 드롭다운 / 뱃지 공통
+   ================================================================ */
+body.dark-theme .badge {
+    background: #252548;
+    color: #8888cc;
+    border-color: #3a3a6a;
+}
+
+body.dark-theme .badge-success {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+body.dark-theme .badge-warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+body.dark-theme .badge-danger {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* ================================================================
+   Quill 에디터
+   ================================================================ */
+body.dark-theme .ql-toolbar {
+    background: #252538;
+    border-color: #3a3a52 !important;
+}
+
+body.dark-theme .ql-toolbar .ql-stroke {
+    stroke: #9898aa;
+}
+
+body.dark-theme .ql-toolbar .ql-fill {
+    fill: #9898aa;
+}
+
+body.dark-theme .ql-toolbar button:hover .ql-stroke,
+body.dark-theme .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #667eea;
+}
+
+body.dark-theme .ql-toolbar button:hover .ql-fill,
+body.dark-theme .ql-toolbar button.ql-active .ql-fill {
+    fill: #667eea;
+}
+
+body.dark-theme .ql-container {
+    background: #1e1e2e;
+    border-color: #3a3a52 !important;
+    color: #c8c8d8;
+}
+
+body.dark-theme .ql-editor.ql-blank::before {
+    color: #55556a;
+}
+
+/* ================================================================
+   개인 주소록 (PersonalContacts)
+   ================================================================ */
+body.dark-theme .personal-contacts-page {
+    background: #13131f;
+}
+
+body.dark-theme .contact-card {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+body.dark-theme .contact-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+body.dark-theme .contact-name {
+    color: #e1e1e8;
+}
+
+body.dark-theme .contact-info-item {
+    color: #9898aa;
+}
+
+/* ================================================================
+   게시판 관리 (BoardList admin)
+   ================================================================ */
+body.dark-theme .boardlist-page .boardlist-table-wrap {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+}
+
+/* ================================================================
+   빈 상태 / 로딩
+   ================================================================ */
+body.dark-theme .empty-state,
+body.dark-theme .no-data {
+    color: #9898aa;
+}
+
+body.dark-theme .loading-container {
+    background: #13131f;
+    color: #9898aa;
+}
+
+/* ================================================================
+   팝업 공지 (PopupNotice)
+   ================================================================ */
+body.dark-theme .popup-notice {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+body.dark-theme .popup-notice-header {
+    background: #252538;
+    border-bottom-color: #2e2e42;
+    color: #e1e1e8;
+}
+
+body.dark-theme .popup-notice-body {
+    color: #c8c8d8;
+}
+
+body.dark-theme .popup-notice-footer {
+    border-top-color: #2e2e42;
+}
+
+body.dark-theme .popup-close-btn {
+    color: #9898aa;
+}
+
+body.dark-theme .popup-close-btn:hover {
+    color: #e1e1e8;
+    background: #252538;
+}
+
+/* ================================================================
+   비밀번호 변경 강제 모달 (ForcePasswordChange)
+   ================================================================ */
+body.dark-theme .force-pw-modal {
+    background: #1e1e2e;
+    border-color: #2e2e42;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+body.dark-theme .force-pw-modal h2 {
+    color: #e1e1e8;
+}
+
+body.dark-theme .force-pw-modal p {
+    color: #9898aa;
+}
+
+/* ================================================================
+   토스트 알림
+   ================================================================ */
+body.dark-theme .toast {
+    background: #2e2e48;
+    border-color: #3a3a52;
+    color: #e1e1e8;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+body.dark-theme .toast.success {
+    border-left-color: #34d399;
+}
+
+body.dark-theme .toast.error {
+    border-left-color: #f87171;
+}
+
+body.dark-theme .toast.info {
+    border-left-color: #667eea;
+}
