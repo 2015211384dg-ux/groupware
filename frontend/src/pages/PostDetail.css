@@ -182,8 +182,8 @@
 
 .post-meta-info {
     display: flex;
-    align-items: center;
-    gap: 4px;
+    align-items: baseline;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
@@ -201,6 +201,9 @@
     padding: 2px 7px;
     border-radius: 4px;
     white-space: nowrap;
+    vertical-align: baseline;
+    position: relative;
+    top: -1px;
 }
 
 .meta-sep {
