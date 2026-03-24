@@ -17,6 +17,11 @@
     min-width: 0;
 }
 
+.main-content--home {
+    padding: 0 32px;
+    background: #f5f7fa;
+}
+
 /* 인쇄 스타일 */
 @media print {
     .layout {

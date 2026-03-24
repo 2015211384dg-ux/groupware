@@ -173,7 +173,9 @@ function Header({ user, onLogout, onToggleSidebar }) {
     return (
         <header className="header">
             <div className="header-left">
-                <button className="menu-toggle" onClick={onToggleSidebar}>☰</button>
+                {onToggleSidebar && (
+                    <button className="menu-toggle" onClick={onToggleSidebar}>☰</button>
+                )}
                 <h1 className="header-logo">{siteSettings.site_name}</h1>
             </div>
 
