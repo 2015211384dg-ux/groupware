@@ -415,3 +415,107 @@ Get-ChildItem $backupDir -Filter "*.sql" |
 - [ ] 프론트 변경 시 `npm run build`
 - [ ] `pm2 restart groupware-backend`
 - [ ] 정상 동작 확인
+
+---
+
+## 자동 배포 설정 (GitHub Actions + Self-hosted Runner)
+
+push할 때마다 운영 서버에 자동으로 배포되도록 설정합니다.
+
+### 전체 흐름
+
+```
+개발 PC에서 git push
+      ↓
+GitHub Actions 트리거
+      ↓
+운영 서버의 Runner가 감지
+      ↓
+git pull + 프론트 빌드 + pm2 restart 자동 실행
+```
+
+---
+
+### 1단계. Runner 설치 (운영 서버에서 한 번만)
+
+1. GitHub 저장소 접속 → **Settings** → **Actions** → **Runners**
+2. **New self-hosted runner** 클릭
+3. OS: **Windows** 선택
+4. 화면에 나오는 PowerShell 명령어를 운영 서버에서 순서대로 실행
+
+```powershell
+# 예시 (GitHub에서 실제 명령어 복사할 것)
+mkdir C:\actions-runner; cd C:\actions-runner
+Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/... -OutFile actions-runner-win-x64.zip
+Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD\actions-runner-win-x64.zip", "$PWD")
+.\config.cmd --url https://github.com/2015211384dg-ux/groupware --token 발급된토큰
+```
+
+5. 서비스로 등록 (서버 재부팅 후에도 자동 시작):
+
+```powershell
+.\svc.cmd install
+.\svc.cmd start
+```
+
+---
+
+### 2단계. GitHub Actions 워크플로우 파일 생성
+
+`.github/workflows/deploy.yml` 파일을 프로젝트에 추가:
+
+```yaml
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: 코드 최신화
+        run: git pull origin main
+
+      - name: 프론트엔드 빌드
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: 백엔드 재시작
+        run: pm2 restart groupware-backend
+```
+
+---
+
+### 3단계. 워크플로우 파일 push
+
+```bash
+git add .github/workflows/deploy.yml
+git commit -m "Add auto deploy workflow"
+git push
+```
+
+이후부터는 `git push`만 하면 운영 서버에 자동 반영됩니다.
+
+---
+
+### 주의사항
+
+- Runner는 운영 서버에서 항상 실행 중이어야 합니다 (`svc.cmd start`)
+- 서버 재부팅 후 자동 시작되도록 서비스 등록 필수
+- `.env` 파일은 git에 포함되지 않으므로 서버에 직접 생성 필요 (최초 1회)
+- 배포 실패 시 GitHub 저장소 → Actions 탭에서 로그 확인 가능
+
+---
+
+### 체크리스트 (자동 배포 설정 시)
+
+- [ ] 운영 서버에 Runner 설치 및 서비스 등록
+- [ ] `.github/workflows/deploy.yml` 파일 생성 및 push
+- [ ] GitHub Actions 탭에서 첫 배포 성공 확인
+- [ ] 이후 push 시 자동 배포 확인
