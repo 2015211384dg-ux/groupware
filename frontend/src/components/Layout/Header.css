@@ -24,6 +24,7 @@
     padding: 8px;
     color: #666;
     transition: color 0.2s;
+    transform: translateY(-2px);
 }
 
 .menu-toggle:hover {

@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import './Layout.css';
+import api from '../../services/authService';
+import { useSettings } from '../../services/SettingsContext';
 
 function Layout({ children, user, onLogout }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
+    const { updateSettings } = useSettings();
+
+    useEffect(() => {
+        api.get('/admin/settings').then(res => {
+            updateSettings(res.data.data);
+        }).catch(() => {});
+    }, []);
 
     const isHome = location.pathname === '/' || location.pathname === '/dashboard';
 
