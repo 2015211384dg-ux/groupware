@@ -605,20 +605,26 @@ router.delete('/notifications/:id', async (req, res) => {
 router.get('/summary', async (req, res) => {
     try {
         const [[inbox]] = await db.query(
-            `SELECT COUNT(*) AS cnt FROM approval_lines
-             WHERE approver_id=? AND status='PENDING'`, [req.user.id]
+            `SELECT COUNT(*) AS cnt FROM approval_lines al
+             JOIN approval_documents ad ON al.document_id = ad.id
+             WHERE al.approver_id=? AND al.status='PENDING'
+             AND ad.status NOT IN ('CANCELLED')
+             AND ad.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
         );
         const [[myPending]] = await db.query(
             `SELECT COUNT(*) AS cnt FROM approval_documents
-             WHERE drafter_id=? AND status IN ('PENDING','IN_PROGRESS')`, [req.user.id]
+             WHERE drafter_id=? AND status IN ('PENDING','IN_PROGRESS')
+             AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
         );
         const [[myApproved]] = await db.query(
             `SELECT COUNT(*) AS cnt FROM approval_documents
-             WHERE drafter_id=? AND status='APPROVED'`, [req.user.id]
+             WHERE drafter_id=? AND status='APPROVED'
+             AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
         );
         const [[myDraft]] = await db.query(
             `SELECT COUNT(*) AS cnt FROM approval_documents
-             WHERE drafter_id=? AND status='DRAFT'`, [req.user.id]
+             WHERE drafter_id=? AND status='DRAFT'
+             AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`, [req.user.id]
         );
         res.json({
             success: true,

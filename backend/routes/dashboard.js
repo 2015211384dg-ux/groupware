@@ -12,34 +12,37 @@ router.get('/stats', async (req, res) => {
     try {
         const userId = req.user.id;
 
-        // 1. 미확인 공지사항 개수
+        // 1. 미확인 공지사항 개수 (30일 이내)
         const [noticeResult] = await db.query(`
             SELECT COUNT(*) as count
             FROM posts p
-            WHERE p.is_notice = TRUE 
+            WHERE p.is_notice = TRUE
             AND p.is_deleted = FALSE
+            AND p.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
             AND p.id NOT IN (
-                SELECT post_id 
-                FROM post_views 
+                SELECT post_id
+                FROM post_views
                 WHERE user_id = ?
             )
         `, [userId]);
 
-        // 2. 내가 쓴 글 개수
+        // 2. 내가 쓴 글 개수 (30일 이내)
         const [myPostsResult] = await db.query(`
             SELECT COUNT(*) as count
             FROM posts
             WHERE user_id = ? AND is_deleted = FALSE
+            AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         `, [userId]);
 
-        // 3. 새 댓글 개수 (내 글에 달린 댓글)
+        // 3. 새 댓글 개수 (내 글에 달린 댓글, 30일 이내)
         const [newCommentsResult] = await db.query(`
             SELECT COUNT(DISTINCT c.id) as count
             FROM comments c
             JOIN posts p ON c.post_id = p.id
-            WHERE p.user_id = ? 
+            WHERE p.user_id = ?
             AND c.user_id != ?
             AND c.is_deleted = FALSE
+            AND c.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
             AND c.created_at > (
                 SELECT COALESCE(MAX(last_check), '2000-01-01')
                 FROM comment_checks
@@ -47,14 +50,15 @@ router.get('/stats', async (req, res) => {
             )
         `, [userId, userId, userId]);
 
-        // 4. 진행 중인 업무 (예시 - 실제로는 업무 테이블 필요)
-        // 지금은 최근 7일 내 작성한 글 개수로 대체
+        // 4. 결재 대기 (내가 결재해야 할 건, 30일 이내, CANCELLED 제외)
         const [tasksResult] = await db.query(`
             SELECT COUNT(*) as count
-            FROM posts
-            WHERE user_id = ? 
-            AND is_deleted = FALSE
-            AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            FROM approval_lines al
+            JOIN approval_documents ad ON al.document_id = ad.id
+            WHERE al.approver_id = ?
+            AND al.status = 'PENDING'
+            AND ad.status NOT IN ('CANCELLED')
+            AND ad.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         `, [userId]);
 
         // 5. 최근 공지사항 (상위 5개)
