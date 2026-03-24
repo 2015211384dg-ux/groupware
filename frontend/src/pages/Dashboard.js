@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/authService';
 import './Dashboard.css';
-import { IconBell, IconEdit, IconChat, IconCalendar } from '../components/Icons';
+import {
+    IconBoard, IconApproval, IconAddressBook,
+    IconCalendar, IconUser, IconHR, IconChat
+} from '../components/Icons';
 import { getCategoryColor } from '../utils/categoryColor';
 
 const Dashboard = memo(({ user }) => {
@@ -19,23 +22,17 @@ const Dashboard = memo(({ user }) => {
 
     const fetchDashboardData = useCallback(async () => {
         try {
-            // 대시보드 통계 조회
-            const statsResponse = await api.get('/dashboard/stats');
-            const data = statsResponse.data.data;
-            
-            console.log('📊 대시보드 데이터:', data);
-            
+            const res = await api.get('/dashboard/stats');
+            const data = res.data.data;
             setStats({
                 unreadNotices: data.unreadNotices,
                 myPosts: data.myPosts,
                 newComments: data.newComments,
                 ongoingTasks: data.ongoingTasks
             });
-            
-            console.log('📋 최근 공지사항:', data.recentNotices);
             setRecentNotices(data.recentNotices || []);
-        } catch (error) {
-            console.error('대시보드 데이터 조회 실패:', error);
+        } catch (e) {
+            console.error('대시보드 데이터 조회 실패:', e);
         } finally {
             setLoading(false);
         }
@@ -43,59 +40,32 @@ const Dashboard = memo(({ user }) => {
 
     useEffect(() => {
         fetchDashboardData();
-    }, [/*fetchDashboardData*/]);
+    }, []);
 
     const formatDate = useCallback((dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
+            year: 'numeric', month: '2-digit', day: '2-digit'
         }).replace(/\. /g, '.').replace(/\.$/, '');
     }, []);
 
     const isNewPost = useCallback((dateString) => {
-        const postDate = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - postDate);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays <= 7;
+        const diff = Math.abs(new Date() - new Date(dateString));
+        return Math.floor(diff / (1000 * 60 * 60 * 24)) <= 7;
     }, []);
 
-    const handleNoticeClick = useCallback((noticeId) => {
-        navigate(`/boards/1/posts/${noticeId}`);
-    }, [navigate]);
+    const today = new Date().toLocaleDateString('ko-KR', {
+        year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+    });
 
-    const handleViewAllClick = useCallback(() => {
-        navigate('/boards/1');
-    }, [navigate]);
-
-    const widgets = useMemo(() => [
-        {
-            title: '미확인 공지사항',
-            value: stats.unreadNotices,
-            icon: <IconBell size={22} color="white" />,
-            color: '#667eea'
-        },
-        {
-            title: '내가 쓴 글',
-            value: stats.myPosts,
-            icon: <IconEdit size={22} color="white" />,
-            color: '#f093fb'
-        },
-        {
-            title: '새 댓글',
-            value: stats.newComments,
-            icon: <IconChat size={22} color="white" />,
-            color: '#4facfe'
-        },
-        {
-            title: '진행 업무',
-            value: stats.ongoingTasks + '일',
-            icon: <IconCalendar size={22} color="white" />,
-            color: '#43e97b'
-        }
-    ], [stats]);
+    const quickLinks = [
+        { label: '게시판',   icon: <IconBoard size={20} />,       path: '/boards' },
+        { label: '전자결재', icon: <IconApproval size={20} />,    path: '/approval' },
+        { label: '주소록',   icon: <IconAddressBook size={20} />, path: '/address-book' },
+        { label: '캘린더',   icon: <IconCalendar size={20} />,    path: '/calendar' },
+        { label: '내 정보',  icon: <IconUser size={20} />,        path: '/my-info' },
+        { label: '인사관리', icon: <IconHR size={20} />,          path: '/hr' },
+    ];
 
     if (loading) {
         return (
@@ -108,117 +78,150 @@ const Dashboard = memo(({ user }) => {
 
     return (
         <div className="dashboard">
-            <div className="dashboard-header">
-                <h1>안녕하세요, {user?.name}님 👋</h1>
-                <p>{new Date().toLocaleDateString('ko-KR', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    weekday: 'long'
-                })}</p>
-            </div>
+            <div className="dashboard-grid">
 
-            <div className="dashboard-stats">
-                {widgets.map((widget, index) => (
-                    <div key={index} className="stat-card" style={{ borderTopColor: widget.color }}>
-                        <div className="stat-icon" style={{ background: widget.color }}>
-                            {widget.icon}
+                {/* ── 왼쪽: 프로필 카드 ── */}
+                <aside className="dash-left">
+                    <div className="dash-profile-card">
+                        <div className="profile-avatar-lg">
+                            {user?.name?.charAt(0) || 'U'}
                         </div>
-                        <div className="stat-content">
-                            <p className="stat-title">{widget.title}</p>
-                            <p className="stat-value">{widget.value}</p>
+                        <div className="profile-greeting">
+                            <span className="profile-name-lg">{user?.name}님,</span>
+                            <span className="profile-hello-lg">안녕하세요.</span>
+                        </div>
+                        <div className="profile-meta">
+                            {user?.position && (
+                                <span className="profile-pos">{user.position}</span>
+                            )}
+                            {user?.department && (
+                                <span className="profile-dept">{user.department}</span>
+                            )}
+                        </div>
+                        <div className="profile-date">{today}</div>
+                    </div>
+                </aside>
+
+                {/* ── 가운데: 현황 + 공지 ── */}
+                <main className="dash-main">
+                    <div className="dash-card">
+                        <div className="dash-card-header">
+                            <span className="dash-card-title">나의 현황</span>
+                        </div>
+                        <div className="stats-grid-2x2">
+                            <div className="stats-cell">
+                                <span className="stats-cell-value">{stats.unreadNotices}</span>
+                                <span className="stats-cell-label">미확인 공지</span>
+                            </div>
+                            <div className="stats-cell">
+                                <span className="stats-cell-value">{stats.myPosts}</span>
+                                <span className="stats-cell-label">내가 쓴 글</span>
+                            </div>
+                            <div className="stats-cell">
+                                <span className="stats-cell-value">{stats.newComments}</span>
+                                <span className="stats-cell-label">새 댓글</span>
+                            </div>
+                            <div className="stats-cell">
+                                <span className="stats-cell-value">{stats.ongoingTasks}</span>
+                                <span className="stats-cell-label">결재 대기</span>
+                            </div>
                         </div>
                     </div>
-                ))}
-            </div>
 
-            <div className="dashboard-content">
-                <div className="content-section">
-                    <div className="section-header">
-                        <h2>최근 공지사항</h2>
-                        <a onClick={handleViewAllClick}>전체보기 →</a>
-                    </div>
-                    <div className="notice-list">
-                        {recentNotices.length > 0 ? (
-                            recentNotices.map((notice) => (
-                                <div 
-                                    key={notice.id} 
-                                    className="notice-item"
-                                    onClick={() => handleNoticeClick(notice.id)}
-                                >
-                                    {notice.category && (
-                                        <span className="notice-badge" style={getCategoryColor(notice.category)}>{notice.category}</span>
-                                    )}
-                                    {isNewPost(notice.created_at) && !notice.category && (
-                                        <span className="notice-badge" style={getCategoryColor('NEW')}>NEW</span>
-                                    )}
-                                    <div className="notice-content">
-                                        <p className="notice-title">
-                                            {notice.title}
-                                        </p>
+                    <div className="dash-card">
+                        <div className="dash-card-header">
+                            <span className="dash-card-title">최근 공지사항</span>
+                            <span className="dash-card-more" onClick={() => navigate('/boards/1')}>전체보기</span>
+                        </div>
+                        <div className="notice-list">
+                            {recentNotices.length > 0 ? (
+                                recentNotices.map((notice) => (
+                                    <div
+                                        key={notice.id}
+                                        className="notice-item"
+                                        onClick={() => navigate(`/boards/1/posts/${notice.id}`)}
+                                    >
+                                        <div className="notice-item-top">
+                                            {notice.category && (
+                                                <span className="notice-badge" style={getCategoryColor(notice.category)}>
+                                                    {notice.category}
+                                                </span>
+                                            )}
+                                            {!notice.category && isNewPost(notice.created_at) && (
+                                                <span className="notice-badge" style={getCategoryColor('NEW')}>NEW</span>
+                                            )}
+                                            <p className="notice-title">{notice.title}</p>
+                                        </div>
                                         <div className="notice-meta">
                                             <span className="notice-author">{notice.author_name}</span>
+                                            <span className="notice-sep">·</span>
                                             <span className="notice-date">{formatDate(notice.created_at)}</span>
                                             {notice.comment_count > 0 && (
-                                                <span className="notice-comments">
-                                                    💬 {notice.comment_count}
+                                                <span className="notice-comment-count">
+                                                    <IconChat size={12} />
+                                                    {notice.comment_count}
                                                 </span>
                                             )}
                                         </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="empty-notice">
+                                    <p>최근 공지사항이 없습니다.</p>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="empty-notice">
-                                <p>최근 공지사항이 없습니다.</p>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
+                </main>
 
-                <div className="content-section">
-                    <div className="section-header">
-                        <h2>이번 주 생일자</h2>
-                    </div>
-                    <div className="birthday-list">
-                        {birthdays.length > 0 ? (
-                            birthdays.map((birthday, index) => (
-                                <div key={index} className="birthday-item">
-                                    <div className="birthday-avatar">
-                                        {birthday.name?.charAt(0) || 'U'}
-                                    </div>
-                                    <div className="birthday-info">
-                                        <p className="birthday-name">{birthday.name}</p>
-                                        <p className="birthday-dept">
-                                            {birthday.department} • {birthday.date} 🎂
-                                        </p>
-                                    </div>
+                {/* ── 오른쪽: 바로가기 + 생일자 ── */}
+                <aside className="dash-right">
+                    <div className="dash-card">
+                        <div className="dash-card-header">
+                            <span className="dash-card-title">바로가기</span>
+                        </div>
+                        <div className="quicklinks-grid">
+                            {quickLinks.map((link) => (
+                                <div
+                                    key={link.label}
+                                    className="quicklink-item"
+                                    onClick={() => navigate(link.path)}
+                                >
+                                    <div className="quicklink-icon-wrap">{link.icon}</div>
+                                    <span className="quicklink-label">{link.label}</span>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="empty-notice">
-                                <p>이번 주 생일자가 없습니다.</p>
-                            </div>
-                        )}
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="content-section full-width">
-                    <div className="section-header">
-                        <h2>나의 근태 현황</h2>
-                        <a onClick={() => window.open('https://shiftee.io/ko/accounts/login', '_blank')}>
-                            상세보기 →
-                        </a>
+                    <div className="dash-card">
+                        <div className="dash-card-header">
+                            <span className="dash-card-title">이번 주 생일자</span>
+                        </div>
+                        <div className="birthday-list">
+                            {birthdays.length > 0 ? (
+                                birthdays.map((b, i) => (
+                                    <div key={i} className="birthday-item">
+                                        <div className="birthday-avatar">{b.name?.charAt(0) || 'U'}</div>
+                                        <div className="birthday-info">
+                                            <p className="birthday-name">{b.name}</p>
+                                            <p className="birthday-dept">{b.department} · {b.date}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="empty-notice">
+                                    <p>이번 주 생일자가 없습니다.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <div className="attendance-chart">
-                        <p className="chart-placeholder"> 구현 예정</p>
-                    </div>
-                </div>
+                </aside>
+
             </div>
         </div>
     );
 });
 
 Dashboard.displayName = 'Dashboard';
-
 export default Dashboard;
