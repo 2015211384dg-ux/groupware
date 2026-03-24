@@ -1171,13 +1171,16 @@
 }
 
 .comment-author-badge {
+  display: inline-flex;
+  align-items: center;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   color: #667eea;
   background: #f0f4ff;
-  padding: 2px 8px;
-  border-radius: 999px;
+  padding: 2px 5px;
+  border-radius: 3px;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .comment-date {
