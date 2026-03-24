@@ -195,10 +195,19 @@ body.dark-theme .meta-sep {
     color: #66667a;
 }
 
-/* ── 구분선 ── */
-body.dark-theme .notice-item,
-body.dark-theme .notice-item:last-child,
+/* ── 공지사항 행 ── */
+body.dark-theme .notice-item {
+    background: transparent;
+    border-bottom-color: #2e2e42;
+}
+
+body.dark-theme .notice-item:hover {
+    background: #252538;
+}
+
+/* ── 현황 그리드 ── */
 body.dark-theme .stats-grid-2x2 {
+    background: #2e2e42;
     border-color: #2e2e42;
 }
 
@@ -208,6 +217,20 @@ body.dark-theme .stats-cell {
 
 body.dark-theme .stats-cell:hover {
     background: #252538;
+}
+
+/* ── 바로가기 아이콘 ── */
+body.dark-theme .quicklink-icon-wrap {
+    background: #252548;
+    color: #8888dd;
+}
+
+body.dark-theme .quicklink-item:hover {
+    background: #252538;
+}
+
+body.dark-theme .quicklink-label {
+    color: #c8c8d8;
 }
 
 body.dark-theme .post-header-block {
