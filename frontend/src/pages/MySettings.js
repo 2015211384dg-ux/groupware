@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/authService';
 import './MySettings.css';
 import { useToast } from '../components/Toast';
-import { applyTheme } from '../App';
-
 function MySettings() {
     const toast = useToast();
     const [settings, setSettings] = useState({
@@ -56,9 +54,6 @@ function MySettings() {
             setSaving(true);
             await api.put('/users/my-settings', settings);
             toast.success('설정이 저장되었습니다.');
-            // 테마 즉시 적용 + 캐싱
-            localStorage.setItem('groupware_theme', settings.theme);
-            applyTheme(settings.theme);
         } catch (error) {
             console.error('설정 저장 실패:', error);
             toast.error('설정 저장에 실패했습니다.');
@@ -157,49 +152,6 @@ function MySettings() {
                             />
                             <span className="slider"></span>
                         </label>
-                    </div>
-                </div>
-
-                {/* 테마 설정 */}
-                <div className="settings-section">
-                    <h2>🎨 테마 설정</h2>
-                    <p className="section-description">
-                        화면 테마를 선택하세요
-                    </p>
-                    
-                    <div className="theme-options">
-                        <div 
-                            className={`theme-option ${settings.theme === 'light' ? 'active' : ''}`}
-                            onClick={() => handleChange('theme', 'light')}
-                        >
-                            <div className="theme-preview light">
-                                <div className="preview-header"></div>
-                                <div className="preview-body"></div>
-                            </div>
-                            <span>라이트 모드</span>
-                        </div>
-
-                        <div 
-                            className={`theme-option ${settings.theme === 'dark' ? 'active' : ''}`}
-                            onClick={() => handleChange('theme', 'dark')}
-                        >
-                            <div className="theme-preview dark">
-                                <div className="preview-header"></div>
-                                <div className="preview-body"></div>
-                            </div>
-                            <span>다크 모드</span>
-                        </div>
-
-                        <div 
-                            className={`theme-option ${settings.theme === 'auto' ? 'active' : ''}`}
-                            onClick={() => handleChange('theme', 'auto')}
-                        >
-                            <div className="theme-preview auto">
-                                <div className="preview-header"></div>
-                                <div className="preview-body"></div>
-                            </div>
-                            <span>자동</span>
-                        </div>
                     </div>
                 </div>
 
