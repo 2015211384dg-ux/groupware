@@ -982,7 +982,7 @@
 
 .comments-header-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   margin-bottom: 14px;
 }
