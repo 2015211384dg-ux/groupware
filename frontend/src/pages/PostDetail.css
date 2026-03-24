@@ -982,7 +982,7 @@
 
 .comments-header-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -1005,6 +1005,7 @@
   color: #3730a3;
   font-size: 12px;
   font-weight: 800;
+  margin-top: 2px;
 }
 
 .comment-compose-card,
