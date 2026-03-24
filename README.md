@@ -10,7 +10,7 @@
 |------|------|
 | Frontend | React 18, Vite, React Router v6 |
 | Backend | Node.js, Express |
-| Database | MySQL (port 3300) |
+| Database | MariaDB (port 3300) |
 | 프로세스 관리 | PM2 |
 | 인증 | JWT (httpOnly Cookie) |
 | 에디터 | React Quill |
@@ -105,7 +105,7 @@ groupware/
 ### 1. 데이터베이스 설정
 
 ```bash
-# MySQL 접속 (포트 3300)
+# MariaDB 접속 (포트 3300)
 mysql -u root -p -P 3300
 
 # DB 생성 및 스키마 적용

@@ -2,7 +2,7 @@
 
 > 작성일: 2026-03-24
 > 대상: 사내 전용 Windows Server 온프레미스 배포
-> 구성: Windows Server + Node.js + PM2 + MySQL + Nginx
+> 구성: Windows Server + Node.js + PM2 + MariaDB + Nginx
 
 ---
 
@@ -15,7 +15,7 @@
       ↓  (3000 포트)
    Node.js + PM2              ← 백엔드 API + 프론트 정적파일 서빙
       ↓  (3300 포트)
-   MySQL                      ← 데이터베이스
+   MariaDB                      ← 데이터베이스
 ```
 
 ---
@@ -55,14 +55,14 @@ npm install -g pm2
 npm install -g pm2-windows-startup
 ```
 
-### 2-3. MySQL 설치
-1. https://dev.mysql.com/downloads/installer/ 에서 MySQL Installer 다운로드
-2. **MySQL Server** + **MySQL Workbench** 선택 설치
+### 2-3. MariaDB 설치
+1. https://mariadb.org/download/ 에서 Windows용 MSI Installer 다운로드
+2. **MariaDB Server** 설치 (GUI 툴은 HeidiSQL 별도 설치 권장)
 3. 설치 중 root 비밀번호 설정 (현재: `Amphenol123`)
 4. 포트: **3300** (기본 3306과 다름 — 설치 시 직접 입력)
 5. 설치 확인:
 ```powershell
-mysql -u root -p -P 3300
+mariadb -u root -p -P 3300
 ```
 
 ### 2-4. Nginx for Windows 설치
@@ -90,7 +90,7 @@ mysqldump -u root -p -P 3300 groupware > groupware_backup.sql
 
 ### 3-2. 새 서버에 DB 가져오기 (새 서버에서 실행)
 ```powershell
-# MySQL 접속
+# MariaDB 접속
 mysql -u root -p -P 3300
 
 # DB 생성
@@ -369,7 +369,7 @@ $date = Get-Date -Format "yyyyMMdd"
 $backupDir = "C:\backup"
 
 # DB 백업
-& "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" `
+& "C:\Program Files\MariaDB\MariaDB Server\bin\mariadb-dump.exe" `
   -u root -pAmphenol123 -P 3300 groupware > "$backupDir\db_$date.sql"
 
 # 30일 이상 된 백업 삭제
@@ -386,7 +386,7 @@ Get-ChildItem $backupDir -Filter "*.sql" |
 |------|------|------|
 | 접속 안 됨 | 방화벽 차단 | 80포트 인바운드 규칙 확인 |
 | 502 Bad Gateway | Node.js 꺼짐 | `pm2 restart groupware-backend` |
-| DB 연결 실패 | MySQL 꺼짐 또는 .env 오류 | MySQL 서비스 확인, .env 재확인 |
+| DB 연결 실패 | MariaDB 꺼짐 또는 .env 오류 | MariaDB 서비스 확인, .env 재확인 |
 | 로그인 안 됨 | JWT_SECRET 변경됨 | 기존 .env의 JWT_SECRET 그대로 사용 |
 | 파일 업로드 실패 | uploads 폴더 없음 | `mkdir C:\groupware\backend\uploads` |
 | 변경사항 안 보임 | 빌드 안 함 | `npm run build` 후 pm2 restart |
@@ -397,7 +397,7 @@ Get-ChildItem $backupDir -Filter "*.sql" |
 
 ### 최초 배포 시
 - [ ] Node.js 설치 확인
-- [ ] MySQL 설치 및 DB 생성
+- [ ] MariaDB 설치 및 DB 생성
 - [ ] DB 데이터 이전 (기존 서버에서 dump)
 - [ ] 코드 복사 및 패키지 설치
 - [ ] `.env` 파일 생성 및 설정
