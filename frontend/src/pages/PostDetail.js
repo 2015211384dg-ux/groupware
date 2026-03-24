@@ -300,56 +300,57 @@ const submitReply = async () => {
     );
   };
 
-  const renderCommentItem = (c, depth = 0) => {
-    const replies = childrenMap.get(c.id) || [];
-    const isReply = depth > 0;
+  // 모든 하위 댓글을 depth 무관하게 flat하게 수집
+  const collectAllReplies = (commentId) => {
+    const children = childrenMap.get(commentId) || [];
+    return children.reduce((acc, child) => {
+      return [...acc, child, ...collectAllReplies(child.id)];
+    }, []);
+  };
 
-    const cardNode = (
-      <div className={`comment-card ${isReply ? 'reply' : ''}`}>
-        <div className="comment-card-top">
-          <div className="comment-avatar-v2">
-            {(c.authorName || 'U').toString().charAt(0)}
+  const renderCommentCard = (c, isReply) => (
+    <div className={`comment-card ${isReply ? 'reply' : ''}`}>
+      <div className="comment-card-top">
+        <div className="comment-avatar-v2">
+          {(c.authorName || 'U').toString().charAt(0)}
+        </div>
+        <div className="comment-body">
+          <div className="comment-meta-row">
+            <div className="comment-author">
+              <span className="comment-author-name">{c.authorName}</span>
+              {c.authorPosition ? (
+                <span className="comment-author-badge">{c.authorPosition}</span>
+              ) : null}
+            </div>
+            <div className="comment-date">{formatDate(c.createdAt)}</div>
           </div>
-
-          <div className="comment-body">
-            <div className="comment-meta-row">
-              <div className="comment-author">
-                <span className="comment-author-name">{c.authorName}</span>
-                {c.authorPosition ? (
-                  <span className="comment-author-badge">{c.authorPosition}</span>
-                ) : null}
-              </div>
-
-              <div className="comment-date">{formatDate(c.createdAt)}</div>
-            </div>
-
-            <div className="comment-text">{renderMentionText(c.content)}</div>
-
-            <div className="comment-actions-row no-print">
-                <button className="comment-action-btn" onClick={() => openReply(c)}>답글</button>
-                <button className="comment-action-btn danger" onClick={() => deleteComment(c.id)}>삭제</button>
-            </div>
+          <div className="comment-text">{renderMentionText(c.content)}</div>
+          <div className="comment-actions-row no-print">
+            <button className="comment-action-btn" onClick={() => openReply(c)}>답글</button>
+            <button className="comment-action-btn danger" onClick={() => deleteComment(c.id)}>삭제</button>
           </div>
         </div>
-
-        {replies.length > 0 ? (
-          <div className="comment-replies">
-            {replies.map((rc) => renderCommentItem(rc, depth + 1))}
-          </div>
-        ) : null}
       </div>
+    </div>
+  );
+
+  const renderCommentItem = (c) => {
+    const allReplies = collectAllReplies(c.id);
+    return (
+      <React.Fragment key={c.id}>
+        {renderCommentCard(c, false)}
+        {allReplies.length > 0 && (
+          <div className="comment-replies">
+            {allReplies.map((rc) => (
+              <div key={rc.id} className="reply-wrapper">
+                <div className="reply-connector">ㄴ</div>
+                {renderCommentCard(rc, true)}
+              </div>
+            ))}
+          </div>
+        )}
+      </React.Fragment>
     );
-
-    if (isReply) {
-      return (
-        <div key={c.id} className="reply-wrapper">
-          <div className="reply-connector">ㄴ</div>
-          {cardNode}
-        </div>
-      );
-    }
-
-    return <React.Fragment key={c.id}>{cardNode}</React.Fragment>;
   };
 
   if (loading) return <div style={{ padding: 24 }}>로딩 중...</div>;
