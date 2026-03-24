@@ -61,10 +61,10 @@ const Dashboard = memo(({ user }) => {
     const quickLinks = [
         { label: '게시판',   icon: <IconBoard size={20} />,       path: '/boards' },
         { label: '전자결재', icon: <IconApproval size={20} />,    path: '/approval' },
-        { label: '주소록',   icon: <IconAddressBook size={20} />, path: '/address-book' },
+        { label: '주소록',   icon: <IconAddressBook size={20} />, path: '/addressbook/all' },
         { label: '캘린더',   icon: <IconCalendar size={20} />,    path: '/calendar' },
-        { label: '내 정보',  icon: <IconUser size={20} />,        path: '/my-info' },
-        { label: '인사관리', icon: <IconHR size={20} />,          path: '/hr' },
+        { label: '내 정보',  icon: <IconUser size={20} />,        path: '/hr/myinfo' },
+        { label: '내 설정',  icon: <IconHR size={20} />,          path: '/my-settings' },
     ];
 
     if (loading) {
