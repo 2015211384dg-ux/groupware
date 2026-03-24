@@ -74,6 +74,12 @@ export const IconPinOff      = (p) => <Icon {...p} d={["M12 17v5","M9 10.76a2 2 
 export const IconHeart       = (p) => <Icon {...p} d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />;
 export const IconDownload    = (p) => <Icon {...p} d={["M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4","M7 10l5 5 5-5","M12 15V3"]} />;
 
+// 글로브 (언어)
+export const IconGlobe      = (p) => <Icon {...p} d={["M12 2a10 10 0 1010 10A10 10 0 0012 2z","M2 12h20","M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"]} />;
+
+// 저장
+export const IconSave       = (p) => <Icon {...p} d={["M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z","M17 21v-8H7v8","M7 3v5h8"]} />;
+
 // 잠금
 export const IconLock           = (p) => <Icon {...p} d={["M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z","M7 11V7a5 5 0 0110 0v4"]} />;
 export const IconUnlock         = (p) => <Icon {...p} d={["M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z","M7 11V7a5 5 0 019.9-1"]} />;

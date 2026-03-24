@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../../services/SettingsContext';
 import api from '../../services/authService';
 import './Header.css';
-import { IconBell, IconSettings, IconApproval, IconLogout, IconUser } from '../../components/Icons';
+import { IconBell, IconSettings, IconApproval, IconLogout, IconUser, IconAdmin } from '../../components/Icons';
 
 // 알림 타입별 아이콘/색상
 const NOTIF_META = {
@@ -224,25 +224,25 @@ function Header({ user, onLogout, onToggleSidebar }) {
                                 </div>
                                 <div className="dropdown-divider" />
                                 <button className="dropdown-item" onClick={() => handleMenuClick('/hr/myinfo')}>
-                                    👤 내 정보
+                                    <IconUser size={16} /> 내 정보
                                 </button>
                                 <button className="dropdown-item" onClick={() => handleMenuClick('/my-settings')}>
-                                    내 설정
+                                    <IconSettings size={16} /> 내 설정
                                 </button>
                                 <button className="dropdown-item" onClick={() => handleMenuClick('/approval')}>
-                                    결재함
+                                    <IconApproval size={16} /> 결재함
                                     {unreadCount > 0 && (
                                         <span className="dropdown-notif-badge">{unreadCount}</span>
                                     )}
                                 </button>
                                 {isAdmin && (
                                     <button className="dropdown-item" onClick={() => handleMenuClick('/admin/settings')}>
-                                        🔧 시스템 설정
+                                        <IconAdmin size={16} /> 시스템 설정
                                     </button>
                                 )}
                                 <div className="dropdown-divider" />
                                 <button className="dropdown-item logout" onClick={onLogout}>
-                                    🚪 로그아웃
+                                    <IconLogout size={16} /> 로그아웃
                                 </button>
                             </div>
                         </>
