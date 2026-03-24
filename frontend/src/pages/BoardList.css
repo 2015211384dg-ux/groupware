@@ -1,297 +1,120 @@
-.board-list-page-v2 {
-    min-height: calc(100vh - 64px);
-    background: #f5f7fa;
+.boardlist-page {
+    padding: 32px;
+    max-width: 900px;
 }
 
-/* 헤더 */
-.board-header-v2 {
-    background: white;
-    padding: 24px 32px;
-    border-bottom: 1px solid #e5e7eb;
+.boardlist-header {
+    margin-bottom: 28px;
 }
 
-.header-title-v2 h1 {
-    font-size: 20px;
+.boardlist-title {
+    font-size: 22px;
     font-weight: 700;
     color: #1a1a1a;
-    margin: 0 0 8px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin: 0 0 6px 0;
 }
 
-.header-subtitle {
-    font-size: 13px;
-    color: #666;
+.boardlist-subtitle {
+    font-size: 14px;
+    color: #888;
     margin: 0;
 }
 
-/* 검색 & 액션 바 */
-.board-toolbar {
-    background: white;
-    padding: 16px 32px;
-    border-bottom: 1px solid #e5e7eb;
+.boardlist-grid {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.toolbar-left {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.search-box-v2 {
+.board-card {
+    background: #fff;
+    border: 1px solid #e8eaed;
+    border-radius: 12px;
+    padding: 18px 20px;
     display: flex;
     align-items: center;
-    background: #f8f9fa;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    padding: 0 12px;
-    width: 320px;
+    gap: 16px;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
 }
 
-.search-box-v2 input {
+.board-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.board-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #f0f4ff;
+    color: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.board-card-body {
     flex: 1;
-    border: none;
-    background: none;
-    padding: 10px 8px;
-    font-size: 14px;
-    outline: none;
-}
-
-.search-box-v2 input::placeholder {
-    color: #999;
-}
-
-.search-btn {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 4px;
-}
-
-.toolbar-right {
-    display: flex;
-    gap: 8px;
-}
-
-.write-btn {
-    padding: 10px 24px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.write-btn:hover {
-    background: #5568d3;
-    transform: translateY(-1px);
-}
-
-/* 테이블 컨테이너 */
-.board-table-container {
-    background: white;
-    margin: 0;
-}
-
-/* 테이블 */
-.board-table-v2 {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.board-table-v2 thead {
-    background: #f8f9fa;
-    border-top: 1px solid #e5e7eb;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.board-table-v2 th {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
-}
-
-.board-table-v2 tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-    transition: background 0.2s;
-    cursor: pointer;
-}
-
-.board-table-v2 tbody tr:hover {
-    background: #f8f9fa;
-}
-
-.board-table-v2 td {
-    padding: 16px;
-    color: #333;
-}
-
-/* 컬럼 너비 */
-.col-checkbox {
-    width: 40px;
-    text-align: center;
-}
-
-.col-number {
-    width: 80px;
-    text-align: center;
-}
-
-.col-title {
-    min-width: 300px;
-}
-
-.col-author {
-    width: 160px;
-}
-
-.col-date {
-    width: 140px;
-    text-align: center;
-}
-
-.col-views {
-    width: 80px;
-    text-align: center;
-}
-
-/* 체크박스 */
-.board-table-v2 input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: #4ecdc4;
-}
-
-/* 구분 */
-.col-number {
-    font-size: 13px;
-    color: #999;
-}
-
-/* 제목 */
-.title-wrapper {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
-.title-text {
-    font-size: 14px;
-    font-weight: 500;
+.board-card-name {
+    font-size: 15px;
+    font-weight: 600;
     color: #1a1a1a;
 }
 
-.title-desc {
-    font-size: 12px;
+.board-card-desc {
+    font-size: 13px;
     color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* 작성자 */
-.author-info-v2 {
+.board-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    color: #aaa;
+}
+
+.board-card-count {
+    font-size: 13px;
+    color: #aaa;
+}
+
+@media (max-width: 600px) {
+    .boardlist-page {
+        padding: 20px 16px;
+    }
+}
+
+/* 공용 로딩 */
+.page-loading {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    gap: 16px;
 }
 
-.author-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
+.page-loading .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
 }
 
-.author-role {
-    font-size: 12px;
-    color: #999;
-}
-
-/* 날짜 */
-.col-date {
-    font-size: 13px;
-    color: #666;
-}
-
-/* 조회수 */
-.col-views {
-    font-size: 13px;
-    color: #666;
-}
-
-/* 빈 상태 */
-.empty-state-v2 {
-    padding: 80px 20px;
-    text-align: center;
-}
-
-.empty-state-v2 p {
-    font-size: 14px;
-    color: #999;
-    margin: 0;
-}
-
-/* 반응형 */
-@media (max-width: 1024px) {
-    .board-header-v2,
-    .board-toolbar {
-        padding: 16px 20px;
-    }
-
-    .search-box-v2 {
-        width: 240px;
-    }
-
-    .col-author,
-    .col-date {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .header-title-v2 h1 {
-        font-size: 18px;
-    }
-
-    .board-toolbar {
-        flex-direction: column;
-        gap: 12px;
-        align-items: stretch;
-    }
-
-    .toolbar-left,
-    .toolbar-right {
-        width: 100%;
-    }
-
-    .search-box-v2 {
-        width: 100%;
-    }
-
-    .write-btn {
-        width: 100%;
-    }
-
-    .board-table-v2 {
-        font-size: 13px;
-    }
-
-    .board-table-v2 th,
-    .board-table-v2 td {
-        padding: 12px 8px;
-    }
-
-    .col-number,
-    .col-views {
-        display: none;
-    }
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
