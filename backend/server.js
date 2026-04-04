@@ -233,16 +233,14 @@ function invalidateMaintenanceCache() { _maintCache.ts = 0; }
 module.exports = { invalidateMaintenanceCache };
 
 const MAINTENANCE_BYPASS = [
-    '/api/v1/auth/login',
-    '/api/v1/auth/refresh',
-    '/api/v1/auth/me',
+    '/api/v1/auth/',
     '/api/v1/settings/public',
     '/api/v1/settings/maintenance',
     '/api/v1/admin/settings',
 ];
 
 app.use('/api/', async (req, res, next) => {
-    if (MAINTENANCE_BYPASS.some(p => req.path.startsWith(p.replace('/api/v1', '')))) return next();
+    if (MAINTENANCE_BYPASS.some(p => req.originalUrl.startsWith(p))) return next();
     const now = Date.now();
     if (now - _maintCache.ts > 15000) {
         try {
