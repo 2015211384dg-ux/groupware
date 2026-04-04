@@ -137,15 +137,25 @@ export default function Feedback() {
                         ) : myList.map(item => {
                             const typeInfo = TYPES.find(t => t.value === item.type) || TYPES[3];
                             const statusInfo = STATUS_MAP[item.status] || STATUS_MAP.pending;
+                            const isOpen = expanded === item.id;
                             return (
-                                <div key={item.id} className="fb-item" onClick={() => setExpanded(expanded === item.id ? null : item.id)}>
-                                    <div className="fb-item-head">
-                                        <span className="fb-item-type" style={{ color: typeInfo.color }}>{typeInfo.icon} {typeInfo.label}</span>
-                                        <span className="fb-item-status" style={{ color: statusInfo.color, background: statusInfo.bg }}>{statusInfo.label}</span>
+                                <div key={item.id} className={`fb-item${isOpen ? ' expanded' : ''}`} onClick={() => setExpanded(isOpen ? null : item.id)}>
+                                    <div className="fb-item-main">
+                                        <div className="fb-item-top">
+                                            <span className="fb-item-type" style={{ color: typeInfo.color }}>
+                                                {typeInfo.icon}&nbsp;{typeInfo.label}
+                                            </span>
+                                            <span className="fb-item-status" style={{ color: statusInfo.color, background: statusInfo.bg }}>
+                                                {statusInfo.label}
+                                            </span>
+                                        </div>
+                                        <div className="fb-item-title">{item.title}</div>
+                                        <div className="fb-item-meta">
+                                            <span className="fb-item-date">{new Date(item.created_at).toLocaleDateString('ko-KR')}</span>
+                                            <span className="fb-item-chevron">{isOpen ? '▲' : '▼'}</span>
+                                        </div>
                                     </div>
-                                    <div className="fb-item-title">{item.title}</div>
-                                    <div className="fb-item-date">{new Date(item.created_at).toLocaleDateString('ko-KR')}</div>
-                                    {expanded === item.id && (
+                                    {isOpen && (
                                         <div className="fb-item-detail">
                                             <p className="fb-item-content">{item.content}</p>
                                             {item.admin_note && (
