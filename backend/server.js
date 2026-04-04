@@ -288,6 +288,46 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================
+// 주기적 정리 작업
+// ============================================
+
+// 만료된 refresh_tokens 매 1시간마다 삭제
+setInterval(async () => {
+    try {
+        const [result] = await db.query('DELETE FROM refresh_tokens WHERE expires_at < NOW()');
+        if (result.affectedRows > 0) {
+            console.log(`[cleanup] 만료된 refresh_tokens ${result.affectedRows}개 삭제`);
+        }
+    } catch (err) {
+        console.error('[cleanup] refresh_tokens 정리 실패:', err.message);
+    }
+}, 60 * 60 * 1000);
+
+// 90일 이상된 system_logs 매일 새벽 3시 삭제
+function scheduleDailyCleanup() {
+    const now = new Date();
+    const next3am = new Date();
+    next3am.setHours(3, 0, 0, 0);
+    if (next3am <= now) next3am.setDate(next3am.getDate() + 1);
+    const msUntil3am = next3am - now;
+
+    setTimeout(async function tick() {
+        try {
+            const [result] = await db.query(
+                'DELETE FROM system_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 90 DAY)'
+            );
+            if (result.affectedRows > 0) {
+                console.log(`[cleanup] 90일 이상 system_logs ${result.affectedRows}개 삭제`);
+            }
+        } catch (err) {
+            console.error('[cleanup] system_logs 정리 실패:', err.message);
+        }
+        setTimeout(tick, 24 * 60 * 60 * 1000);
+    }, msUntil3am);
+}
+scheduleDailyCleanup();
+
+// ============================================
 // 서버 시작
 // ============================================
 
