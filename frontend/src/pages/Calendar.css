@@ -84,9 +84,6 @@
     color: #ff6b6b;
 }
 
-.mini-cal-weekdays #4ecdc4 {
-    color: #764ba2;
-}
 
 .mini-cal-grid {
     display: grid;
@@ -119,9 +116,6 @@
     color: #ff6b6b;
 }
 
-.mini-cal-day#4ecdc4 {
-    color: #764ba2;
-}
 
 .mini-cal-day.empty {
     cursor: default;
