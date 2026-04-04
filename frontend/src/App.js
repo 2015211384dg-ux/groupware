@@ -122,7 +122,7 @@ function App() {
   }
 
   // 점검 중 && 관리자가 아닌 경우 점검 페이지 표시
-  if (maintenance.on && !ADMIN_ROLES.includes(user?.role)) {
+  if (maintenance.on && isAuthenticated && !ADMIN_ROLES.includes(user?.role)) {
     return <MaintenancePage message={maintenance.message} onLogout={isAuthenticated ? handleLogout : null} />;
   }
 
