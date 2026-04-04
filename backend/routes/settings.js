@@ -20,6 +20,19 @@ router.get('/public', async (req, res) => {
     }
 });
 
+// 점검 모드 상태 (인증 불필요 — 프론트엔드 앱 초기화 시 폴링)
+router.get('/maintenance', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT maintenance_mode, maintenance_message FROM system_settings LIMIT 1');
+        res.json({
+            maintenance: !!rows[0]?.maintenance_mode,
+            message: rows[0]?.maintenance_message || '',
+        });
+    } catch {
+        res.json({ maintenance: false, message: '' });
+    }
+});
+
 // 활성화된 팝업 공지 목록 (인증 불필요)
 router.get('/notices/public', async (req, res) => {
     try {
@@ -43,7 +56,7 @@ router.get('/', async (req, res) => {
     try {
         const [settings] = await db.query(
             `SELECT id, site_name, site_description, max_upload_size, session_timeout,
-                    allow_registration, require_email_verification, maintenance_mode,
+                    allow_registration, require_email_verification, maintenance_mode, maintenance_message,
                     password_min_length, password_require_special, login_fail_lock_count,
                     log_retention_days,
                     popup_notice_enabled, popup_notice_title, popup_notice_content,
@@ -62,6 +75,7 @@ router.get('/', async (req, res) => {
                     allow_registration: false,
                     require_email_verification: true,
                     maintenance_mode: false,
+                    maintenance_message: '',
                     password_min_length: 8,
                     password_require_special: false,
                     login_fail_lock_count: 5,
@@ -94,7 +108,7 @@ router.post('/', async (req, res) => {
     try {
         const {
             site_name, site_description, max_upload_size, session_timeout,
-            allow_registration, require_email_verification, maintenance_mode,
+            allow_registration, require_email_verification, maintenance_mode, maintenance_message,
             password_min_length, password_require_special, login_fail_lock_count,
             log_retention_days,
             popup_notice_enabled, popup_notice_title, popup_notice_content,
@@ -107,6 +121,7 @@ router.post('/', async (req, res) => {
             allow_registration ? 1 : 0,
             require_email_verification ? 1 : 0,
             maintenance_mode ? 1 : 0,
+            maintenance_message || null,
             password_min_length ?? 8,
             password_require_special ? 1 : 0,
             login_fail_lock_count ?? 5,
@@ -120,7 +135,7 @@ router.post('/', async (req, res) => {
             await db.query(
                 `UPDATE system_settings SET
                     site_name=?, site_description=?, max_upload_size=?, session_timeout=?,
-                    allow_registration=?, require_email_verification=?, maintenance_mode=?,
+                    allow_registration=?, require_email_verification=?, maintenance_mode=?, maintenance_message=?,
                     password_min_length=?, password_require_special=?, login_fail_lock_count=?,
                     log_retention_days=?,
                     popup_notice_enabled=?, popup_notice_title=?, popup_notice_content=?,
@@ -132,14 +147,17 @@ router.post('/', async (req, res) => {
             await db.query(
                 `INSERT INTO system_settings
                     (site_name, site_description, max_upload_size, session_timeout,
-                     allow_registration, require_email_verification, maintenance_mode,
+                     allow_registration, require_email_verification, maintenance_mode, maintenance_message,
                      password_min_length, password_require_special, login_fail_lock_count,
                      log_retention_days,
                      popup_notice_enabled, popup_notice_title, popup_notice_content)
-                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
                 values
             );
         }
+
+        // 점검 모드 캐시 즉시 갱신
+        try { require('../server').invalidateMaintenanceCache?.(); } catch {}
 
         logActivity('info', `시스템 설정 변경 (관리자: ${req.user.name})`, { userId: req.user.id, req });
 

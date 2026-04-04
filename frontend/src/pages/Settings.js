@@ -224,11 +224,24 @@ function Settings() {
                             <h3>유지보수 모드</h3>
                             <label className="toggle-row">
                                 <div className="toggle-row-text">
-                                    <span className="toggle-label">유지보수 모드 활성화</span>
-                                    <span className="toggle-desc">활성화 시 관리자를 제외한 모든 사용자의 접근이 차단됩니다.</span>
+                                    <span className="toggle-label">점검 모드 활성화</span>
+                                    <span className="toggle-desc">활성화 시 관리자를 제외한 모든 사용자에게 점검 페이지가 표시됩니다.</span>
                                 </div>
                                 <input type="checkbox" className="toggle-checkbox" checked={settings?.maintenance_mode || false} onChange={e => handleChange('maintenance_mode', e.target.checked)} />
                             </label>
+                            {settings?.maintenance_mode && (
+                                <div className="form-group" style={{ marginTop: 12 }}>
+                                    <label className="form-label">점검 안내 메시지 <span style={{ fontWeight: 400, color: '#aaa' }}>(선택)</span></label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={settings?.maintenance_message || ''}
+                                        onChange={e => handleChange('maintenance_message', e.target.value)}
+                                        placeholder="예) 오후 2시까지 점검이 진행됩니다."
+                                        maxLength={200}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className="form-actions">
                             <button type="submit" className="btn-primary" disabled={loading}>{loading ? '저장 중...' : '설정 저장'}</button>

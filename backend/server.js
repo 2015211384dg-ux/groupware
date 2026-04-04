@@ -112,6 +112,9 @@ db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS login_fail_count INT NOT NU
 db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS locked_until DATETIME DEFAULT NULL`).catch(() => {});
 db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS require_password_change TINYINT(1) NOT NULL DEFAULT 0`).catch(() => {});
 
+// 점검 메시지 컬럼 추가
+db.query(`ALTER TABLE system_settings ADD COLUMN IF NOT EXISTS maintenance_message VARCHAR(500) DEFAULT NULL`).catch(() => {});
+
 // 피드백 테이블 생성
 db.query(`
     CREATE TABLE IF NOT EXISTS feedback (
@@ -218,6 +221,48 @@ db.query(`
         updated_at  DATETIME DEFAULT NOW() ON UPDATE NOW()
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 `).catch(err => console.error('popup_notices 테이블 생성 실패:', err.message));
+
+// ============================================
+// 점검 모드 미들웨어
+// ============================================
+
+let _maintCache = { mode: false, msg: '', ts: 0 };
+
+// 캐시 강제 갱신 (settings 저장 시 호출)
+function invalidateMaintenanceCache() { _maintCache.ts = 0; }
+module.exports = { invalidateMaintenanceCache };
+
+const MAINTENANCE_BYPASS = [
+    '/api/v1/auth/login',
+    '/api/v1/auth/refresh',
+    '/api/v1/auth/me',
+    '/api/v1/settings/public',
+    '/api/v1/settings/maintenance',
+    '/api/v1/admin/settings',
+];
+
+app.use('/api/', async (req, res, next) => {
+    if (MAINTENANCE_BYPASS.some(p => req.path.startsWith(p.replace('/api/v1', '')))) return next();
+    const now = Date.now();
+    if (now - _maintCache.ts > 15000) {
+        try {
+            const [rows] = await db.query('SELECT maintenance_mode, maintenance_message FROM system_settings LIMIT 1');
+            _maintCache = {
+                mode: !!rows[0]?.maintenance_mode,
+                msg:  rows[0]?.maintenance_message || '',
+                ts:   now,
+            };
+        } catch { _maintCache.ts = now; }
+    }
+    if (_maintCache.mode) {
+        return res.status(503).json({
+            success: false,
+            maintenance: true,
+            message: _maintCache.msg || '시스템 점검 중입니다. 잠시 후 다시 접속해주세요.',
+        });
+    }
+    next();
+});
 
 // ============================================
 // 라우트 설정

@@ -1,0 +1,113 @@
+.maint-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.maint-card {
+    background: white;
+    border-radius: 24px;
+    padding: 52px 48px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+    animation: maint-in 0.4s ease;
+}
+
+@keyframes maint-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.maint-icon-wrap {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(102,126,234,0.12) 0%, rgba(118,75,162,0.12) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    color: #667eea;
+    animation: maint-spin 6s linear infinite;
+}
+
+@keyframes maint-spin {
+    0%   { transform: rotate(0deg); }
+    15%  { transform: rotate(20deg); }
+    30%  { transform: rotate(-10deg); }
+    45%  { transform: rotate(15deg); }
+    60%  { transform: rotate(-5deg); }
+    75%  { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.maint-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(102,126,234,0.1);
+    color: #667eea;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+.maint-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 14px;
+}
+
+.maint-desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+    margin: 0 0 28px;
+}
+
+.maint-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #f8f9ff;
+    border: 1px solid #e8ecff;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #667eea;
+    margin-bottom: 28px;
+}
+
+.maint-dot-anim {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #667eea;
+    animation: maint-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes maint-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+.maint-divider {
+    height: 1px;
+    background: #f0f2f5;
+    margin-bottom: 24px;
+}
+
+.maint-footer {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.7;
+    margin: 0;
+}

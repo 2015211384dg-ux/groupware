@@ -31,6 +31,7 @@ import FeedbackAdmin from './pages/FeedbackAdmin';
 import MagicLogin from './pages/MagicLogin';
 import AR from './pages/AR';
 import ARAdmin from './pages/ARAdmin';
+import MaintenancePage from './pages/MaintenancePage';
 
 // Auth 관련
 import { authService } from './services/authService';
@@ -57,14 +58,29 @@ AdminRoute.propTypes = {
   children: PropTypes.node.isRequired
 };
 
+const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'];
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [maintenance, setMaintenance] = useState({ on: false, message: '' });
 
   // 인증 상태 확인
   useEffect(() => {
     checkAuth();
+  }, []);
+
+  // 점검 모드 폴링 (30초마다)
+  useEffect(() => {
+    const check = () => {
+      api.get('/settings/maintenance').then(res => {
+        setMaintenance({ on: !!res.data.maintenance, message: res.data.message || '' });
+      }).catch(() => {});
+    };
+    check();
+    const t = setInterval(check, 30000);
+    return () => clearInterval(t);
   }, []);
 
   const checkAuth = async () => {
@@ -103,6 +119,11 @@ function App() {
         <p>로딩 중...</p>
       </div>
     );
+  }
+
+  // 점검 중 && 관리자가 아닌 경우 점검 페이지 표시
+  if (maintenance.on && !ADMIN_ROLES.includes(user?.role)) {
+    return <MaintenancePage message={maintenance.message} />;
   }
 
   return (
