@@ -1,6 +1,6 @@
 # 그룹웨어 - 사내 업무 협업 시스템
 
-사내 전용 그룹웨어 시스템입니다. 게시판, 전자결재, 주소록, 캘린더, 인사관리 등 업무에 필요한 기능을 통합 제공합니다.
+사내 전용 그룹웨어 시스템입니다. 게시판, 전자결재, 예산관리(AR), 주소록, 캘린더, 인사관리 등 업무에 필요한 기능을 통합 제공합니다.
 
 ---
 
@@ -12,23 +12,34 @@
 | Backend | Node.js, Express |
 | Database | MariaDB (port 3300) |
 | 프로세스 관리 | PM2 |
-| 인증 | JWT (httpOnly Cookie) |
+| 인증 | JWT (Access Token + Refresh Token) |
 | 에디터 | React Quill |
+| 데스크탑 앱 | Electron |
 
 ---
 
 ## 주요 기능
 
-- 로그인 / 인증 (JWT, 비밀번호 강제 변경)
-- 대시보드
-- 게시판 (게시글 CRUD, 댓글, 좋아요, 파일 첨부, 공지/고정 게시글)
-- 전자결재 (기안, 승인/반려, 관리자 뷰)
-- 주소록 (조직도, 전체 주소록, 개인 주소록)
-- 캘린더
-- 인사관리 (내 정보)
-- 검색
-- 관리자 기능 (사용자 관리, 부서 관리, 시스템 설정)
-- 데스크탑 앱 (Electron)
+### 업무
+- **대시보드** — 결재 현황, 공지, 일정 한눈에 확인
+- **게시판** — 게시글 CRUD, 댓글, 좋아요, 파일 첨부, 공지/고정 게시글
+- **전자결재** — 기안 작성, 결재선 설정, 승인/반려, 참조, 관리자 뷰
+- **예산관리 (AR)** — AR 프로젝트 생성·관리, 지출 등록, 잔여예산 추적, 월별/카테고리 차트, Excel 내보내기
+- **캘린더** — 일정 등록 및 공유
+- **주소록** — 조직도, 전체 주소록, 개인 주소록
+
+### 인사/조직
+- **인사관리** — 내 정보, 인사발령 이력
+- **조직 관리** — 부서 관리, 사용자 관리
+
+### 알림
+- **인앱 벨 알림** — 결재 요청/승인/반려, AR 팀 배정
+- **데스크탑 앱 (Electron)** — 시스템 트레이 상주, 실시간 토스트 팝업, 알림함, 자동 로그인
+
+### 관리자
+- 사용자/부서/게시판 관리
+- 시스템 설정 (사이트명, 파비콘 등)
+- 팝업 공지, 피드백 관리
 
 ---
 
@@ -52,12 +63,14 @@ groupware/
 │   │   ├── attachments.js
 │   │   ├── addressbook.js
 │   │   ├── approval.js
+│   │   ├── approvalAdmin.js
+│   │   ├── ar.js              # AR 예산관리
 │   │   ├── events.js
 │   │   ├── hr.js
 │   │   ├── search.js
 │   │   ├── settings.js
 │   │   ├── feedback.js
-│   │   ├── notifications.js
+│   │   ├── notifications.js   # 데스크탑 앱 통합 알림
 │   │   └── dashboard.js
 │   ├── uploads/
 │   ├── server.js
@@ -66,6 +79,7 @@ groupware/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── Icons.js
 │   │   │   └── Layout/
 │   │   │       ├── Layout.js
 │   │   │       ├── Header.js
@@ -73,26 +87,28 @@ groupware/
 │   │   ├── pages/
 │   │   │   ├── Login.js
 │   │   │   ├── Dashboard.js
-│   │   │   ├── PostList.js
-│   │   │   ├── PostDetail.js
-│   │   │   ├── PostWrite.js
-│   │   │   ├── BoardList.js
-│   │   │   ├── Approval.js
-│   │   │   ├── ApprovalDetail.js
-│   │   │   ├── ApprovalWrite.js
+│   │   │   ├── PostList.js / PostDetail.js / PostWrite.js
+│   │   │   ├── Approval.js / ApprovalDetail.js / ApprovalWrite.js
+│   │   │   ├── ApprovalAdmin.js
+│   │   │   ├── AR.js / ARAdmin.js / arUtils.js   # AR 예산관리
 │   │   │   ├── Calendar.js
-│   │   │   ├── AddressBook.js
-│   │   │   ├── Organization.js
-│   │   │   ├── MyInfo.js
-│   │   │   ├── UserManagement.js
-│   │   │   ├── DepartmentManagement.js
+│   │   │   ├── AddressBook.js / Organization.js
+│   │   │   ├── MyInfo.js / MySettings.js
+│   │   │   ├── UserManagement.js / DepartmentManagement.js
 │   │   │   └── Settings.js
 │   │   ├── services/
-│   │   │   └── authService.js
+│   │   │   ├── authService.js
+│   │   │   └── SettingsContext.js
 │   │   └── App.js
 │   └── package.json
 │
-├── desktop/               # Electron 데스크탑 앱
+├── desktop/               # Electron 데스크탑 알림 앱
+│   ├── main.js
+│   ├── preload.js
+│   ├── preload-notification.js
+│   ├── preload-inbox.js
+│   └── renderer/
+│
 ├── groupware_schema.sql   # DB 스키마
 ├── DEPLOYMENT.md          # 서버 배포 가이드
 └── README.md
@@ -139,6 +155,8 @@ DB_NAME=groupware
 
 JWT_SECRET=랜덤_64자_이상_문자열
 JWT_EXPIRES_IN=24h
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_DAYS=7
 
 UPLOAD_PATH=./uploads
 MAX_FILE_SIZE=52428800
@@ -168,8 +186,8 @@ pm2 save
 
 ## 접속
 
-| 항목 | 주소 |
-|------|------|
+| 항목 | 값 |
+|------|----|
 | 웹 접속 | http://서버IP:3000 |
 | 기본 관리자 계정 | admin / admin123 |
 
@@ -187,17 +205,41 @@ pm2 restart groupware-backend
 
 ---
 
+## 알림 구조
+
+```
+결재 요청·승인·반려·AR 팀 배정
+        ↓
+approval_notifications 테이블 (결재/AR 통합)
+notifications 테이블 (게시글·댓글·피드백)
+        ↓
+인앱 벨 (Header 30초 폴링)
+데스크탑 앱 (Electron 15초 폴링 → 토스트 팝업)
+```
+
+---
+
 ## 관리자 권한
 
 | 역할 | 권한 |
 |------|------|
 | SUPER_ADMIN | 전체 관리 |
-| ADMIN | 사용자/게시판 관리 |
+| ADMIN | 사용자/게시판/AR 관리 |
 | HR_ADMIN | 인사 관리 |
 | USER | 일반 사용자 |
 
 ---
 
+## AR 예산관리 접근 제어
+
+| 구분 | 열람 범위 |
+|------|----------|
+| ADMIN / SUPER_ADMIN | 전체 AR 프로젝트 |
+| 재경팀 (dept_id=4) | 전체 AR 프로젝트 |
+| 일반 직원 | 소속 부서가 배정된 AR 프로젝트만 |
+
+---
+
 ## 서버 배포 가이드
 
-온프레미스 Windows Server 배포 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md) 를 참고하세요.
+온프레미스 Windows Server 배포 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.
