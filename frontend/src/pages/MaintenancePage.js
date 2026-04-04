@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { authService } from '../services/authService';
 import './MaintenancePage.css';
 
-export default function MaintenancePage({ message }) {
+export default function MaintenancePage({ message, onLogout }) {
     const [dots, setDots] = useState('');
 
     useEffect(() => {
@@ -39,6 +40,12 @@ export default function MaintenancePage({ message }) {
                     점검이 완료되면 자동으로 접속됩니다.<br />
                     불편을 드려 죄송합니다.
                 </p>
+
+                {onLogout && (
+                    <button className="maint-logout-btn" onClick={async () => { await authService.logout(); onLogout(); }}>
+                        로그아웃
+                    </button>
+                )}
             </div>
         </div>
     );
