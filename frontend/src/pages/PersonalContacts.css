@@ -275,7 +275,7 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
+.modal-content .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -285,14 +285,14 @@
     border-radius: 12px 12px 0 0;
 }
 
-.modal-header h2 {
+.modal-content .modal-header h2 {
     font-size: 20px;
     font-weight: 700;
     color: white;
     margin: 0;
 }
 
-.close-btn {
+.modal-content .close-btn {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     font-size: 20px;
@@ -308,7 +308,7 @@
     transition: background 0.2s;
 }
 
-.close-btn:hover {
+.modal-content .close-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 

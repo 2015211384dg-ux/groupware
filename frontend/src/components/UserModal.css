@@ -21,7 +21,7 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
+.modal-container .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,7 +29,7 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.modal-header h2 {
+.modal-container .modal-header h2 {
     font-size: 20px;
     font-weight: 700;
     color: #1a1a1a;
