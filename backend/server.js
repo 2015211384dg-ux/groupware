@@ -133,10 +133,12 @@ db.query(`
     CREATE TABLE IF NOT EXISTS notifications (
         id          INT AUTO_INCREMENT PRIMARY KEY,
         user_id     INT NOT NULL,
-        type        ENUM('post','comment','feedback') NOT NULL,
-        title       VARCHAR(200) NOT NULL,
-        body        VARCHAR(500) DEFAULT NULL,
+        type        ENUM('post','comment','feedback','ar') NOT NULL,
+        title       VARCHAR(255) NOT NULL,
+        body        TEXT DEFAULT NULL,
         url         VARCHAR(500) DEFAULT NULL,
+        message     TEXT DEFAULT NULL,
+        link        VARCHAR(500) DEFAULT NULL,
         is_read     TINYINT(1) NOT NULL DEFAULT 0,
         created_at  DATETIME DEFAULT NOW(),
         CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
