@@ -143,6 +143,68 @@ db.query(`
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 `).catch(err => console.error('notifications 테이블 생성 실패:', err.message));
 
+// ─── AR 프로젝트 테이블 ────────────────────────
+db.query(`
+    CREATE TABLE IF NOT EXISTS ar_projects (
+        id              INT AUTO_INCREMENT PRIMARY KEY,
+        ar_code         VARCHAR(50)  NOT NULL,
+        title           VARCHAR(255) NOT NULL,
+        description     TEXT,
+        budget_amount   DECIMAL(18,2) NOT NULL DEFAULT 0,
+        currency        VARCHAR(10)  NOT NULL DEFAULT 'KRW',
+        status          ENUM('active','closed','on_hold') NOT NULL DEFAULT 'active',
+        created_by      INT NOT NULL,
+        created_at      DATETIME DEFAULT NOW(),
+        updated_at      DATETIME DEFAULT NOW() ON UPDATE NOW(),
+        CONSTRAINT fk_ar_creator FOREIGN KEY (created_by) REFERENCES users(id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('ar_projects 테이블 생성 실패:', err.message));
+
+db.query(`
+    CREATE TABLE IF NOT EXISTS ar_activity_logs (
+        id          INT AUTO_INCREMENT PRIMARY KEY,
+        project_id  INT NOT NULL,
+        user_id     INT NOT NULL,
+        action      VARCHAR(50) NOT NULL,
+        detail      TEXT,
+        created_at  DATETIME DEFAULT NOW(),
+        CONSTRAINT fk_ar_log_proj FOREIGN KEY (project_id) REFERENCES ar_projects(id) ON DELETE CASCADE,
+        CONSTRAINT fk_ar_log_user FOREIGN KEY (user_id)    REFERENCES users(id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('ar_activity_logs 테이블 생성 실패:', err.message));
+
+db.query(`
+    CREATE TABLE IF NOT EXISTS ar_project_teams (
+        id            INT AUTO_INCREMENT PRIMARY KEY,
+        project_id    INT NOT NULL,
+        department_id INT NOT NULL,
+        UNIQUE KEY uq_ar_pt (project_id, department_id),
+        CONSTRAINT fk_ar_pt_proj FOREIGN KEY (project_id) REFERENCES ar_projects(id) ON DELETE CASCADE,
+        CONSTRAINT fk_ar_pt_dept FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('ar_project_teams 테이블 생성 실패:', err.message));
+
+db.query(`
+    CREATE TABLE IF NOT EXISTS ar_expenses (
+        id          INT AUTO_INCREMENT PRIMARY KEY,
+        project_id  INT NOT NULL,
+        user_id     INT NOT NULL,
+        amount      DECIMAL(18,2) NOT NULL,
+        description TEXT NOT NULL,
+        category    VARCHAR(100),
+        spent_at    DATE NOT NULL,
+        created_at  DATETIME DEFAULT NOW(),
+        CONSTRAINT fk_ar_exp_project FOREIGN KEY (project_id) REFERENCES ar_projects(id) ON DELETE CASCADE,
+        CONSTRAINT fk_ar_exp_user    FOREIGN KEY (user_id)    REFERENCES users(id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('ar_expenses 테이블 생성 실패:', err.message));
+
+// ar_projects ar_code 유니크 제약
+db.query(`ALTER TABLE ar_projects ADD UNIQUE KEY uq_ar_code (ar_code)`).catch(() => {});
+
+// notifications type ENUM에 'ar' 추가
+db.query(`ALTER TABLE notifications MODIFY COLUMN type ENUM('post','comment','feedback','ar') NOT NULL`).catch(() => {});
+
 // popup_notices 테이블 생성 (다중 팝업 공지)
 db.query(`
     CREATE TABLE IF NOT EXISTS popup_notices (
@@ -181,6 +243,7 @@ const approvalRoutes      = require('./routes/approval');
 const approvalAdminRoutes = require('./routes/approvalAdmin');
 const feedbackRoutes        = require('./routes/feedback');
 const notificationRoutes    = require('./routes/notifications');
+const arRoutes              = require('./routes/ar');
 
 app.use('/api/v1/auth',            authRoutes);
 app.use('/api/v1/users',           userRoutes);
@@ -200,6 +263,7 @@ app.use('/api/v1/approval/admin',  approvalAdminRoutes);
 app.use('/api/v1/approval',        approvalRoutes);
 app.use('/api/v1/feedback',        feedbackRoutes);
 app.use('/api/v1/notifications',   notificationRoutes);
+app.use('/api/v1/ar',              arRoutes);
 
 // ============================================
 // 에러 핸들링
@@ -234,7 +298,7 @@ app.listen(PORT, HOST, () => {
     console.log(`📡 포트: ${PORT}`);
     console.log(`🌍 호스트: ${HOST}`);
     console.log(`🔗 로컬: http://localhost:${PORT}`);
-    console.log(`🔗 네트워크: http://10.18.10.75:${PORT}`);
+    console.log(`🔗 네트워크: http://10.18.10.70:${PORT}`);
     console.log('='.repeat(50));
 });
 

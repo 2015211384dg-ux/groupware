@@ -12,6 +12,7 @@ const NOTIF_META = {
     REJECTED: { icon: '❌', color: '#e53e3e', label: '반려'      },
     COMMENT:  { icon: '💬', color: '#f6ad55', label: '의견'      },
     CC:       { icon: '◎', color: '#888',    label: '참조'      },
+    AR:       { icon: '₩', color: '#38a169', label: 'AR 배정'   },
 };
 
 const formatTime = (d) => {
@@ -23,7 +24,7 @@ const formatTime = (d) => {
 };
 
 // ─── 알림 드롭다운 ─────────────────────────
-function NotificationPanel({ onClose }) {
+function NotificationPanel({ onClose, onRead }) {
     const navigate  = useNavigate();
     const [notifs, setNotifs]   = useState([]);
     const [unread, setUnread]   = useState(0);
@@ -35,14 +36,6 @@ function NotificationPanel({ onClose }) {
             setUnread(res.data.data.unread);
         }).catch(console.error).finally(() => setLoading(false));
     }, []);
-
-    const handleReadAll = async () => {
-        try {
-            await api.put('/approval/notifications/read');
-            setNotifs(prev => prev.map(n => ({ ...n, is_read: true })));
-            setUnread(0);
-        } catch(e) { console.error(e); }
-    };
 
     const handleDelete = async (e, notifId) => {
         e.stopPropagation();
@@ -57,20 +50,36 @@ function NotificationPanel({ onClose }) {
     };
 
     const handleClick = async (notif) => {
-        // 클릭 시 읽음 처리 후 해당 문서로 이동
         if (!notif.is_read) {
+            try {
+                await api.put(`/approval/notifications/${notif.id}/read`);
+            } catch(e) { console.error(e); }
             setNotifs(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
             setUnread(prev => Math.max(0, prev - 1));
+            onRead?.();
         }
         onClose();
-        navigate(`/approval/documents/${notif.document_id}`);
+        if (notif.type === 'AR' && notif.url) {
+            navigate(notif.url);
+        } else if (notif.document_id) {
+            navigate(`/approval/documents/${notif.document_id}`);
+        }
+    };
+
+    const handleReadAll = async () => {
+        try {
+            await api.put('/approval/notifications/read');
+            setNotifs(prev => prev.map(n => ({ ...n, is_read: true })));
+            setUnread(0);
+            onRead?.();
+        } catch(e) { console.error(e); }
     };
 
     return (
         <div className="notif-panel">
             <div className="notif-panel-header">
                 <span className="notif-panel-title">
-                    결재 알림
+                    알림
                     {unread > 0 && <span className="notif-unread-count">{unread}</span>}
                 </span>
                 {unread > 0 && (
@@ -123,6 +132,8 @@ function NotificationPanel({ onClose }) {
         </div>
     );
 }
+
+export { NotificationPanel };
 
 // ─── 메인 Header ──────────────────────────
 function Header({ user, onLogout, onToggleSidebar }) {

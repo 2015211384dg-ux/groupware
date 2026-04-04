@@ -243,7 +243,7 @@ function DepartmentManagement() {
             await fetchDepartments();
         } catch (error) {
             console.error('순서 저장 실패:', error);
-            toast.error('순서 저장에 실패했습니다.');
+            toast.error('순서를 저장하지 못했습니다.');
         } finally {
             setSaving(false);
         }
@@ -276,7 +276,7 @@ function DepartmentManagement() {
             handleCloseModal();
             fetchDepartments();
         } catch (error) {
-            toast.error(error.response?.data?.message || '부서 저장에 실패했습니다.');
+            toast.error(error.response?.data?.message || '부서를 저장하지 못했습니다.');
         }
     };
 
@@ -290,7 +290,7 @@ function DepartmentManagement() {
             if (selectedDept?.id === dept.id) setSelectedDept(null);
             fetchDepartments();
         } catch (error) {
-            toast.error(error.response?.data?.message || '부서 삭제에 실패했습니다.');
+            toast.error(error.response?.data?.message || '부서를 삭제하지 못했습니다.');
         }
     };
 

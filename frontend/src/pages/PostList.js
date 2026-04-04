@@ -161,7 +161,21 @@ function PostList({ user }) {
     if (loading) {
         return (
             <div className="post-list-page-v2">
-                <div style={{ padding: 40, textAlign: 'center', color: '#aaa' }}>로딩 중...</div>
+                <div className="post-list-wrap">
+                    <div style={{ padding: '20px 0 16px' }}>
+                        <div className="skel" style={{ height: 22, width: 160, marginBottom: 16 }} />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        {[...Array(8)].map((_, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 4px', borderBottom: '1px solid #f5f5f5' }}>
+                                <div className="skel" style={{ height: 13, width: 30, flexShrink: 0, borderRadius: 4 }} />
+                                <div className="skel" style={{ height: 13, flex: 1, borderRadius: 4 }} />
+                                <div className="skel" style={{ height: 13, width: 60, flexShrink: 0, borderRadius: 4 }} />
+                                <div className="skel" style={{ height: 13, width: 70, flexShrink: 0, borderRadius: 4 }} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     }

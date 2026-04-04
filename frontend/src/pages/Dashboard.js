@@ -69,9 +69,42 @@ const Dashboard = memo(({ user }) => {
 
     if (loading) {
         return (
-            <div className="loading-container">
-                <div className="spinner"></div>
-                <p>로딩 중...</p>
+            <div className="dashboard">
+                <div className="dashboard-grid">
+                    <aside className="dash-left">
+                        <div className="dash-profile-card" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+                            <div className="skel" style={{ width:72, height:72, borderRadius:'50%' }} />
+                            <div className="skel" style={{ height:18, width:'55%' }} />
+                            <div className="skel" style={{ height:13, width:'40%' }} />
+                            <div className="skel" style={{ height:13, width:'60%', marginTop:4 }} />
+                        </div>
+                    </aside>
+                    <main className="dash-main">
+                        <div className="dash-card">
+                            <div className="dash-card-header">
+                                <div className="skel" style={{ height:15, width:80 }} />
+                            </div>
+                            <div className="stats-grid-2x2" style={{ marginTop:14 }}>
+                                {[...Array(4)].map((_,i) => (
+                                    <div key={i} className="stats-cell" style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8 }}>
+                                        <div className="skel" style={{ height:30, width:'50%' }} />
+                                        <div className="skel" style={{ height:12, width:'70%' }} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="dash-card">
+                            <div className="dash-card-header">
+                                <div className="skel" style={{ height:15, width:100 }} />
+                            </div>
+                            <div style={{ marginTop:14, display:'flex', flexDirection:'column', gap:10 }}>
+                                {[...Array(4)].map((_,i) => (
+                                    <div key={i} className="skel" style={{ height:48, borderRadius:8 }} />
+                                ))}
+                            </div>
+                        </div>
+                    </main>
+                </div>
             </div>
         );
     }

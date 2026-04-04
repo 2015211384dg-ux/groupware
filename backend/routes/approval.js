@@ -561,7 +561,7 @@ router.get('/notifications', async (req, res) => {
         const [notifs] = await db.query(
             `SELECT n.*, d.title AS doc_title
              FROM approval_notifications n
-             JOIN approval_documents d ON n.document_id = d.id
+             LEFT JOIN approval_documents d ON n.document_id = d.id
              WHERE n.user_id = ?
              ORDER BY n.created_at DESC LIMIT 30`,
             [req.user.id]
@@ -571,6 +571,19 @@ router.get('/notifications', async (req, res) => {
             [req.user.id]
         );
         res.json({ success: true, data: { notifications: notifs, unread } });
+    } catch (err) {
+        res.status(500).json({ success: false, message: '서버 오류' });
+    }
+});
+
+// PUT /api/approval/notifications/:id/read  ─ 개별 읽음
+router.put('/notifications/:id/read', async (req, res) => {
+    try {
+        await db.query(
+            `UPDATE approval_notifications SET is_read=TRUE WHERE id=? AND user_id=?`,
+            [req.params.id, req.user.id]
+        );
+        res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, message: '서버 오류' });
     }

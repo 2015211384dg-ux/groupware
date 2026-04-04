@@ -1,5 +1,5 @@
 .post-write-page-v2 {
-  height: calc(100vh - 64px);
+  height: 100vh;
   background: #f5f7fa;
   display: flex;
   flex-direction: column;

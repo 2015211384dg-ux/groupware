@@ -1,5 +1,5 @@
 .dept-management-page {
-    height: calc(100vh - 64px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: #f5f7fa;
@@ -512,7 +512,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 64px);
+    height: 100vh;
     gap: 16px;
 }
 

@@ -1,13 +1,8 @@
 .layout {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100vh;
     background: #f5f7fa;
-}
-
-.layout-content {
-    display: flex;
-    flex: 1;
     overflow: hidden;
 }
 
@@ -15,11 +10,7 @@
     flex: 1;
     overflow-y: auto;
     min-width: 0;
-}
-
-.main-content--home {
-    padding: 0 32px;
-    background: #f5f7fa;
+    padding: 0;
 }
 
 /* 인쇄 스타일 */
@@ -29,11 +20,6 @@
         height: auto !important;
         background: white !important;
     }
-
-    .layout-content {
-        display: block !important;
-    }
-
     .main-content {
         margin: 0 !important;
         padding: 0 !important;

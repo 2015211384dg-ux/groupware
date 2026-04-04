@@ -1,25 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate, useLocation } from 'react-router-dom';
-import Header from './Header';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import './Layout.css';
-import api from '../../services/authService';
-import { useSettings } from '../../services/SettingsContext';
 
 function Layout({ children, user, onLogout }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const navigate = useNavigate();
-    const location = useLocation();
-    const { updateSettings } = useSettings();
-
-    useEffect(() => {
-        api.get('/admin/settings').then(res => {
-            updateSettings(res.data.data);
-        }).catch(() => {});
-    }, []);
-
-    const isHome = location.pathname === '/' || location.pathname === '/dashboard';
 
     const handleLogout = () => {
         if (window.confirm('로그아웃 하시겠습니까?')) {
@@ -28,24 +15,17 @@ function Layout({ children, user, onLogout }) {
         }
     };
 
-    const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-    };
-
     return (
         <div className="layout">
-            <Header
+            <Sidebar
+                isOpen={sidebarOpen}
+                onToggle={() => setSidebarOpen(prev => !prev)}
                 user={user}
                 onLogout={handleLogout}
-                onToggleSidebar={isHome ? null : toggleSidebar}
             />
-
-            <div className="layout-content">
-                {!isHome && <Sidebar isOpen={sidebarOpen} user={user} />}
-                <main className={`main-content${isHome ? ' main-content--home' : ''}`}>
-                    {children}
-                </main>
-            </div>
+            <main className="main-content">
+                {children}
+            </main>
         </div>
     );
 }

@@ -1,0 +1,695 @@
+/* ============================================
+   AR (Appropriation Request) - AR.css
+   ============================================ */
+
+.ar-page {
+    padding: 24px;
+    min-height: 100vh;
+    background: #f5f6fa;
+}
+
+/* ─── 페이지 헤더 ───────────────────────────── */
+.ar-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.ar-page-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 4px;
+}
+.ar-page-sub {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+.ar-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ar-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ar-search-icon {
+    position: absolute;
+    left: 10px;
+    color: #c0c0c0;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+.ar-search {
+    padding: 8px 32px 8px 32px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+.ar-search:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+.ar-search-clear {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #bbb;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+.ar-search-clear:hover { color: #666; }
+
+/* ─── 버튼 ───────────────────────────────────── */
+.ar-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+.ar-btn-primary:hover { opacity: 0.88; }
+.ar-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ar-btn-cancel {
+    padding: 9px 18px;
+    background: #f5f5f5;
+    color: #555;
+    border: 1px solid #e0e0e0;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ar-btn-cancel:hover { border-color: #aaa; }
+
+.ar-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.ar-back-btn:hover { border-color: #667eea; color: #667eea; }
+
+/* ─── 프로젝트 카드 그리드 ─────────────────── */
+.ar-project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+}
+.ar-project-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #ebebeb;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ar-project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+}
+.ar-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.ar-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 6px;
+    line-height: 1.4;
+}
+.ar-card-creator {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 14px;
+}
+.ar-card-budget-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+.ar-card-budget-label { color: #888; }
+.ar-card-budget-val { font-weight: 600; color: #333; }
+.ar-card-budget-val.over { color: #e53e3e; }
+.ar-card-progress-bar {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 10px 0 6px;
+}
+.ar-card-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+.ar-card-progress-fill.warn { background: linear-gradient(90deg, #f6ad55, #ed8936); }
+.ar-card-progress-fill.over { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+.ar-card-pct { font-size: 11px; color: #aaa; }
+
+/* ─── 뱃지 ───────────────────────────────────── */
+.ar-code-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    background: #f0f3ff;
+    color: #667eea;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+}
+.ar-status-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.ar-status-badge.active  { background: #e6ffed; color: #2f855a; }
+.ar-status-badge.closed  { background: #f5f5f5; color: #888; }
+.ar-status-badge.hold    { background: #fff8e1; color: #b7791f; }
+
+.ar-cat-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f5f5f5;
+    color: #666;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ─── 빈 상태 ───────────────────────────────── */
+.ar-empty-state {
+    text-align: center;
+    padding: 64px 24px 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.ar-empty-svg-wrap {
+    width: 80px;
+    height: 80px;
+    background: #f6f7fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.ar-empty-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+    margin: 0;
+}
+.ar-empty-desc {
+    font-size: 13px;
+    color: #aaa;
+    margin: 0 0 12px;
+    line-height: 1.6;
+}
+.ar-empty-clear-btn {
+    padding: 8px 18px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.ar-empty-clear-btn:hover { border-color: #667eea; color: #667eea; }
+.ar-empty { text-align: center; padding: 32px; color: #bbb; font-size: 13px; }
+
+.ar-loading {
+    text-align: center;
+    padding: 80px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* ─── 상세 페이지 ───────────────────────────── */
+.ar-detail {
+    padding: 24px;
+    min-height: 100vh;
+    background: #f5f6fa;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.ar-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #ebebeb;
+    padding: 16px 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.ar-detail-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.ar-detail-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ar-detail-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 4px 0 0;
+}
+
+/* ─── 요약 카드 ─────────────────────────────── */
+.ar-summary-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+.ar-sum-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    padding: 18px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ar-sum-label { font-size: 12px; color: #888; margin-bottom: 8px; }
+.ar-sum-value { font-size: 20px; font-weight: 800; }
+.ar-sum-card.blue   .ar-sum-value { color: #2b6cb0; }
+.ar-sum-card.orange .ar-sum-value { color: #c05621; }
+.ar-sum-card.green  .ar-sum-value { color: #2f855a; }
+.ar-sum-card.red    .ar-sum-value { color: #c53030; }
+.ar-sum-card.purple .ar-sum-value { color: #553c9a; }
+
+/* ─── 진행 바 ───────────────────────────────── */
+.ar-progress-wrap {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    padding: 18px 20px;
+}
+.ar-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 10px;
+}
+.ar-over-text { color: #e53e3e; }
+.ar-progress-bar {
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.ar-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+.ar-progress-fill.warn { background: linear-gradient(90deg, #f6ad55, #ed8936); }
+.ar-progress-fill.over { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+
+/* ─── 차트 ───────────────────────────────────── */
+.ar-charts-row {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+}
+.ar-chart-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    padding: 18px 20px;
+    height: 260px;
+}
+.ar-chart-sm { height: 260px; }
+.ar-chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+/* ─── 설명 카드 ─────────────────────────────── */
+.ar-desc-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    padding: 18px 20px;
+}
+.ar-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.ar-desc-body {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+/* ─── 지출 테이블 ───────────────────────────── */
+.ar-expense-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    padding: 18px 20px;
+}
+.ar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.ar-table th {
+    padding: 10px 14px;
+    background: #fafafa;
+    font-weight: 600;
+    color: #555;
+    text-align: left;
+    border-bottom: 1px solid #ebebeb;
+    white-space: nowrap;
+}
+.ar-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #333;
+    vertical-align: middle;
+}
+.ar-table tfoot td {
+    border-top: 2px solid #ebebeb;
+    border-bottom: none;
+    padding: 12px 14px;
+}
+.ar-table tr:last-child td { border-bottom: none; }
+.ar-td-date  { color: #888; font-size: 12px; white-space: nowrap; }
+.ar-td-desc  { max-width: 280px; }
+.ar-td-user  { color: #666; font-size: 12px; }
+.ar-td-amount { text-align: right; font-weight: 600; white-space: nowrap; }
+.ar-td-amount.over { color: #e53e3e; }
+.ar-exp-del {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+.ar-exp-del:hover { color: #e53e3e; }
+
+/* ─── 모달 ───────────────────────────────────── */
+.ar-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.ar-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+.ar-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.ar-modal-header h3 { font-size: 16px; font-weight: 800; margin: 0; color: #1a1a1a; }
+.ar-modal-header button {
+    background: none; border: none; cursor: pointer; color: #aaa; padding: 4px;
+    border-radius: 6px; transition: background 0.15s;
+}
+.ar-modal-header button:hover { background: #f5f5f5; color: #555; }
+.ar-modal-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.ar-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* ─── 폼 요소 ───────────────────────────────── */
+.ar-field-group { display: flex; flex-direction: column; gap: 5px; }
+.ar-field-group label { font-size: 12px; font-weight: 600; color: #555; }
+.ar-field-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.ar-req { color: #e53e3e; }
+
+.ar-input {
+    padding: 9px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.ar-input:focus { border-color: #667eea; }
+
+.ar-select {
+    padding: 9px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    cursor: pointer;
+}
+.ar-select:focus { border-color: #667eea; }
+
+.ar-textarea {
+    padding: 9px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    resize: vertical;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    line-height: 1.6;
+}
+.ar-textarea:focus { border-color: #667eea; }
+
+.ar-amount-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ar-amount-sym {
+    position: absolute;
+    left: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    pointer-events: none;
+    z-index: 1;
+}
+.ar-amount-input { padding-left: 24px !important; text-align: right; }
+
+.ar-info-text {
+    font-size: 13px;
+    color: #444;
+    font-weight: 600;
+    background: #fafafa;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid #ebebeb;
+}
+
+/* ─── 반응형 ─────────────────────────────────── */
+@media (max-width: 900px) {
+    .ar-summary-row { grid-template-columns: repeat(2, 1fr); }
+    .ar-charts-row  { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .ar-project-grid { grid-template-columns: 1fr; }
+    .ar-summary-row  { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 상태 변경 셀렉트 (PM 전용) */
+.ar-status-select {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid transparent;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s;
+}
+.ar-status-select.active  { background: #e6ffed; color: #2f855a; border-color: #9ae6b4; }
+.ar-status-select.closed  { background: #f5f5f5; color: #888;    border-color: #ddd; }
+.ar-status-select.hold    { background: #fff8e1; color: #b7791f;  border-color: #f6e05e; }
+.ar-status-select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* 도넛 차트 컨테이너 */
+.ar-doughnut-wrap {
+    height: 200px;
+    position: relative;
+}
+
+/* 지출 수정/삭제 버튼 묶음 */
+.ar-exp-actions {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+.ar-exp-edit {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+.ar-exp-edit:hover { color: #667eea; }
+
+/* 부서 체크박스 그리드 */
+.ar-dept-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+.ar-dept-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s;
+    user-select: none;
+}
+.ar-dept-chip input { display: none; }
+.ar-dept-chip:hover { border-color: #667eea; color: #667eea; }
+.ar-dept-chip.selected {
+    background: #f0f3ff;
+    border-color: #667eea;
+    color: #667eea;
+    font-weight: 600;
+}
+.ar-label-hint {
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 400;
+}
+
+/* 열람팀 태그 */
+.ar-detail-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.ar-team-tags {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.ar-team-label { font-size: 11px; color: #aaa; }
+.ar-team-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f0f3ff;
+    color: #667eea;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.ar-team-tag.finance {
+    background: #f0fff4;
+    color: #2f855a;
+}
+
+/* ── CSV 내보내기 버튼 ── */
+.ar-btn-secondary {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1.5px solid #cbd5e0; background: #fff; color: #4a5568; cursor: pointer;
+    transition: all 0.15s;
+}
+.ar-btn-secondary:hover { background: #f7fafc; border-color: #667eea; color: #667eea; }

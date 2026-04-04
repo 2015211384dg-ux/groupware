@@ -3,7 +3,7 @@
    ============================================= */
 
 .fa-page {
-    height: calc(100vh - 64px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: #f0f2f5;

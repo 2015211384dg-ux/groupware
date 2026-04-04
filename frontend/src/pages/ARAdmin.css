@@ -1,0 +1,243 @@
+/* ============================================
+   AR Admin - ARAdmin.css
+   ============================================ */
+
+.ara-page { padding: 24px; min-height: 100vh; background: #f5f6fa; }
+
+.ara-page-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+}
+.ara-page-title { font-size: 20px; font-weight: 800; color: #1a1a1a; margin: 0 0 4px; }
+.ara-page-sub   { font-size: 13px; color: #888; margin: 0; }
+
+.ara-toolbar { display: flex; align-items: center; gap: 10px; }
+.ara-search {
+    padding: 8px 14px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-size: 13px; width: 240px; outline: none; transition: border 0.2s;
+}
+.ara-search:focus { border-color: #667eea; }
+.ara-select-filter {
+    padding: 8px 10px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-size: 13px; background: #fff; outline: none; cursor: pointer;
+}
+.ara-select-filter:focus { border-color: #667eea; }
+
+/* ─── 카드 ─────────────────────── */
+.ara-card {
+    background: #fff; border-radius: 14px; border: 1px solid #ebebeb;
+    padding: 20px; margin-bottom: 20px;
+}
+.ara-section-title {
+    font-size: 13px; font-weight: 700; color: #555;
+    margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;
+}
+
+/* ─── 테이블 ────────────────────── */
+.ara-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ara-table th {
+    padding: 10px 14px; background: #fafafa; font-weight: 600; color: #555;
+    text-align: left; border-bottom: 1px solid #ebebeb; white-space: nowrap;
+}
+.ara-table td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; color: #333; vertical-align: middle; }
+.ara-table tfoot td { border-top: 2px solid #ebebeb; border-bottom: none; }
+.ara-table tr:last-child td { border-bottom: none; }
+.ara-row { cursor: pointer; transition: background 0.12s; }
+.ara-row:hover td { background: #fafbff; }
+.ara-td-title { font-weight: 500; max-width: 260px; }
+.ara-td-meta  { font-size: 12px; color: #888; }
+.ara-td-date  { font-size: 12px; color: #aaa; white-space: nowrap; }
+.ara-td-user  { font-size: 12px; color: #666; }
+.ara-empty    { text-align: center; padding: 40px; color: #bbb; font-size: 13px; }
+.ara-loading  { text-align: center; padding: 80px; color: #aaa; font-size: 14px; }
+
+/* ─── 집행률 ────────────────────── */
+.ara-pct      { font-weight: 600; color: #333; }
+.ara-pct.warn { color: #c05621; }
+.ara-pct.over { color: #e53e3e; }
+
+/* ─── 뱃지 ─────────────────────── */
+.ara-code-badge {
+    display: inline-block; padding: 3px 9px; background: #f0f3ff;
+    color: #667eea; border-radius: 6px; font-size: 12px; font-weight: 700; font-family: monospace;
+}
+.ara-status-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.ara-status-badge.active { background: #e6ffed; color: #2f855a; }
+.ara-status-badge.closed { background: #f5f5f5; color: #888; }
+.ara-status-badge.hold   { background: #fff8e1; color: #b7791f; }
+.ara-cat-badge { display: inline-block; padding: 2px 8px; background: #f5f5f5; color: #666; border-radius: 5px; font-size: 11px; font-weight: 600; }
+.ara-team-tag { display: inline-block; padding: 3px 9px; background: #f0f3ff; color: #667eea; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.ara-team-tag.finance { background: #f0fff4; color: #2f855a; }
+
+/* ─── 액션 버튼 ─────────────────── */
+.ara-row-actions { display: flex; gap: 2px; align-items: center; justify-content: flex-end; }
+.ara-icon-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 5px; border-radius: 5px; transition: all 0.15s;
+}
+.ara-icon-btn.edit { color: #bbb; }
+.ara-icon-btn.edit:hover { color: #667eea; background: #f0f3ff; }
+.ara-icon-btn.del  { color: #bbb; }
+.ara-icon-btn.del:hover  { color: #e53e3e; background: #fff0f0; }
+
+.ara-btn-edit {
+    display: flex; align-items: center; gap: 6px; padding: 8px 16px;
+    background: #fff; border: 1px solid #667eea; color: #667eea;
+    border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+}
+.ara-btn-edit:hover { background: #f0f3ff; }
+.ara-btn-primary {
+    display: flex; align-items: center; gap: 6px; padding: 9px 18px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.ara-btn-primary:hover { opacity: 0.88; }
+.ara-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.ara-btn-cancel {
+    padding: 9px 18px; background: #f5f5f5; color: #555;
+    border: 1px solid #e0e0e0; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.ara-back-btn {
+    display: flex; align-items: center; gap: 5px; background: none;
+    border: 1px solid #e0e0e0; border-radius: 8px; padding: 7px 12px;
+    font-size: 13px; color: #666; cursor: pointer; flex-shrink: 0;
+}
+.ara-back-btn:hover { border-color: #667eea; color: #667eea; }
+
+/* ─── 상세 헤더 ─────────────────── */
+.ara-detail { padding: 24px; min-height: 100vh; background: #f5f6fa; display: flex; flex-direction: column; gap: 20px; }
+.ara-detail-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border-radius: 14px; border: 1px solid #ebebeb;
+    padding: 16px 20px; gap: 12px; flex-wrap: wrap;
+}
+.ara-header-left  { display: flex; align-items: center; gap: 14px; }
+.ara-header-right { display: flex; align-items: center; gap: 10px; }
+.ara-detail-title { font-size: 17px; font-weight: 800; color: #1a1a1a; margin: 4px 0 0; }
+.ara-detail-meta  { font-size: 12px; color: #aaa; margin-top: 3px; }
+
+/* ─── 요약 카드 ─────────────────── */
+.ara-summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.ara-sum-card { background: #fff; border-radius: 12px; border: 1px solid #ebebeb; padding: 16px 18px; }
+.ara-sum-label { font-size: 12px; color: #888; margin-bottom: 8px; }
+.ara-sum-value { font-size: 18px; font-weight: 800; }
+.ara-sum-card.blue   .ara-sum-value { color: #2b6cb0; }
+.ara-sum-card.orange .ara-sum-value { color: #c05621; }
+.ara-sum-card.green  .ara-sum-value { color: #2f855a; }
+.ara-sum-card.red    .ara-sum-value { color: #c53030; }
+.ara-sum-card.purple .ara-sum-value { color: #553c9a; }
+
+/* ─── 모달 ─────────────────────── */
+.ara-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.ara-modal {
+    background: #fff; border-radius: 16px; width: 100%; max-width: 580px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15); display: flex; flex-direction: column; max-height: 90vh;
+}
+.ara-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px 16px; border-bottom: 1px solid #f0f0f0;
+}
+.ara-modal-header h3 { font-size: 16px; font-weight: 800; margin: 0; color: #1a1a1a; }
+.ara-modal-header button { background: none; border: none; cursor: pointer; color: #aaa; padding: 4px; border-radius: 6px; }
+.ara-modal-header button:hover { background: #f5f5f5; color: #555; }
+.ara-modal-body { padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.ara-modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid #f0f0f0; }
+
+/* ─── 폼 ────────────────────────── */
+.ara-field-group { display: flex; flex-direction: column; gap: 5px; }
+.ara-field-group label { font-size: 12px; font-weight: 600; color: #555; }
+.ara-field-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.ara-hint { font-size: 11px; color: #aaa; font-weight: 400; }
+.ara-input {
+    padding: 9px 12px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-size: 13px; outline: none; width: 100%; box-sizing: border-box; transition: border 0.2s;
+}
+.ara-input:focus { border-color: #667eea; }
+.ara-select {
+    padding: 9px 10px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-size: 13px; outline: none; width: 100%; box-sizing: border-box; background: #fff; cursor: pointer;
+}
+.ara-select:focus { border-color: #667eea; }
+.ara-textarea {
+    padding: 9px 12px; border: 1px solid #e0e0e0; border-radius: 8px;
+    font-size: 13px; outline: none; resize: vertical; width: 100%; box-sizing: border-box;
+    font-family: inherit; line-height: 1.6; transition: border 0.2s;
+}
+.ara-textarea:focus { border-color: #667eea; }
+.ara-amount-wrap { position: relative; display: flex; align-items: center; }
+.ara-amount-sym { position: absolute; left: 10px; font-size: 13px; font-weight: 600; color: #555; pointer-events: none; z-index: 1; }
+.ara-amount-input { padding-left: 24px !important; text-align: right; }
+.ara-dept-grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 8px; max-height: 160px; overflow-y: auto; }
+.ara-dept-chip { display: flex; align-items: center; gap: 5px; padding: 4px 10px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 12px; color: #555; cursor: pointer; background: #fff; transition: all 0.15s; user-select: none; }
+.ara-dept-chip input { display: none; }
+.ara-dept-chip:hover { border-color: #667eea; color: #667eea; }
+.ara-dept-chip.selected { background: #f0f3ff; border-color: #667eea; color: #667eea; font-weight: 600; }
+
+@media (max-width: 900px) { .ara-summary-row { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── 활동 히스토리 ── */
+.ara-section-title-collapsible {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+}
+.ara-section-title-collapsible:hover { color: #667eea; }
+.ara-collapse-arrow {
+    font-size: 18px; color: #aaa; transition: transform 0.2s; line-height: 1;
+}
+.ara-collapse-arrow.open { transform: rotate(90deg); }
+
+.ara-log-timeline {
+    display: flex; flex-direction: column; gap: 0;
+    padding: 8px 0 4px; border-left: 2px solid #e8e8e8; margin-left: 8px;
+}
+.ara-log-item {
+    display: flex; gap: 0; position: relative; padding-bottom: 18px;
+}
+.ara-log-item:last-child { padding-bottom: 0; }
+.ara-log-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #d0d0d0; border: 2px solid #fff; box-shadow: 0 0 0 1px #ccc;
+    flex-shrink: 0; margin-left: -6px; margin-top: 4px;
+}
+.ara-log-item.create .ara-log-dot  { background: #48bb78; box-shadow: 0 0 0 1px #48bb78; }
+.ara-log-item.add    .ara-log-dot  { background: #667eea; box-shadow: 0 0 0 1px #667eea; }
+.ara-log-item.delete .ara-log-dot  { background: #e53e3e; box-shadow: 0 0 0 1px #e53e3e; }
+.ara-log-item.update .ara-log-dot  { background: #ed8936; box-shadow: 0 0 0 1px #ed8936; }
+
+.ara-log-body { padding-left: 14px; flex: 1; }
+.ara-log-header {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;
+}
+.ara-log-badge {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; white-space: nowrap;
+}
+.ara-log-badge.create { background: #f0fff4; color: #276749; }
+.ara-log-badge.add    { background: #ebf4ff; color: #2b4acb; }
+.ara-log-badge.delete { background: #fff5f5; color: #c53030; }
+.ara-log-badge.update { background: #fffaf0; color: #c05621; }
+.ara-log-user  { font-size: 12px; font-weight: 600; color: #333; }
+.ara-log-dept  { font-size: 11px; color: #888; background: #f0f0f0; padding: 1px 7px; border-radius: 10px; }
+.ara-log-time  { font-size: 11px; color: #bbb; margin-left: auto; }
+.ara-log-detail { font-size: 12px; color: #555; line-height: 1.6; }
+
+/* ── 집행률 미니 진행바 ── */
+.ara-pct-wrap { display: flex; align-items: center; gap: 6px; min-width: 110px; }
+.ara-mini-bar { flex: 1; height: 6px; background: #e8e8e8; border-radius: 3px; overflow: hidden; }
+.ara-mini-fill { height: 100%; border-radius: 3px; background: #48bb78; transition: width 0.3s; }
+.ara-mini-fill.warn { background: #ed8936; }
+.ara-mini-fill.over { background: #e53e3e; }
+.ara-pct-label { font-size: 12px; font-weight: 600; color: #333; white-space: nowrap; }
+.ara-pct-label.warn { color: #ed8936; }
+.ara-pct-label.over { color: #e53e3e; }
+
+/* ── CSV 내보내기 버튼 ── */
+.ara-btn-csv {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1.5px solid #cbd5e0; background: #fff; color: #4a5568; cursor: pointer;
+    transition: all 0.15s;
+}
+.ara-btn-csv:hover { background: #f7fafc; border-color: #667eea; color: #667eea; }

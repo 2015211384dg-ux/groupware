@@ -148,7 +148,7 @@ function PostDetail({ user }) {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('파일 다운로드 실패:', err);
-      toast.error('파일 다운로드 실패');
+      toast.error('파일을 다운로드하지 못했습니다.');
     }
   };
 
@@ -170,7 +170,7 @@ function PostDetail({ user }) {
       await fetchPost();
     } catch (err) {
       console.error('고정 처리 실패:', err);
-      toast.error('고정 처리 실패');
+      toast.error('고정하지 못했습니다.');
     }
   };
 
@@ -181,7 +181,7 @@ function PostDetail({ user }) {
     await fetchComments();
   } catch (e) {
     console.error('댓글 삭제 실패:', e?.response?.data || e);
-    toast.error(e?.response?.data?.message || '댓글 삭제 실패');
+    toast.error(e?.response?.data?.message || '댓글을 삭제하지 못했습니다.');
   }
 };
 
@@ -262,7 +262,7 @@ const submitComment = async () => {
     await fetchComments(); // GET 붙였으면
   } catch (e) {
     console.error('댓글 등록 실패:', e?.response?.data || e);
-    toast.error(e?.response?.data?.message || '댓글 등록 실패');
+    toast.error(e?.response?.data?.message || '댓글을 등록하지 못했습니다.');
   } finally {
     setSubmitting(false);
   }
@@ -285,7 +285,7 @@ const submitReply = async () => {
     await fetchComments();
   } catch (e) {
     console.error('답글 등록 실패:', e?.response?.data || e);
-    toast.error(e?.response?.data?.message || '답글 등록 실패');
+    toast.error(e?.response?.data?.message || '답글을 등록하지 못했습니다.');
   } finally {
     setSubmitting(false);
   }

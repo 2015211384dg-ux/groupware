@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../services/authService';
 import './ApprovalAdmin.css';
 import { useToast } from '../components/Toast';
@@ -225,30 +225,60 @@ function TemplateStep1({ form, setForm, categories }) {
                     <label className="tm-label">결재 구분</label>
                     <div className="tm-radio-group">
                         {[
-                            { key: 'approval_name', options: ['결재','일반 결재','동의','일반','승인'], label: '결재' },
-                            { key: 'ref_name', options: ['참조','참조 결재','자동 동의','통보','검토'], label: '참조' },
-                            { key: 'agree_name', options: ['합의','합의 결재','협조'], label: '합의' },
-                            { key: 'parallel_name', options: ['병렬 결재','병렬 동의','병렬 일반'], label: '병렬 결재' },
-                            { key: 'parallel_agree_name', options: ['병렬 합의','병렬 협조'], label: '병렬 합의' },
-                        ].map(row => (
-                            <div key={row.key} className="tm-approval-row">
-                                <span className="tm-approval-label">{row.label}</span>
-                                <div className="tm-radios">
-                                    {row.options.map(opt => (
-                                        <label key={opt} className="tm-radio-label">
-                                            <input
-                                                type="radio"
-                                                name={row.key}
-                                                value={opt}
-                                                checked={(form[row.key] || row.options[0]) === opt}
-                                                onChange={() => setForm(f => ({ ...f, [row.key]: opt }))}
-                                            />
-                                            {opt}
-                                        </label>
-                                    ))}
+                            { key: 'approval_name', label: '결재', options: [
+                                { val: '결재',      desc: '가장 일반적인 결재 명칭. 서식에서 기본값으로 사용됩니다.' },
+                                { val: '일반 결재', desc: '일반적인 결재임을 명시적으로 표현할 때 사용합니다.' },
+                                { val: '동의',      desc: '동의 형식으로 표현. 부드러운 어감이 필요한 서식에 적합합니다.' },
+                                { val: '일반',      desc: '간결하고 포괄적인 명칭. 형식 구분이 불필요할 때 사용합니다.' },
+                                { val: '승인',      desc: '공식적인 승인을 강조하는 명칭. 권위 있는 결재 흐름에 적합합니다.' },
+                            ]},
+                            { key: 'ref_name', label: '참조', options: [
+                                { val: '참조',      desc: '문서를 참고용으로 받아보는 기본 역할. 승인 없이 자동 통과됩니다.' },
+                                { val: '참조 결재', desc: '결재선에 포함된 형태의 참조. 결재 흐름 안에서 열람합니다.' },
+                                { val: '자동 동의', desc: '처리 없이 시스템이 자동으로 동의 처리합니다.' },
+                                { val: '통보',      desc: '일방적으로 알림만 받는 역할. 의사결정에 참여하지 않습니다.' },
+                                { val: '검토',      desc: '내용을 검토하는 역할. 의견 제시는 가능하나 결재권은 없습니다.' },
+                            ]},
+                            { key: 'agree_name', label: '합의', options: [
+                                { val: '합의',      desc: '의견을 맞추는 협의 역할. 합의 완료 후 다음 단계로 진행됩니다.' },
+                                { val: '합의 결재', desc: '결재 형식으로 진행되는 합의. 결재와 동일한 UI로 표시됩니다.' },
+                                { val: '협조',      desc: '업무 협력을 요청하는 역할. 부서 간 협조가 필요한 서식에 사용합니다.' },
+                            ]},
+                            { key: 'parallel_name', label: '병렬 결재', options: [
+                                { val: '병렬 결재', desc: '여러 명이 동시에 결재. 모두 승인해야 다음 단계로 진행됩니다.' },
+                                { val: '병렬 동의', desc: '여러 명이 동시에 동의. 동의 형식으로 병렬 처리합니다.' },
+                                { val: '병렬 일반', desc: '일반 명칭의 병렬 처리. 서식 성격이 포괄적일 때 사용합니다.' },
+                            ]},
+                            { key: 'parallel_agree_name', label: '병렬 합의', options: [
+                                { val: '병렬 합의', desc: '여러 명이 동시에 합의. 합의 역할이 병렬로 적용됩니다.' },
+                                { val: '병렬 협조', desc: '여러 명이 동시에 협조. 다수 부서 협력이 필요한 경우 사용합니다.' },
+                            ]},
+                        ].map(row => {
+                            const selected = form[row.key] || row.options[0].val;
+                            const selectedDesc = row.options.find(o => o.val === selected)?.desc || '';
+                            return (
+                                <div key={row.key} className="tm-approval-row">
+                                    <span className="tm-approval-label">{row.label}</span>
+                                    <div className="tm-radios">
+                                        {row.options.map(opt => (
+                                            <label key={opt.val} className="tm-radio-label">
+                                                <input
+                                                    type="radio"
+                                                    name={row.key}
+                                                    value={opt.val}
+                                                    checked={selected === opt.val}
+                                                    onChange={() => setForm(f => ({ ...f, [row.key]: opt.val }))}
+                                                />
+                                                {opt.val}
+                                            </label>
+                                        ))}
+                                    </div>
+                                    <div className="tm-option-desc-box">
+                                        {selectedDesc}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -265,30 +295,123 @@ function TemplateStep1({ form, setForm, categories }) {
 // 폼 필드 빌더
 function FieldBuilder({ form, setForm }) {
     const toast = useToast();
-    const [newField, setNewField] = useState({ key: '', label: '', type: 'text', required: false });
-    const fieldTypeLabel = { text: '텍스트', textarea: '장문', number: '숫자', date: '날짜', time: '시간', select: '선택' };
+    const [newField, setNewField] = useState({ key: '', label: '', type: 'text', required: false, currency: 'KRW' });
+    const [editIdx, setEditIdx] = useState(null);
+    const [editField, setEditField] = useState(null);
+    const [dragOver, setDragOver] = useState(null);
+    const fieldTypeLabel = { text: '텍스트', textarea: '장문', number: '숫자', date: '날짜', time: '시간', select: '선택', amount: '금액' };
+    const CURRENCIES = [
+        { code: 'KRW', label: '원화 (₩)' },
+        { code: 'USD', label: '달러 ($)' },
+        { code: 'EUR', label: '유로 (€)' },
+        { code: 'JPY', label: '엔화 (¥)' },
+        { code: 'CNY', label: '위안화 (¥)' },
+    ];
+    const dragIndex = useRef(null);
 
     const addField = () => {
         if (!newField.key || !newField.label) { toast.warning('키와 라벨을 입력해주세요.'); return; }
         setForm(f => ({ ...f, form_fields: [...f.form_fields, { ...newField }] }));
-        setNewField({ key: '', label: '', type: 'text', required: false });
+        setNewField({ key: '', label: '', type: 'text', required: false, currency: 'KRW' });
     };
 
     const removeField = (idx) => {
+        if (editIdx === idx) { setEditIdx(null); setEditField(null); }
         setForm(f => ({ ...f, form_fields: f.form_fields.filter((_, i) => i !== idx) }));
     };
+
+    const startEdit = (idx, field) => {
+        setEditIdx(idx);
+        setEditField({ ...field });
+    };
+
+    const saveEdit = () => {
+        if (!editField.key || !editField.label) { toast.warning('키와 라벨을 입력해주세요.'); return; }
+        setForm(f => {
+            const fields = [...f.form_fields];
+            fields[editIdx] = { ...editField };
+            return { ...f, form_fields: fields };
+        });
+        setEditIdx(null);
+        setEditField(null);
+    };
+
+    const cancelEdit = () => { setEditIdx(null); setEditField(null); };
+
+    const handleDragStart = (idx) => { dragIndex.current = idx; };
+
+    const handleDragOver = (e, idx) => {
+        e.preventDefault();
+        setDragOver(idx);
+        if (dragIndex.current === null || dragIndex.current === idx) return;
+        setForm(f => {
+            const fields = [...f.form_fields];
+            const [moved] = fields.splice(dragIndex.current, 1);
+            fields.splice(idx, 0, moved);
+            dragIndex.current = idx;
+            return { ...f, form_fields: fields };
+        });
+    };
+
+    const handleDragEnd = () => { dragIndex.current = null; setDragOver(null); };
 
     return (
         <div className="tm-field-builder">
             <div className="tm-field-list">
                 {form.form_fields.map((field, idx) => (
-                    <div key={idx} className="tm-field-item">
-                        <span className="tm-field-label">{field.label}</span>
-                        <span className="tm-field-key">({field.key})</span>
-                        <span className="tm-field-type-badge">{fieldTypeLabel[field.type] || field.type}</span>
-                        {field.required && <span className="tm-field-required">필수</span>}
-                        <button className="tm-field-del" onClick={() => removeField(idx)}>✕</button>
-                    </div>
+                    editIdx === idx ? (
+                        <div key={field.key + idx} className="tm-field-edit-row">
+                            <input type="text" value={editField.key}
+                                onChange={e => setEditField(f => ({ ...f, key: e.target.value }))}
+                                className="tm-input sm" placeholder="키" />
+                            <input type="text" value={editField.label}
+                                onChange={e => setEditField(f => ({ ...f, label: e.target.value }))}
+                                className="tm-input sm" placeholder="라벨" />
+                            <select value={editField.type} onChange={e => setEditField(f => ({ ...f, type: e.target.value }))} className="tm-select sm">
+                                <option value="text">텍스트</option>
+                                <option value="textarea">장문</option>
+                                <option value="number">숫자</option>
+                                <option value="date">날짜</option>
+                                <option value="time">시간</option>
+                                <option value="select">선택</option>
+                                <option value="amount">금액</option>
+                            </select>
+                            {editField.type === 'amount' && (
+                                <select value={editField.currency || 'KRW'} onChange={e => setEditField(f => ({ ...f, currency: e.target.value }))} className="tm-select sm">
+                                    {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
+                                </select>
+                            )}
+                            <label className="tm-checkbox-label">
+                                <input type="checkbox" checked={editField.required}
+                                    onChange={e => setEditField(f => ({ ...f, required: e.target.checked }))} />
+                                필수
+                            </label>
+                            <button className="tm-btn-save" onClick={saveEdit}>저장</button>
+                            <button className="tm-btn-cancel" onClick={cancelEdit}>취소</button>
+                        </div>
+                    ) : (
+                        <div
+                            key={field.key + idx}
+                            className={`tm-field-item${dragOver === idx ? ' tm-drag-over' : ''}`}
+                            draggable
+                            onDragStart={() => handleDragStart(idx)}
+                            onDragOver={(e) => handleDragOver(e, idx)}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <span className="tm-drag-handle" title="드래그하여 순서 변경">⠿</span>
+                            <span className="tm-field-label">{field.label}</span>
+                            <span className="tm-field-key">({field.key})</span>
+                            <span className="tm-field-type-badge">{fieldTypeLabel[field.type] || field.type}</span>
+                            {field.type === 'amount' && field.currency && (
+                                <span className="tm-field-currency">{CURRENCIES.find(c => c.code === field.currency)?.label || field.currency}</span>
+                            )}
+                            {field.required && <span className="tm-field-required">필수</span>}
+                            <div className="tm-field-actions">
+                                <button className="tm-field-edit" onClick={() => startEdit(idx, field)} title="수정">✎</button>
+                                <button className="tm-field-del" onClick={() => removeField(idx)}>✕</button>
+                            </div>
+                        </div>
+                    )
                 ))}
                 {form.form_fields.length === 0 && (
                     <div className="tm-field-empty">추가된 필드가 없습니다.</div>
@@ -306,7 +429,13 @@ function FieldBuilder({ form, setForm }) {
                     <option value="date">날짜</option>
                     <option value="time">시간</option>
                     <option value="select">선택</option>
+                    <option value="amount">금액</option>
                 </select>
+                {newField.type === 'amount' && (
+                    <select value={newField.currency || 'KRW'} onChange={e => setNewField(f => ({ ...f, currency: e.target.value }))} className="tm-select sm">
+                        {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
+                    </select>
+                )}
                 <label className="tm-checkbox-label">
                     <input type="checkbox" checked={newField.required}
                         onChange={e => setNewField(f => ({ ...f, required: e.target.checked }))} />

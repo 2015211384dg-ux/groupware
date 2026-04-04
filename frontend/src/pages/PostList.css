@@ -4,7 +4,7 @@
    ============================================ */
 
 .post-list-page-v2 {
-    height: calc(100vh - 64px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: #f5f7fa;
@@ -411,8 +411,8 @@
 }
 
 .page-num {
-    min-width: 34px;
-    height: 34px;
+    min-width: 36px;
+    height: 36px;
     padding: 0 8px;
     background: white;
     border: 1px solid #e0e0e0;

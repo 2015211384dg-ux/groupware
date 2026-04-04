@@ -90,4 +90,7 @@ export const IconAlertTriangle  = (p) => <Icon {...p} d="M10.29 3.86L1.82 18a2 2
 export const IconAlertCircle    = (p) => <Icon {...p} d={["M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z","M12 8v4","M12 16h.01"]} />;
 export const IconCheckCircle    = (p) => <Icon {...p} d={["M22 11.08V12a10 10 0 11-5.93-9.14","M22 4L12 14.01l-3-3"]} />;
 
+export const IconBudget = (p) => <Icon {...p} d={["M12 2a10 10 0 1010 10A10 10 0 0012 2z","M12 6v6l4 2"]} />;
+export const IconTrendUp = (p) => <Icon {...p} d={["M23 6l-9.5 9.5-5-5L1 18","M17 6h6v6"]} />;
+
 export default Icon;

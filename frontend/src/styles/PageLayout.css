@@ -2,7 +2,7 @@
 
 /* 페이지 배경과 전체 높이 */
 .page-shell{
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   background: #f5f7fa;
 }
 

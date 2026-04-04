@@ -36,7 +36,7 @@ export default function Feedback() {
         try {
             const res = await api.get('/feedback/mine');
             setMyList(res.data.data);
-        } catch { toast.error('조회에 실패했습니다.'); }
+        } catch { toast.error('불러오지 못했습니다.'); }
         finally { setListLoading(false); }
     };
 
@@ -52,7 +52,7 @@ export default function Feedback() {
             toast.success('피드백이 등록되었습니다. 감사합니다!');
             setForm({ type: 'bug', title: '', content: '' });
             setTab('mine');
-        } catch { toast.error('등록에 실패했습니다.'); }
+        } catch { toast.error('등록하지 못했습니다.'); }
         finally { setSubmitting(false); }
     };
 

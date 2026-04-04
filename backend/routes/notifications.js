@@ -29,7 +29,9 @@ router.get('/unread', async (req, res) => {
         const [approval] = await db.query(
             `SELECT 'approval' AS source, n.id, n.type,
                     n.message AS title, NULL AS body,
-                    CONCAT('/approval/documents/', n.document_id) AS url,
+                    CASE WHEN n.type = 'AR' THEN n.url
+                         ELSE CONCAT('/approval/documents/', n.document_id)
+                    END AS url,
                     n.created_at
              FROM approval_notifications n
              WHERE n.user_id = ? AND n.is_read = FALSE AND n.created_at > ?

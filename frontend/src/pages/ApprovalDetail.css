@@ -1,7 +1,7 @@
 /* ============================================
    문서 상세 - ApprovalDetail.css
    ============================================ */
-.ad-page { min-height: calc(100vh - 60px); background: #f5f6fa; }
+.ad-page { min-height: 100vh; background: #f5f6fa; }
 
 .ad-loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; color: #bbb; gap: 12px; }
 .ad-spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: #667eea; border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -10,10 +10,12 @@
 /* 헤더 */
 .ad-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 0; background: #fff; border-bottom: 1px solid #ebebeb;
-    position: sticky; top: 0; z-index: 10;
+    padding: 14px 24px; background: #fff; border-bottom: 1px solid #ebebeb;
+    position: sticky; top: 0; z-index: 10; gap: 16px;
 }
-.ad-back-btn { background: none; border: 1px solid #e0e0e0; border-radius: 8px; padding: 7px 14px; font-size: 13px; color: #666; cursor: pointer; }
+.ad-header-left { display: flex; align-items: center; gap: 12px; }
+.ad-header-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin: 0; }
+.ad-back-btn { display: flex; align-items: center; gap: 5px; background: none; border: 1px solid #e0e0e0; border-radius: 8px; padding: 7px 12px; font-size: 13px; color: #666; cursor: pointer; flex-shrink: 0; }
 .ad-back-btn:hover { border-color: #667eea; color: #667eea; }
 .ad-header-right { display: flex; gap: 10px; }
 
@@ -26,7 +28,7 @@
 .ad-btn-cancel-doc:hover { background: #fff5f5; }
 
 /* 본문 */
-.ad-body { max-width: 100%; margin: 0; padding: 20px 0; display: flex; flex-direction: column; gap: 20px; }
+.ad-body { max-width: 100%; margin: 0; padding: 20px 24px; display: flex; flex-direction: column; gap: 20px; }
 
 /* 문서 메타 */
 .ad-meta-card { background: #fff; border-radius: 14px; border: 1px solid #ebebeb; padding: 20px 24px; }
@@ -182,6 +184,7 @@
     flex: 1; padding: 12px; border: 2px solid #ebebeb; border-radius: 10px;
     background: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
     transition: all 0.15s; color: #555;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .ad-action-btn.approve.active { border-color: #68d391; background: #f0fff4; color: #2f855a; }
 .ad-action-btn.reject.active  { border-color: #fc8181; background: #fff5f5; color: #e53e3e; }

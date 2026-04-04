@@ -160,7 +160,7 @@ router.post('/templates', async (req, res) => {
             // 공유
             share_range, share_timing, share_targets, share_changeable,
             // 권한
-            view_targets,
+            view_targets, regulation,
         } = req.body;
 
         if (!category_id || !name?.trim())

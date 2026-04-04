@@ -103,7 +103,17 @@ function DocumentList({ box, onSelect }) {
                     </thead>
                     <tbody>
                         {loading ? (
-                            <tr><td colSpan={6} className="ap-empty">로딩 중...</td></tr>
+                            <>
+                                {[...Array(5)].map((_,i) => (
+                                    <tr key={i}>
+                                        {[40,180,80,60,80,80].map((w,j) => (
+                                            <td key={j} style={{ padding:'14px 12px' }}>
+                                                <div className="skel" style={{ height:13, width:w, borderRadius:4 }} />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </>
                         ) : docs.map(doc => (
                             <tr key={doc.id} className="ap-row" onClick={() => navigate(`/approval/documents/${doc.id}`)}>
                                 <td className="ap-docnum" style={{textAlign:'center'}}>{doc.doc_number || '(임시저장)'}</td>
@@ -176,7 +186,9 @@ function DashboardHome({ onBoxSelect }) {
                         </div>
                         <div className="ap-card-info">
                             <div className="ap-card-value" style={{ color: c.color }}>
-                                {loading ? '-' : c.value}
+                                {loading
+                                    ? <div className="skel" style={{ height:28, width:36, borderRadius:6 }} />
+                                    : c.value}
                             </div>
                             <div className="ap-card-label">{c.label}</div>
                         </div>
@@ -189,7 +201,11 @@ function DashboardHome({ onBoxSelect }) {
                 <div className="ap-section-title">최근 문서</div>
                 <div className="ap-recent-list">
                     {loading ? (
-                        <div className="ap-empty-msg">로딩 중...</div>
+                        <div style={{ display:'flex', flexDirection:'column', gap:8, padding:'4px 0' }}>
+                            {[...Array(4)].map((_,i) => (
+                                <div key={i} className="skel" style={{ height:52, borderRadius:8 }} />
+                            ))}
+                        </div>
                     ) : recentDocs.length === 0 ? (
                         <div className="ap-empty-msg">작성한 문서가 없습니다.</div>
                     ) : recentDocs.map(doc => (

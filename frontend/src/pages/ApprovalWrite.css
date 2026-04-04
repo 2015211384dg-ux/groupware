@@ -1,7 +1,7 @@
 /* ============================================
    문서 작성 - ApprovalWrite.css
    ============================================ */
-.aw-page { min-height: calc(100vh - 60px); background: #f5f6fa; font-family: inherit; }
+.aw-page { min-height: 100vh; background: #f5f6fa; font-family: inherit; }
 
 /* 폰트 전체 통일 */
 .aw-page input,
@@ -15,7 +15,7 @@
 }
 
 /* ── 서식 선택 페이지 ─────────────────────── */
-.aw-template-page { max-width: 100%; margin: 0; padding: 20px 0; }
+.aw-template-page { max-width: 100%; margin: 0; padding: 20px 24px; }
 
 .aw-tp-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
 .aw-tp-header h1 { font-size: 22px; font-weight: 700; color: #1a1a1a; margin: 0; }
@@ -78,10 +78,10 @@
 .aw-star-btn.active { color: #f6ad55; }
 
 /* ── 문서 작성 레이아웃 ────────────────────── */
-.aw-write-layout { display: flex; gap: 0; min-height: calc(100vh - 60px); }
+.aw-write-layout { display: flex; gap: 0; height: 100vh; overflow: hidden; }
 
 .aw-form-area {
-    flex: 1; padding: 20px 0; overflow-y: auto;
+    flex: 1; padding: 20px 24px; overflow-y: auto;
     background: #f5f6fa;
 }
 
@@ -153,11 +153,11 @@ textarea.aw-field-input { resize: vertical; }
     width: 280px; min-width: 280px;
     background: #fff; border-left: 1px solid #e8e8e8;
     padding: 24px 20px; display: flex; flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
 }
 .aw-panel-title { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 16px; }
 
-.aw-line-list { flex: 1; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; min-height: 80px; }
+.aw-line-list { flex: 1; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; min-height: 80px; overflow-y: auto; }
 
 .aw-line-empty {
     text-align: center; color: #bbb; font-size: 12px;
@@ -284,10 +284,9 @@ textarea.aw-field-input { resize: vertical; }
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
     color: #667eea;
     background: #f0f2ff;
-    border-left: 3px solid #667eea;
+    border-radius: 6px 6px 0 0;
     padding: 6px 12px;
     margin: 0 0 2px 0;
 }
@@ -335,4 +334,25 @@ textarea.aw-field-input { resize: vertical; }
     font-family: inherit;
     line-height: 1.75;
     padding: 12px 14px;
+}
+/* 금액 필드 */
+.aw-amount-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.aw-amount-symbol {
+    position: absolute;
+    left: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+}
+.aw-amount-input {
+    flex: 1;
+    padding-left: 26px !important;
+    font-variant-numeric: tabular-nums;
 }

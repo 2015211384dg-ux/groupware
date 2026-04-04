@@ -265,7 +265,7 @@ function Calendar() {
             resetForm();
         } catch (error) {
             console.error('일정 저장 실패:', error);
-            toast.error('일정 저장에 실패했습니다.');
+            toast.error('일정을 저장하지 못했습니다.');
         }
     };
 
@@ -279,7 +279,7 @@ function Calendar() {
             fetchEvents();
         } catch (error) {
             console.error('일정 삭제 실패:', error);
-            toast.error('일정 삭제에 실패했습니다.');
+            toast.error('일정을 삭제하지 못했습니다.');
         }
     };
 

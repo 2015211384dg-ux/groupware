@@ -76,7 +76,7 @@ function PostWrite() {
 
     } catch (e) {
       console.error(e);
-      toast.error('파일 업로드 중 오류가 발생했습니다.');
+      toast.error('파일을 업로드하지 못했습니다.');
     } finally {
       setUploading(false);
     }

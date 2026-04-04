@@ -116,6 +116,25 @@ function DynamicField({ field, value, onChange }) {
                 {(field.options || []).map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
         );
+    if (field.type === 'date')
+        return <input type="date" {...common} onClick={e => e.currentTarget.showPicker?.()} />;
+    if (field.type === 'amount') {
+        const CURRENCY_SYMBOLS = { KRW: '₩', USD: '$', EUR: '€', JPY: '¥', CNY: '¥' };
+        const symbol = CURRENCY_SYMBOLS[field.currency] || '₩';
+        const handleAmountChange = (e) => {
+            const raw = e.target.value.replace(/[^0-9]/g, '');
+            onChange(field.key, raw);
+        };
+        const displayValue = value ? Number(value).toLocaleString() : '';
+        return (
+            <div className="aw-amount-wrap">
+                <span className="aw-amount-symbol">{symbol}</span>
+                <input type="text" value={displayValue} onChange={handleAmountChange}
+                    required={field.required} placeholder={field.label + (field.required ? ' *' : '')}
+                    className="aw-field-input aw-amount-input" />
+            </div>
+        );
+    }
     return <input type={field.type || 'text'} {...common} />;
 }
 

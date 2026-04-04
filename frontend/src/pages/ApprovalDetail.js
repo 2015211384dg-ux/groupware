@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/authService';
 import './ApprovalDetail.css';
-import { IconEdit, IconTrash, IconPaperclip, IconFile, IconCheck } from '../components/Icons';
+import { IconEdit, IconTrash, IconPaperclip, IconFile, IconCheck, IconX } from '../components/Icons';
 import { useToast } from '../components/Toast';
 
 const STATUS_MAP = {
@@ -220,13 +220,13 @@ function ActionModal({ doc, myLine, onClose, onDone }) {
                             className={`ad-action-btn approve ${action === 'APPROVED' ? 'active' : ''}`}
                             onClick={() => setAction('APPROVED')}
                         >
-                            ✅ 승인
+                            <IconCheck size={15}/> 승인
                         </button>
                         <button
                             className={`ad-action-btn reject ${action === 'REJECTED' ? 'active' : ''}`}
                             onClick={() => setAction('REJECTED')}
                         >
-                            ❌ 반려
+                            <IconX size={15}/> 반려
                         </button>
                     </div>
 
@@ -340,11 +340,17 @@ function ApprovalDetail() {
 
             {/* 상단 헤더 */}
             <div className="ad-header">
-                <button className="ad-back-btn" onClick={() => navigate('/approval')}>← 목록으로</button>
+                <div className="ad-header-left">
+                    <button className="ad-back-btn" onClick={() => navigate('/approval')}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        목록으로
+                    </button>
+                    <h2 className="ad-header-title">결재 문서 상세</h2>
+                </div>
                 <div className="ad-header-right">
                     {myLine && (
                         <button className="ad-btn-action-main" onClick={() => setShowAction(true)}>
-                            ✍️ 결재 처리
+                            <IconCheck size={14}/> 결재 처리
                         </button>
                     )}
                     {/* 임시저장: 수정 + 삭제 */}
@@ -394,12 +400,21 @@ function ApprovalDetail() {
                         <div className="ad-section">
                             <div className="ad-section-title">신청 내용</div>
                             <div className="ad-form-view">
-                                {doc.template_fields.map(f => (
-                                    <div key={f.key} className="ad-fv-row">
-                                        <span className="ad-fv-label">{f.label}</span>
-                                        <span className="ad-fv-value">{doc.form_data[f.key] || '-'}</span>
-                                    </div>
-                                ))}
+                                {doc.template_fields.map(f => {
+                                    const CURRENCY_SYMBOLS = { KRW: '₩', USD: '$', EUR: '€', JPY: '¥', CNY: '¥' };
+                                    const raw = doc.form_data[f.key];
+                                    let display = raw || '-';
+                                    if (f.type === 'amount' && raw) {
+                                        const sym = CURRENCY_SYMBOLS[f.currency] || '₩';
+                                        display = `${sym} ${Number(raw).toLocaleString()}`;
+                                    }
+                                    return (
+                                        <div key={f.key} className="ad-fv-row">
+                                            <span className="ad-fv-label">{f.label}</span>
+                                            <span className="ad-fv-value">{display}</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}

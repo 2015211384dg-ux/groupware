@@ -4,7 +4,7 @@
 
 .approval-admin-page {
     display: flex;
-    height: calc(100vh - 60px);
+    height: 100vh;
     background: #f5f6fa;
     overflow: hidden;
 }
@@ -54,7 +54,6 @@
     font-size: 11px;
     font-weight: 700;
     color: #999;
-    text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
@@ -64,12 +63,12 @@
     padding: 8px 16px 8px 24px;
     background: none;
     border: none;
+    border-radius: 8px;
     text-align: left;
     font-size: 13px;
     color: #555;
     cursor: pointer;
     transition: all 0.15s;
-    border-left: 3px solid transparent;
     position: relative;
 }
 
@@ -89,7 +88,6 @@
     background: #f0f3ff;
     color: #667eea;
     font-weight: 600;
-    border-left-color: #667eea;
 }
 
 .aa-nav-item.active::before {
@@ -103,13 +101,13 @@
     padding: 10px 16px;
     background: none;
     border: none;
+    border-radius: 8px;
     text-align: left;
     font-size: 13px;
     font-weight: 600;
     color: #333;
     cursor: pointer;
     transition: all 0.15s;
-    border-left: 3px solid transparent;
 }
 
 .aa-nav-solo:hover {
@@ -120,7 +118,6 @@
 .aa-nav-solo.active {
     background: #f0f3ff;
     color: #667eea;
-    border-left-color: #667eea;
 }
 
 /* ============================================
@@ -129,7 +126,7 @@
 .aa-content {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 0;
+    padding: 20px 24px;
 }
 
 .aa-section {
@@ -1959,3 +1956,116 @@
     color: #aaa; background: #fafafa;
     min-height: 100px; box-sizing: border-box;
 }
+/* 드래그 앤 드롭 */
+.tm-field-item { cursor: default; transition: background 0.1s; }
+.tm-field-item.tm-drag-over { background: #f0f4ff; border-top: 2px solid #667eea; }
+.tm-drag-handle { color: #bbb; font-size: 16px; cursor: grab; user-select: none; flex-shrink: 0; line-height: 1; }
+.tm-drag-handle:active { cursor: grabbing; }
+
+/* 결재 구분 설명 */
+.tm-approval-desc {
+    font-size: 12px;
+    color: #888;
+    margin-left: auto;
+    max-width: 320px;
+    text-align: right;
+    line-height: 1.5;
+}
+
+/* 결재 구분 옵션 설명 칸 */
+.tm-approval-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.tm-option-desc-box {
+    min-width: 240px;
+    max-width: 300px;
+    margin-left: auto;
+    padding: 6px 12px;
+    background: #f8f9ff;
+    border: 1px solid #e8eaf6;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+    flex-shrink: 0;
+}
+
+/* 금액 필드 통화 뱃지 */
+.tm-field-currency {
+    display: inline-block;
+    padding: 1px 7px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* 필드 수정 버튼 */
+.tm-field-edit {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: #667eea;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.tm-field-edit:hover { background: #f0f3ff; }
+
+/* 필드 인라인 수정 행 */
+.tm-field-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #f8f9ff;
+    border: 1.5px solid #667eea;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+/* 저장/취소 버튼 */
+.tm-btn-save {
+    padding: 5px 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+}
+.tm-btn-save:hover { opacity: 0.88; }
+
+.tm-btn-cancel {
+    padding: 5px 12px;
+    background: #fff;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+}
+.tm-btn-cancel:hover { border-color: #aaa; }
+
+/* 필드 액션 버튼 묶음 */
+.tm-field-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+.tm-field-actions .tm-field-edit { margin-left: 0; }

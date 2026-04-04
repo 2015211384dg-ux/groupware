@@ -98,6 +98,22 @@ code {
     font-size: 14px;
 }
 
+/* ── 글로벌 스켈레톤 로딩 ─────────────────────
+   사용법: <div className="skel" style={{ height:16, width:'60%' }} />
+   shimmer 애니메이션이 자동 적용됩니다.
+─────────────────────────────────────────── */
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.skel {
+    background: linear-gradient(90deg, #f0f2f5 25%, #e8eaee 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease infinite;
+    border-radius: 6px;
+    display: block;
+}
+
 /* 유틸리티 클래스 */
 .text-center {
     text-align: center;
@@ -271,7 +287,7 @@ label.required::after,
 
 /* 공통 페이지 프레임 */
 .page-shell{
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   background: #f5f7fa;
 }
 

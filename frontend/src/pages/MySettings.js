@@ -57,7 +57,7 @@ function MySettings() {
             toast.success('설정이 저장되었습니다.');
         } catch (error) {
             console.error('설정 저장 실패:', error);
-            toast.error('설정 저장에 실패했습니다.');
+            toast.error('설정을 저장하지 못했습니다.');
         } finally {
             setSaving(false);
         }

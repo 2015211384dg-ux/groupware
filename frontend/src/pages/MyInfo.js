@@ -82,7 +82,7 @@ function SignaturePad({ currentSignature, onSave, onClose }) {
             await api.put('/users/me/signature', { signature_data: dataURL });
             onSave(dataURL);
         } catch (e) {
-            toast.error('서명 저장 실패');
+            toast.error('서명을 저장하지 못했습니다.');
         } finally {
             setSaving(false);
         }
@@ -212,7 +212,7 @@ function MyInfo({ user }) {
             setUserInfo(prev => ({ ...prev, profile_image: res.data.profile_image }));
             toast.success('프로필 사진이 변경되었습니다.');
         } catch {
-            toast.error('프로필 사진 업로드에 실패했습니다.');
+            toast.error('프로필 사진을 업로드하지 못했습니다.');
         }
     };
 
@@ -224,7 +224,7 @@ function MyInfo({ user }) {
             setEditMode(false);
             fetchUserInfo();
         } catch (e) {
-            toast.error(e.response?.data?.message || '정보 수정에 실패했습니다.');
+            toast.error(e.response?.data?.message || '정보를 수정하지 못했습니다.');
         } finally { setSaving(false); }
     };
 
@@ -239,7 +239,7 @@ function MyInfo({ user }) {
             setShowPasswordModal(false);
             setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         } catch (e) {
-            toast.error(e.response?.data?.message || '비밀번호 변경에 실패했습니다.');
+            toast.error(e.response?.data?.message || '비밀번호를 변경하지 못했습니다.');
         } finally { setSaving(false); }
     };
 

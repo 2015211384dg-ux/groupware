@@ -173,7 +173,7 @@ export default function FeedbackAdmin() {
                 params: { type: filterType || undefined, status: filterStatus || undefined }
             });
             setList(res.data.data);
-        } catch { toast.error('조회에 실패했습니다.'); }
+        } catch { toast.error('불러오지 못했습니다.'); }
         finally { setLoading(false); }
     };
 
@@ -183,7 +183,7 @@ export default function FeedbackAdmin() {
             setList(prev => prev.map(f => f.id === id ? { ...f, status } : f));
             setSelected(prev => prev?.id === id ? { ...prev, status } : prev);
             toast.success('상태가 변경되었습니다.');
-        } catch { toast.error('변경에 실패했습니다.'); }
+        } catch { toast.error('변경하지 못했습니다.'); }
     };
 
     const saveNote = async (id, note) => {
@@ -193,7 +193,7 @@ export default function FeedbackAdmin() {
             setList(prev => prev.map(f => f.id === id ? { ...f, admin_note: note.trim() } : f));
             setSelected(prev => prev?.id === id ? { ...prev, admin_note: note.trim() } : prev);
             toast.success('답변이 저장되었습니다.');
-        } catch { toast.error('저장에 실패했습니다.'); }
+        } catch { toast.error('저장하지 못했습니다.'); }
     };
 
     // 검색 필터 적용

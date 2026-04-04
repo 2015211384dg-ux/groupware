@@ -1,6 +1,6 @@
 .naver-calendar-page {
     display: flex;
-    height: calc(100vh - 64px);
+    height: 100vh;
     background: #f5f6f8;
     overflow: hidden;
 }

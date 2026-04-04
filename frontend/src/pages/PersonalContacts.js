@@ -127,7 +127,7 @@ function PersonalContacts() {
             fetchContacts();
         } catch (error) {
             console.error('연락처 저장 실패:', error);
-            toast.error('연락처 저장에 실패했습니다.');
+            toast.error('연락처를 저장하지 못했습니다.');
         }
     };
 
@@ -142,7 +142,7 @@ function PersonalContacts() {
             fetchContacts();
         } catch (error) {
             console.error('연락처 삭제 실패:', error);
-            toast.error('연락처 삭제에 실패했습니다.');
+            toast.error('연락처를 삭제하지 못했습니다.');
         }
     };
 

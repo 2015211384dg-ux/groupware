@@ -125,7 +125,7 @@ function Settings() {
             toast.success('설정이 저장되었습니다.');
             updateSettings(settings);
         } catch {
-            toast.error('설정 저장에 실패했습니다.');
+            toast.error('설정을 저장하지 못했습니다.');
         } finally {
             setLoading(false);
         }

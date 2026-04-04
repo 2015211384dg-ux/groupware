@@ -29,6 +29,8 @@ import ApprovalDetail from './pages/ApprovalDetail';
 import Feedback from './pages/Feedback';
 import FeedbackAdmin from './pages/FeedbackAdmin';
 import MagicLogin from './pages/MagicLogin';
+import AR from './pages/AR';
+import ARAdmin from './pages/ARAdmin';
 
 // Auth 관련
 import { authService } from './services/authService';
@@ -163,6 +165,11 @@ function App() {
                   <Route path="/approval/write/edit/:docId" element={<ApprovalWrite />} />
                   <Route path="/approval/documents/:id" element={<ApprovalDetail />} />
                   
+                  {/* 예산 관리 */}
+                  <Route path="/budget/ar" element={<AR user={user} />} />
+                  <Route path="/admin/ar" element={<AdminRoute user={user}><ARAdmin user={user} /></AdminRoute>} />
+                  <Route path="/budget" element={<Navigate to="/budget/ar" replace />} />
+
                   {/* 피드백 */}
                   <Route path="/feedback" element={<Feedback />} />
                   <Route path="/admin/feedback" element={<AdminRoute user={user}><FeedbackAdmin /></AdminRoute>} />
