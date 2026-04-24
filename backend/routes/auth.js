@@ -7,6 +7,7 @@ const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
 const { logActivity, validatePassword } = require('../utils/logger');
+const { createNotification } = require('../utils/notificationHelper');
 const { cache } = require('../middleware/cache');
 
 // 쿠키 공통 옵션
@@ -104,6 +105,20 @@ router.post('/login', [
                 );
                 cache.deletePattern(/^api:.*\/api\/v1\/users/);
                 logActivity('warning', `계정 잠금: ${username} (${newFailCount}회 연속 실패)`, { userId: user.id, req });
+
+                // 관리자에게 보안 알림
+                db.query("SELECT id FROM users WHERE role IN ('SUPER_ADMIN','ADMIN') AND is_active = TRUE")
+                    .then(([admins]) => {
+                        if (admins.length > 0) {
+                            createNotification(admins.map(a => a.id), {
+                                type: 'security',
+                                title: '계정 잠금 발생',
+                                body: `${username} 계정이 비밀번호 ${newFailCount}회 오류로 30분간 잠겼습니다.`,
+                                url: '/settings'
+                            });
+                        }
+                    }).catch(() => {});
+
                 return res.status(423).json({ success: false, message: '로그인 실패가 반복되어 계정이 30분간 잠겼습니다.' });
             } else {
                 await db.query('UPDATE users SET login_fail_count=? WHERE id=?', [newFailCount, user.id]);

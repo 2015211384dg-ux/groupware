@@ -16,12 +16,27 @@ const app = express();
 // 미들웨어 설정
 // ============================================
 
-// 보안 헤더 (인트라넷 HTTP 환경 - HTTPS 강제 헤더 전체 비활성화)
+// 보안 헤더
 app.use(helmet({
-    hsts: false,
-    contentSecurityPolicy: false,
+    hsts: false,                    // HTTP 내부망
     crossOriginOpenerPolicy: false,
     originAgentCluster: false,
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc:    ["'self'"],
+            scriptSrc:     ["'self'"],
+            // Pretendard 폰트 CDN + React 인라인 스타일
+            styleSrc:      ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+            fontSrc:       ["'self'", "https://cdn.jsdelivr.net"],
+            imgSrc:        ["'self'", "data:", "blob:"],
+            connectSrc:    ["'self'"],
+            mediaSrc:      ["'self'", "blob:"],
+            workerSrc:     ["'self'", "blob:"],   // PDF.js 웹워커
+            objectSrc:     ["'none'"],
+            frameAncestors:["'none'"],            // 클릭재킹 방어
+            baseUri:       ["'self'"],
+        }
+    }
 }));
 
 // Rate Limiting - 전체 API
@@ -429,8 +444,8 @@ db.query(`
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 `).catch(err => console.error('feed_comments 테이블 생성 실패:', err.message));
 
-// notifications type에 'project' 추가
-db.query(`ALTER TABLE notifications MODIFY COLUMN type ENUM('post','comment','feedback','ar','project') NOT NULL`).catch(() => {});
+// notifications type enum 확장
+db.query(`ALTER TABLE notifications MODIFY COLUMN type ENUM('post','comment','feedback','ar','project','security') NOT NULL`).catch(() => {});
 
 // magic_tokens — 데스크탑→브라우저 일회성 자동 로그인 토큰
 db.query(`

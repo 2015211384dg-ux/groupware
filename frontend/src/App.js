@@ -1,62 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 
-// Components
-import Login from './pages/Login';
-import Layout from './components/Layout/Layout';
-import Dashboard from './pages/Dashboard';
-import BoardList from './pages/BoardList';
-import PostList from './pages/PostList';
-import PostWrite from './pages/PostWrite';
-import PostDetail from './pages/PostDetail';
-import Search from './pages/Search';
-import Organization from './pages/Organization';
-import AddressBook from './pages/AddressBook';
-import PersonalContacts from './pages/PersonalContacts';
-import MyInfo from './pages/MyInfo';
-import UserManagement from './pages/UserManagement';
-import DepartmentManagement from './pages/DepartmentManagement';
-import Settings from './pages/Settings';
-import NotFound from './pages/NotFound';
-import MySettings from './pages/MySettings';
-import Calendar from './pages/Calendar';
-import Approval from './pages/Approval';
-import ApprovalAdmin from './pages/ApprovalAdmin';
-import ApprovalWrite from './pages/ApprovalWrite';
-import ApprovalDetail from './pages/ApprovalDetail';
-import Feedback from './pages/Feedback';
-import FeedbackAdmin from './pages/FeedbackAdmin';
-import MagicLogin from './pages/MagicLogin';
-import AR from './pages/AR';
-import ARAdmin from './pages/ARAdmin';
-import MaintenancePage from './pages/MaintenancePage';
-
-// Auth 관련
+import { SettingsProvider } from './context/SettingsContext';
+import { ToastProvider } from './components/common/Toast';
+import { ConfirmProvider } from './components/common/Confirm';
 import { authService } from './services/authService';
-import api from './services/authService';
-
-import { SettingsProvider } from './services/SettingsContext';
-import { ToastProvider } from './components/Toast';
-import PopupNotice from './components/PopupNotice';
-import ForcePasswordChange from './components/ForcePasswordChange';
-
-// 관리자 전용 라우트 가드
-const AdminRoute = ({ user, children }) => {
-  const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'];
-  if (!user || !ADMIN_ROLES.includes(user.role)) {
-    return <Navigate to="/" replace />;
-  }
-  return children;
-};
-
-AdminRoute.propTypes = {
-  user: PropTypes.shape({
-    role: PropTypes.string.isRequired
-  }),
-  children: PropTypes.node.isRequired
-};
+import api from './services/api';
+import MaintenancePage from './pages/MaintenancePage';
+import AppRoutes from './routes/AppRoutes';
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'];
 
@@ -65,13 +17,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [maintenance, setMaintenance] = useState({ on: false, message: '' });
+  const [sessionTimeout, setSessionTimeout] = useState(60); // 분 단위
 
-  // 인증 상태 확인
   useEffect(() => {
     checkAuth();
   }, []);
 
-  // 점검 모드 폴링 (30초마다)
   useEffect(() => {
     const check = () => {
       api.get('/settings/maintenance').then(res => {
@@ -88,12 +39,45 @@ function App() {
       const userData = await authService.getCurrentUser();
       setUser(userData);
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch {
       // 미인증 상태 (401) — 정상 케이스
     } finally {
       setLoading(false);
     }
   };
+
+  // 공개 설정 로드 (session_timeout 포함)
+  useEffect(() => {
+    api.get('/settings/public').then(res => {
+      if (res.data?.success) setSessionTimeout(res.data.data.session_timeout || 60);
+    }).catch(() => {});
+  }, []);
+
+  // 유휴 세션 타임아웃 — stale closure 방지를 위해 ref 사용
+  const logoutRef = useRef(null);
+  const handleLogout = useCallback(async () => {
+    await authService.logout();
+    setUser(null);
+    setIsAuthenticated(false);
+  }, []);
+  logoutRef.current = handleLogout;
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const ms = sessionTimeout * 60 * 1000;
+    let timer;
+    const reset = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => logoutRef.current(), ms);
+    };
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(e => window.addEventListener(e, reset, { passive: true }));
+    reset();
+    return () => {
+      clearTimeout(timer);
+      events.forEach(e => window.removeEventListener(e, reset));
+    };
+  }, [isAuthenticated, sessionTimeout]);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -101,16 +85,10 @@ function App() {
   };
 
   const handlePasswordChanged = async () => {
-    // 비밀번호 변경 후 최신 사용자 정보 다시 로드
     const updated = await authService.getCurrentUser();
     setUser(updated);
   };
 
-  const handleLogout = async () => {
-    await authService.logout();
-    setUser(null);
-    setIsAuthenticated(false);
-  };
 
   if (loading) {
     return (
@@ -121,97 +99,25 @@ function App() {
     );
   }
 
-  // 점검 중 && 관리자가 아닌 경우 점검 페이지 표시
   if (maintenance.on && isAuthenticated && !ADMIN_ROLES.includes(user?.role)) {
-    return <MaintenancePage message={maintenance.message} onLogout={isAuthenticated ? handleLogout : null} />;
+    return <MaintenancePage message={maintenance.message} onLogout={handleLogout} />;
   }
 
   return (
     <SettingsProvider>
-    <ToastProvider>
-      <Router>
-        <Routes>
-        {/* 데스크탑 앱 매직 로그인 */}
-        <Route path="/auth/magic" element={<MagicLogin />} />
-
-        {/* 로그인 페이지 */}
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? 
-              <Navigate to="/" replace /> : 
-              <Login onLogin={handleLogin} />
-          } 
-        />
-
-        {/* 메인 레이아웃 */}
-        <Route
-          path="/*"
-          element={
-            isAuthenticated ? (
-              <Layout user={user} onLogout={handleLogout}>
-                {!!user?.require_password_change && (
-                    <ForcePasswordChange onSuccess={handlePasswordChanged} />
-                )}
-                <PopupNotice />
-                <Routes>
-                  <Route path="/" element={<Dashboard user={user} />} />
-                  
-                  {/* Phase 5: 검색 */}
-                  <Route path="/search" element={<Search />} />
-                  
-                  {/* Phase 2: 게시판 */}
-                  <Route path="/boards" element={<BoardList />} />
-                  <Route path="/boards/:boardId" element={<PostList user={user} />} />
-                  <Route path="/boards/:boardId/write" element={<PostWrite />} />
-                  <Route path="/boards/:boardId/posts/:postId" element={<PostDetail user={user} />} />
-                  
-                  {/* Phase 3: 주소록 */}
-                  <Route path="/addressbook/organization" element={<Organization />} />
-                  <Route path="/addressbook/all" element={<AddressBook />} />
-                  <Route path="/addressbook/personal" element={<PersonalContacts />} />
-                  <Route path="/addressbook/*" element={<div>개인 주소록 (개발 중)</div>} />
-                  
-                  {/* Phase 4: HR */}
-                  <Route path="/hr/myinfo" element={<MyInfo user={user} />} />
-                  <Route path="/hr" element={<Navigate to="/hr/myinfo" replace />} />
-
-                  <Route path="/my-settings" element={<MySettings />} />
-
-                  {/* calendar */}
-                  <Route path="/calendar" element={<Calendar />} />
-                  <Route path="/approval" element={<Approval />} />
-                  <Route path="/admin/approval" element={<AdminRoute user={user}><ApprovalAdmin /></AdminRoute>} />
-                  <Route path="/approval/write" element={<ApprovalWrite />} />
-                  <Route path="/approval/write/edit/:docId" element={<ApprovalWrite />} />
-                  <Route path="/approval/documents/:id" element={<ApprovalDetail />} />
-                  
-                  {/* 예산 관리 */}
-                  <Route path="/budget/ar" element={<AR user={user} />} />
-                  <Route path="/admin/ar" element={<AdminRoute user={user}><ARAdmin user={user} /></AdminRoute>} />
-                  <Route path="/budget" element={<Navigate to="/budget/ar" replace />} />
-
-                  {/* 피드백 */}
-                  <Route path="/feedback" element={<Feedback />} />
-                  <Route path="/admin/feedback" element={<AdminRoute user={user}><FeedbackAdmin /></AdminRoute>} />
-
-                  {/* 관리 (관리자 전용) */}
-                  <Route path="/admin/users" element={<AdminRoute user={user}><UserManagement currentUser={user} /></AdminRoute>} />
-                  <Route path="/admin/departments" element={<AdminRoute user={user}><DepartmentManagement /></AdminRoute>} />
-                  <Route path="/admin/settings" element={<AdminRoute user={user}><Settings /></AdminRoute>} />
-                  
-                  {/* 404 */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Layout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-      </Routes>
-    </Router>
-    </ToastProvider>
+      <ToastProvider>
+      <ConfirmProvider>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AppRoutes
+            isAuthenticated={isAuthenticated}
+            user={user}
+            onLogin={handleLogin}
+            onLogout={handleLogout}
+            onPasswordChanged={handlePasswordChanged}
+          />
+        </Router>
+      </ConfirmProvider>
+      </ToastProvider>
     </SettingsProvider>
   );
 }

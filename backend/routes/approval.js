@@ -8,6 +8,7 @@ const db = require('../config/database');
 const { logActivity } = require('../utils/logger');
 const { sendApprovalRequest, sendApprovalComplete, sendApprovalRejected } = require('../utils/mailer');
 const { validateMimeType } = require('../utils/mimeCheck');
+const { logAudit } = require('../utils/auditLog');
 
 // 이메일 fire-and-forget 헬퍼
 function mailSilent(fn) { fn().catch(err => console.error('메일 발송 실패:', err.message)); }
@@ -281,6 +282,10 @@ router.get('/documents/:id', async (req, res) => {
 
         doc.form_data = JSON.parse(doc.form_data || '{}');
         doc.template_fields = JSON.parse(doc.template_fields || '[]');
+
+        // 결재문서 열람 감사 로그
+        logAudit(req.user.id, 'VIEW', 'approval_documents', doc.id,
+            `결재문서 열람: ${doc.doc_number} (${doc.template_name || '서식 없음'})`, req);
 
         res.json({ success: true, data: { ...doc, lines, attachments } });
     } catch (err) {

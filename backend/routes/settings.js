@@ -10,10 +10,11 @@ const { logActivity } = require('../utils/logger');
 router.get('/public', async (req, res) => {
     try {
         const [rows] = await db.query(
-            'SELECT site_name, password_min_length, password_require_special FROM system_settings ORDER BY id DESC LIMIT 1'
+            'SELECT site_name, password_min_length, password_require_special, session_timeout FROM system_settings ORDER BY id DESC LIMIT 1'
         );
-        const data = rows[0] || { site_name: '그룹웨어', password_min_length: 8, password_require_special: false };
+        const data = rows[0] || { site_name: '그룹웨어', password_min_length: 8, password_require_special: false, session_timeout: 60 };
         data.password_require_special = Boolean(data.password_require_special);
+        data.session_timeout = data.session_timeout || 60;
         res.json({ success: true, data });
     } catch (error) {
         res.status(500).json({ success: false, message: '설정 조회 실패' });
