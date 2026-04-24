@@ -6,15 +6,16 @@ const crypto = require('crypto');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
-const { logActivity } = require('../utils/logger');
+const { logActivity, validatePassword } = require('../utils/logger');
 const { cache } = require('../middleware/cache');
 
 // 쿠키 공통 옵션
 const isProduction = process.env.NODE_ENV === 'production';
 
+// 인트라넷 HTTP 환경 — Secure 플래그 비활성화 (HTTPS 미사용)
 const ACCESS_COOKIE_OPTS = {
     httpOnly: true,
-    secure: isProduction,
+    secure: false,
     sameSite: 'lax',
     maxAge: 15 * 60 * 1000,  // 15분
     path: '/'
@@ -22,7 +23,7 @@ const ACCESS_COOKIE_OPTS = {
 
 const REFRESH_COOKIE_OPTS = {
     httpOnly: true,
-    secure: isProduction,
+    secure: false,
     sameSite: 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,  // 7일
     path: '/api/v1/auth/refresh'
@@ -345,8 +346,19 @@ router.post('/logout', authMiddleware, async (req, res) => {
 // ============================================
 // 현재 사용자 정보 조회
 // ============================================
-router.get('/me', authMiddleware, async (req, res) => {
+router.get('/me', async (req, res) => {
     try {
+        const token = req.cookies?.accessToken ||
+            (req.headers.authorization?.startsWith('Bearer ')
+                ? req.headers.authorization.substring(7)
+                : null);
+
+        if (!token) {
+            return res.json({ success: false, authenticated: false, user: null });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
         const [users] = await db.query(
             `SELECT u.id, u.username, u.name, u.email, u.role, u.last_login, u.created_at,
                     u.signature_data, u.require_password_change,
@@ -356,19 +368,19 @@ router.get('/me', authMiddleware, async (req, res) => {
              FROM users u
              LEFT JOIN employees e ON u.id = e.user_id
              LEFT JOIN departments d ON e.department_id = d.id
-             WHERE u.id = ?`,
-            [req.user.id]
+             WHERE u.id = ? AND u.is_active = TRUE`,
+            [decoded.userId]
         );
 
         if (users.length === 0) {
-            return res.status(404).json({ success: false, message: '사용자를 찾을 수 없습니다.' });
+            return res.json({ success: false, authenticated: false, user: null });
         }
 
-        res.json({ success: true, user: users[0] });
+        res.json({ success: true, authenticated: true, user: users[0] });
 
     } catch (error) {
-        console.error('Get user info error:', error);
-        res.status(500).json({ success: false, message: '사용자 정보 조회 중 오류가 발생했습니다.' });
+        // 토큰 만료/무효 → 401 없이 미인증 상태 반환
+        res.json({ success: false, authenticated: false, user: null });
     }
 });
 
@@ -378,7 +390,7 @@ router.get('/me', authMiddleware, async (req, res) => {
 router.put('/change-password', [
     authMiddleware,
     body('currentPassword').notEmpty().withMessage('현재 비밀번호를 입력해주세요'),
-    body('newPassword').isLength({ min: 6 }).withMessage('비밀번호는 최소 6자 이상이어야 합니다')
+    body('newPassword').notEmpty().withMessage('새 비밀번호를 입력해주세요')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -387,6 +399,12 @@ router.put('/change-password', [
         }
 
         const { currentPassword, newPassword } = req.body;
+
+        // 시스템 비밀번호 정책 검증 (system_settings 기준)
+        const policyCheck = await validatePassword(newPassword, db);
+        if (!policyCheck.valid) {
+            return res.status(400).json({ success: false, message: policyCheck.message });
+        }
 
         const [users] = await db.query('SELECT password FROM users WHERE id = ?', [req.user.id]);
         const isCurrentPasswordValid = await bcrypt.compare(currentPassword, users[0].password);
