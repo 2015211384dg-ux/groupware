@@ -277,15 +277,19 @@ router.post('/desktop/refresh', async (req, res) => {
 });
 
 // ============================================
-// 데스크탑 → 브라우저 자동 로그인 (매직 링크)
+// 데스크탑 → 브라우저 자동 로그인 (매직 링크 — 일회성)
 // ============================================
 router.post('/desktop/magic-link', authMiddleware, async (req, res) => {
     try {
-        const token = jwt.sign(
-            { userId: req.user.id, magic: true },
-            process.env.JWT_SECRET,
-            { expiresIn: '60s' }
+        const token = crypto.randomBytes(32).toString('hex');
+        const hash  = crypto.createHash('sha256').update(token).digest('hex');
+        const expiresAt = new Date(Date.now() + 60 * 1000); // 60초
+
+        await db.query(
+            'INSERT INTO magic_tokens (token_hash, user_id, expires_at) VALUES (?, ?, ?)',
+            [hash, req.user.id, expiresAt]
         );
+
         res.json({ success: true, data: { token } });
     } catch (err) {
         res.status(500).json({ success: false });
@@ -297,14 +301,25 @@ router.post('/magic-verify', async (req, res) => {
         const { token } = req.body;
         if (!token) return res.status(400).json({ success: false, message: '토큰이 없습니다.' });
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (!decoded.magic) return res.status(401).json({ success: false, message: '유효하지 않은 토큰입니다.' });
+        const hash = crypto.createHash('sha256').update(token).digest('hex');
+
+        // 미사용 + 미만료 토큰 조회
+        const [rows] = await db.query(
+            'SELECT * FROM magic_tokens WHERE token_hash = ? AND used_at IS NULL AND expires_at > NOW()',
+            [hash]
+        );
+        if (rows.length === 0) {
+            return res.status(401).json({ success: false, message: '링크가 만료되었거나 이미 사용된 링크입니다.' });
+        }
+
+        // 일회성 소진 처리
+        await db.query('UPDATE magic_tokens SET used_at = NOW() WHERE token_hash = ?', [hash]);
 
         const [users] = await db.query(
             `SELECT u.*, e.department_id FROM users u
              LEFT JOIN employees e ON u.id = e.user_id
              WHERE u.id = ? AND u.is_active = TRUE`,
-            [decoded.userId]
+            [rows[0].user_id]
         );
         if (users.length === 0) return res.status(401).json({ success: false, message: '사용자를 찾을 수 없습니다.' });
 

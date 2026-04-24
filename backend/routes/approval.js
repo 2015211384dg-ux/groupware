@@ -6,6 +6,17 @@ const router = express.Router();
 const { authMiddleware } = require('../middleware/auth');
 const db = require('../config/database');
 const { logActivity } = require('../utils/logger');
+const { sendApprovalRequest, sendApprovalComplete, sendApprovalRejected } = require('../utils/mailer');
+const { validateMimeType } = require('../utils/mimeCheck');
+
+// 이메일 fire-and-forget 헬퍼
+function mailSilent(fn) { fn().catch(err => console.error('메일 발송 실패:', err.message)); }
+
+// 유저 이메일 조회
+async function getUserEmail(userId) {
+    const [[u]] = await db.query('SELECT email, name FROM users WHERE id = ?', [userId]);
+    return u || null;
+}
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -328,7 +339,7 @@ router.post('/documents', async (req, res) => {
             );
         }
 
-        // 상신 시 첫 결재자에게 알림
+        // 상신 시 첫 결재자에게 알림 + 이메일
         if (submit && lines.length > 0) {
             const firstApprover = lines.find(l => l.step === 1);
             if (firstApprover) {
@@ -337,6 +348,20 @@ router.post('/documents', async (req, res) => {
                      VALUES (?, ?, 'REQUEST', ?)`,
                     [firstApprover.approver_id, docId, `'${title}' 결재 요청이 도착했습니다.`]
                 );
+                const [approver, drafter] = await Promise.all([
+                    getUserEmail(firstApprover.approver_id),
+                    getUserEmail(req.user.id),
+                ]);
+                if (approver?.email) {
+                    mailSilent(() => sendApprovalRequest({
+                        to: approver.email,
+                        approverName: approver.name,
+                        drafterName: drafter?.name || req.user.name,
+                        docTitle: title,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                    }));
+                }
             }
         }
 
@@ -492,12 +517,24 @@ router.post('/documents/:id/action', async (req, res) => {
                 `UPDATE approval_lines SET status='SKIPPED' WHERE document_id=? AND status='WAITING'`,
                 [req.params.id]
             );
-            // 기안자에게 알림
+            // 기안자에게 알림 + 이메일
             await conn.query(
                 `INSERT INTO approval_notifications (user_id, document_id, type, message)
                  VALUES (?, ?, 'REJECTED', ?)`,
                 [doc.drafter_id, req.params.id, `'${doc.title}' 문서가 반려되었습니다.`]
             );
+            const drafter = await getUserEmail(doc.drafter_id);
+            if (drafter?.email) {
+                mailSilent(() => sendApprovalRejected({
+                    to: drafter.email,
+                    drafterName: drafter.name,
+                    docTitle: doc.title,
+                    docNumber: doc.doc_number,
+                    rejectorName: req.user.name,
+                    comment,
+                    docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                }));
+            }
         } else {
             // 승인 → 다음 결재자 활성화
             const [[nextLine]] = await conn.query(
@@ -515,24 +552,45 @@ router.post('/documents/:id/action', async (req, res) => {
                     `UPDATE approval_documents SET status='IN_PROGRESS', current_step=? WHERE id=?`,
                     [nextLine.step, req.params.id]
                 );
-                // 다음 결재자 알림
+                // 다음 결재자 알림 + 이메일
                 await conn.query(
                     `INSERT INTO approval_notifications (user_id, document_id, type, message)
                      VALUES (?, ?, 'REQUEST', ?)`,
                     [nextLine.approver_id, req.params.id, `'${doc.title}' 결재 요청이 도착했습니다.`]
                 );
+                const nextApprover = await getUserEmail(nextLine.approver_id);
+                if (nextApprover?.email) {
+                    mailSilent(() => sendApprovalRequest({
+                        to: nextApprover.email,
+                        approverName: nextApprover.name,
+                        drafterName: req.user.name,
+                        docTitle: doc.title,
+                        docNumber: doc.doc_number,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                    }));
+                }
             } else {
                 // 모든 결재 완료
                 await conn.query(
                     `UPDATE approval_documents SET status='APPROVED', completed_at=NOW() WHERE id=?`,
                     [req.params.id]
                 );
-                // 기안자에게 완료 알림
+                // 기안자에게 완료 알림 + 이메일
                 await conn.query(
                     `INSERT INTO approval_notifications (user_id, document_id, type, message)
                      VALUES (?, ?, 'APPROVED', ?)`,
                     [doc.drafter_id, req.params.id, `'${doc.title}' 문서가 최종 승인되었습니다.`]
                 );
+                const drafter = await getUserEmail(doc.drafter_id);
+                if (drafter?.email) {
+                    mailSilent(() => sendApprovalComplete({
+                        to: drafter.email,
+                        drafterName: drafter.name,
+                        docTitle: doc.title,
+                        docNumber: doc.doc_number,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                    }));
+                }
             }
         }
 
@@ -664,6 +722,18 @@ router.post('/documents/:id/attachments', upload.array('files', 10), async (req,
             return res.status(400).json({ success: false, message: '완료/반려된 문서에는 첨부 불가' });
         }
         if (!req.files || !req.files.length) return res.status(400).json({ success: false, message: '파일 없음' });
+
+        // MIME 타입 검증
+        for (const file of req.files) {
+            const original = Buffer.from(file.originalname, 'latin1').toString('utf8');
+            const ext = path.extname(original).toLowerCase();
+            const absPath = path.join(__dirname, '../uploads/approval', file.filename);
+            const mimeError = await validateMimeType(absPath, ext);
+            if (mimeError) {
+                req.files.forEach(f => fs.unlink(path.join(__dirname, '../uploads/approval', f.filename), () => {}));
+                return res.status(400).json({ success: false, message: mimeError });
+            }
+        }
 
         const inserted = [];
         for (const file of req.files) {

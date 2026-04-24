@@ -7,6 +7,7 @@ const { authMiddleware } = require('../middleware/auth');
 const { optimizeImage, createThumbnail } = require('../middleware/imageOptimizer');
 const db = require('../config/database');
 const { logActivity } = require('../utils/logger');
+const { validateMimeType } = require('../utils/mimeCheck');
 
 router.use(authMiddleware);
 
@@ -69,6 +70,18 @@ router.post('/upload', (req, res) => {
       }
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ success: false, message: '업로드할 파일이 없습니다.' });
+      }
+
+      // MIME 타입 검증 — 실패 시 전체 파일 삭제 후 400
+      for (const file of req.files) {
+        const originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const ext = path.extname(originalName).toLowerCase();
+        const absPath = path.join(__dirname, '../uploads', file.filename);
+        const mimeError = await validateMimeType(absPath, ext);
+        if (mimeError) {
+          req.files.forEach(f => fs.unlink(path.join(__dirname, '../uploads', f.filename), () => {}));
+          return res.status(400).json({ success: false, message: mimeError });
+        }
       }
 
       const processed = await Promise.all(
