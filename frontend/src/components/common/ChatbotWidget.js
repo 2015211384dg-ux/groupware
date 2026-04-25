@@ -19,6 +19,31 @@ export default function ChatbotWidget() {
   const textareaRef    = useRef(null);
   const panelRef       = useRef(null);
 
+  // 드래그 상태
+  const [fabPos, setFabPos]   = useState(null); // null = CSS 기본값(우측 하단)
+  const isDragging  = useRef(false);
+  const hasMoved    = useRef(false);
+  const dragStart   = useRef({ mx: 0, my: 0, px: 0, py: 0 });
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!isDragging.current) return;
+      const dx = e.clientX - dragStart.current.mx;
+      const dy = e.clientY - dragStart.current.my;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved.current = true;
+      const x = Math.max(0, Math.min(window.innerWidth  - 54, dragStart.current.px + dx));
+      const y = Math.max(0, Math.min(window.innerHeight - 54, dragStart.current.py + dy));
+      setFabPos({ x, y });
+    };
+    const onUp = () => { isDragging.current = false; };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    return () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+  }, []);
+
   // 패널 열릴 때 초기화
   useEffect(() => {
     if (open) {
@@ -439,7 +464,16 @@ export default function ChatbotWidget() {
       {/* ── 플로팅 버튼 ── */}
       <button
         className={`cbw-fab ${open ? 'cbw-fab-open' : ''}`}
-        onClick={() => setOpen(prev => !prev)}
+        style={fabPos ? { left: fabPos.x, top: fabPos.y, bottom: 'auto', right: 'auto', cursor: 'grab' } : { cursor: 'grab' }}
+        onMouseDown={(e) => {
+          if (e.button !== 0) return;
+          const pos = fabPos ?? { x: window.innerWidth - 82, y: window.innerHeight - 82 };
+          isDragging.current = true;
+          hasMoved.current = false;
+          dragStart.current = { mx: e.clientX, my: e.clientY, px: pos.x, py: pos.y };
+          e.preventDefault();
+        }}
+        onClick={() => { if (!hasMoved.current) setOpen(prev => !prev); }}
         title="AI 규정 도우미"
       >
         {open ? (

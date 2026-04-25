@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/authService';
-import UserModal from '../components/UserModal';
+import UserModal from '../components/common/UserModal';
 import './UserManagement.css';
-import { IconSettings, IconSearch, IconPlus, IconEdit, IconUnlock, IconX } from '../components/Icons';
-import UserAvatar from '../components/UserAvatar';
+import { IconSettings, IconSearch, IconPlus, IconEdit, IconUnlock, IconX } from '../components/common/Icons';
+import UserAvatar from '../components/common/UserAvatar';
 
 function UserManagement({ currentUser }) {
     const [users, setUsers] = useState([]);
@@ -138,17 +138,8 @@ function UserManagement({ currentUser }) {
         <div className="user-management-page">
                 
             <div className="page-header">
-                <h1><IconSettings size={20} style={{marginRight:8,verticalAlign:'middle'}}/> 사용자 관리</h1>
-                <div className="header-actions">
-                    <button 
-                        className="btn-primary"
-                        onClick={() => {
-                            setSelectedUser(null);
-                            setIsModalOpen(true);
-                        }}
-                    >
-                        <IconPlus size={15} style={{marginRight:6,verticalAlign:'middle'}}/> 사용자 등록
-                    </button>
+                <div className="header-left">
+                    <h1><IconSettings size={20} style={{marginRight:8,verticalAlign:'middle'}}/> 사용자 관리</h1>
                     <div className="search-box">
                         <input
                             type="text"
@@ -159,6 +150,15 @@ function UserManagement({ currentUser }) {
                         <button><IconSearch size={16}/></button>
                     </div>
                 </div>
+                <button
+                    className="btn-primary"
+                    onClick={() => {
+                        setSelectedUser(null);
+                        setIsModalOpen(true);
+                    }}
+                >
+                    <IconPlus size={15} style={{marginRight:6,verticalAlign:'middle'}}/> 사용자 등록
+                </button>
             </div>
 
             <div className="content-container">

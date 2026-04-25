@@ -21,23 +21,21 @@
     margin: 0;
 }
 
-/* 버튼 - 보라-파랑 그라디언트 */
 .add-btn {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #667eea;
+    background: #667eea;
+    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    white-space: nowrap;
 }
 
 .add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+    background: #5568d3;
 }
 
 .content-wrapper {
@@ -608,4 +606,79 @@
     border-top: 1px solid #f0f0f0;
     margin-top: 4px;
     padding-top: 4px;
+}
+/* ============================
+   팀 리더 설정 UI
+   ============================ */
+.leader-section {
+    background: #f8faff;
+    border: 1.5px solid #dbeafe;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.leader-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1F4EF5;
+    margin: 0 0 10px;
+}
+
+.leader-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.leader-select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #111827;
+    background: white;
+    cursor: pointer;
+    min-width: 0;
+}
+
+.leader-select:focus {
+    outline: none;
+    border-color: #1F4EF5;
+}
+
+.leader-save-btn {
+    padding: 8px 16px;
+    background: #1F4EF5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+.leader-save-btn:hover { background: #1740d4; }
+.leader-save-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+
+/* 리더 뱃지 */
+.leader-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1F4EF5;
+    background: #dbeafe;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.employee-card.is-leader {
+    background: #eff6ff;
+    border-color: #dbeafe;
 }

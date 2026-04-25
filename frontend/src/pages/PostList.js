@@ -3,7 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../services/authService';
 import './PostList.css';
 import { getCategoryColor } from '../utils/categoryColor';
-import { IconPin, IconPaperclip, IconHeart, IconFolder } from '../components/Icons';
+import { IconPin, IconPaperclip, IconHeart, IconFolder } from '../components/common/Icons';
 
 function PostList({ user }) {
     const { boardId } = useParams();
@@ -130,7 +130,7 @@ function PostList({ user }) {
                     <div className="post-title-wrap">
                         <span className="post-title-text">{titleLabel}</span>
                         {post.comment_count > 0 && (
-                            <span className="comment-badge">[{post.comment_count}]</span>
+                            <span className="comment-badge">{post.comment_count}</span>
                         )}
                         {post.attachment_count > 0 && (
                             <span className="attachment-icon"><IconPaperclip size={13} /></span>

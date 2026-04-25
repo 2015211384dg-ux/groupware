@@ -126,7 +126,8 @@ router.get('/', async (req, res) => {
     const [rows] = await db.query(
       `SELECT c.*,
               u.name as author_name,
-              e.position as author_position
+              e.position as author_position,
+              e.profile_image as author_profile_image
        FROM comments c
        JOIN users u ON c.user_id = u.id
        LEFT JOIN employees e ON u.id = e.user_id

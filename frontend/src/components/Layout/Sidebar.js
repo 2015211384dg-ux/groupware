@@ -2,13 +2,14 @@ import React, { useState, memo, useMemo, useEffect, useRef, useCallback } from '
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import { NotificationPanel } from './Header';
-import { useSettings } from '../../services/SettingsContext';
+import { useSettings } from '../../context/SettingsContext';
 import api from '../../services/authService';
+import UserAvatar from '../common/UserAvatar';
 import {
     IconHome, IconBoard, IconAddressBook, IconHR, IconCalendar,
     IconApproval, IconAdmin, IconSearch, IconMessageSquare,
-    IconBell, IconUser, IconSettings, IconLogout, IconBudget
-} from '../../components/Icons';
+    IconBell, IconUser, IconSettings, IconLogout, IconBudget, IconProject
+} from '../common/Icons';
 
 const ROLE_LABEL = {
     SUPER_ADMIN: '슈퍼관리자',
@@ -106,11 +107,13 @@ const Sidebar = memo(({ isOpen, onToggle, user, onLogout }) => {
                     { title: '임시 저장',  path: '/approval?box=draft' },
                 ]
             },
+            { title: '프로젝트', icon: <IconProject />, path: '/project' },
             { type: 'label', title: '예산 관리' },
             {
                 title: '예산 관리', icon: <IconBudget />, path: '/budget',
                 subItems: [
-                    { title: 'AR', path: '/budget/ar' },
+                    { title: 'AR',           path: '/budget/ar' },
+                    { title: 'AI 전표 자동화', path: '/budget/voucher-ai' },
                 ]
             },
             { type: 'label', title: '기타' },
@@ -129,6 +132,7 @@ const Sidebar = memo(({ isOpen, onToggle, user, onLogout }) => {
                     { title: '결재 관리',   path: '/admin/approval' },
                     { title: '피드백 관리', path: '/admin/feedback' },
                     ...(['SUPER_ADMIN','ADMIN'].includes(user?.role) ? [{ title: 'AR 관리', path: '/admin/ar' }] : []),
+                    ...(['SUPER_ADMIN','ADMIN'].includes(user?.role) ? [{ title: 'AI 문서 관리', path: '/admin/chatbot' }] : []),
                 ]
             });
         }
@@ -303,7 +307,7 @@ const Sidebar = memo(({ isOpen, onToggle, user, onLogout }) => {
                         className="sb-user-btn"
                         onClick={() => { setShowUserMenu(p => !p); setShowNotif(false); }}
                     >
-                        <div className="sb-avatar">{initials}</div>
+                        <UserAvatar name={user?.name} profileImage={user?.profile_image} size={32} />
                         {isOpen && (
                             <div className="sb-user-info">
                                 <span className="sb-user-name">{user?.name}</span>
@@ -315,7 +319,7 @@ const Sidebar = memo(({ isOpen, onToggle, user, onLogout }) => {
                     {showUserMenu && (
                         <div className="sb-user-dropdown">
                             <div className="sb-dropdown-header">
-                                <div className="sb-avatar sb-avatar-lg">{initials}</div>
+                                <UserAvatar name={user?.name} profileImage={user?.profile_image} size={44} />
                                 <div>
                                     <div className="sb-user-name">{user?.name}</div>
                                     <div className="sb-user-email">{user?.email}</div>

@@ -47,7 +47,7 @@ router.get('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), cacheMiddleware(120), asyn
             SELECT u.id, u.username, u.name, u.email, u.role, u.is_active, u.last_login,
                    u.login_fail_count, u.locked_until,
                    e.employee_number, e.department_id, e.position, e.job_title,
-                   e.mobile, e.status as employee_status,
+                   e.mobile, e.status as employee_status, e.profile_image,
                    d.name as department_name
             FROM users u
             LEFT JOIN employees e ON u.id = e.user_id
@@ -254,14 +254,16 @@ router.post('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), invalidateCache(/^api:.*\
 
             const userId = userResult.insertId;
 
-            // 직원 정보 생성
-            if (employee_number || department_id || position) {
-                await connection.query(
-                    `INSERT INTO employees (user_id, employee_number, department_id, position, phone, mobile, status)
-                     VALUES (?, ?, ?, ?, ?, ?, 'ACTIVE')`,
-                    [userId, employee_number || null, department_id || null, position || null, phone || null, mobile || null]
-                );
-            }
+            // 랜덤 캐릭터 아바타 배정 (1~20)
+            const charNum = String(Math.floor(Math.random() * 20) + 1).padStart(2, '0');
+            const randomAvatar = `uploads/characters/character_${charNum}.png`;
+
+            // 직원 정보 생성 (항상 생성 — 아바타 포함)
+            await connection.query(
+                `INSERT INTO employees (user_id, employee_number, department_id, position, phone, mobile, status, profile_image)
+                 VALUES (?, ?, ?, ?, ?, ?, 'ACTIVE', ?)`,
+                [userId, employee_number || null, department_id || null, position || null, phone || null, mobile || null, randomAvatar]
+            );
 
             await connection.commit();
 

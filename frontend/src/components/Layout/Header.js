@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSettings } from '../../services/SettingsContext';
+import { useSettings } from '../../context/SettingsContext';
 import api from '../../services/authService';
 import './Header.css';
-import { IconBell, IconSettings, IconApproval, IconLogout, IconUser, IconAdmin } from '../../components/Icons';
+import { IconBell, IconSettings, IconApproval, IconLogout, IconUser, IconAdmin } from '../common/Icons';
+import UserAvatar from '../common/UserAvatar';
 
 // 알림 타입별 아이콘/색상
 const NOTIF_META = {
@@ -216,7 +217,7 @@ function Header({ user, onLogout, onToggleSidebar }) {
                         className="user-button"
                         onClick={() => { setShowUserMenu(!showUserMenu); setShowNotif(false); }}
                     >
-                        <div className="user-avatar">{user?.name?.charAt(0) || 'U'}</div>
+                        <UserAvatar name={user?.name} profileImage={user?.profile_image} size={32} />
                         <span className="user-name">{user?.name}</span>
                         <span className="user-dropdown">▼</span>
                     </button>
@@ -226,7 +227,7 @@ function Header({ user, onLogout, onToggleSidebar }) {
                             <div className="dropdown-overlay" onClick={() => setShowUserMenu(false)} />
                             <div className="user-dropdown-menu">
                                 <div className="dropdown-header">
-                                    <div className="dropdown-avatar">{user?.name?.charAt(0) || 'U'}</div>
+                                    <UserAvatar name={user?.name} profileImage={user?.profile_image} size={44} />
                                     <div className="dropdown-info">
                                         <p className="dropdown-name">{user?.name}</p>
                                         <p className="dropdown-email">{user?.email}</p>

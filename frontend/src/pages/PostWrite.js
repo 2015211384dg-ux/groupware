@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import api from '../services/authService';
-import { useToast } from '../components/Toast';
+import { useToast } from '../components/common/Toast';
 import './PostWrite.css';
 
-function PostWrite() {
+function PostWrite({ user }) {
   const navigate = useNavigate();
   const { boardId } = useParams();
   const quillRef = useRef(null);
@@ -18,6 +18,9 @@ function PostWrite() {
   const [category, setCategory] = useState('공지');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [isPinned, setIsPinned] = useState(false);
+
+  const isAdmin = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'].includes(user?.role);
 
   const [selectedFiles, setSelectedFiles] = useState([]); // File[]
   const [uploadedFiles, setUploadedFiles] = useState([]); // {id, original_name, file_path...}[]
@@ -138,6 +141,7 @@ function PostWrite() {
         title: t,
         content,
         is_notice: category === '공지',
+        is_pinned: isPinned,
         attachment_ids: attachmentIds,
       };
 
@@ -207,6 +211,20 @@ function PostWrite() {
             <div className="file-hint">
               최대 {MAX_FILES}개, {MAX_FILE_MB}MB 이하
             </div>
+
+            {isAdmin && (
+              <label className="pin-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={isPinned}
+                  onChange={(e) => setIsPinned(e.target.checked)}
+                />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                게시글 고정
+              </label>
+            )}
           </div>
 
           {uploadedFiles.length > 0 && (

@@ -29,6 +29,18 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:5001',
         changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyRes', (proxyRes, req) => {
+            const sc = proxyRes.headers['set-cookie'];
+            if (sc) {
+              console.log('[PROXY] Set-Cookie for', req.url, JSON.stringify(sc));
+            }
+          });
+        },
+      },
+      '/uploads': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
       }
     }
   }

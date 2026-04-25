@@ -102,5 +102,8 @@ export const IconFlag       = (p) => <Icon {...p} d={["M4 15s1-1 4-1 5 2 8 2 4-1
 export const IconChevronUp  = (p) => <Icon {...p} d="M18 15l-6-6-6 6" />;
 export const IconMoreH      = (p) => <Icon {...p} d={["M12 13a1 1 0 100-2 1 1 0 000 2z","M19 13a1 1 0 100-2 1 1 0 000 2z","M5 13a1 1 0 100-2 1 1 0 000 2z"]} strokeWidth={2} />;
 export const IconClose      = (p) => <Icon {...p} d="M18 6L6 18M6 6l12 12" />;
+export const IconPhone      = (p) => <Icon {...p} d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z" />;
+export const IconMail       = (p) => <Icon {...p} d={["M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z","M22 6l-10 7L2 6"]} />;
+export const IconStar       = (p) => <Icon {...p} d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />;
 
 export default Icon;

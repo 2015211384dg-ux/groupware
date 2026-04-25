@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../services/authService';
 import './ApprovalAdmin.css';
-import { useToast } from '../components/Toast';
+import { useToast } from '../components/common/Toast';
+import { IconSearch, IconTrash, IconEye, IconX, IconEdit, IconCheck } from '../components/common/Icons';
 
 // ============================================
 // 서브 컴포넌트들
@@ -407,8 +408,8 @@ function FieldBuilder({ form, setForm }) {
                             )}
                             {field.required && <span className="tm-field-required">필수</span>}
                             <div className="tm-field-actions">
-                                <button className="tm-field-edit" onClick={() => startEdit(idx, field)} title="수정">✎</button>
-                                <button className="tm-field-del" onClick={() => removeField(idx)}>✕</button>
+                                <button className="tm-field-edit" onClick={() => startEdit(idx, field)} title="수정"><IconEdit size={13}/></button>
+                                <button className="tm-field-del" onClick={() => removeField(idx)}><IconX size={13}/></button>
                             </div>
                         </div>
                     )
@@ -511,7 +512,7 @@ function ApprovalLineEditModal({ line, users, departments, onClose, onSave }) {
             <div className="aline-modal">
                 <div className="aline-header">
                     <span className="aline-title">결재선 설정</span>
-                    <button className="exc-close-btn" onClick={onClose}>✕</button>
+                    <button className="exc-close-btn" onClick={onClose}><IconX size={16}/></button>
                 </div>
                 <div className="aline-body">
                     {/* 결재선 이름 */}
@@ -547,7 +548,7 @@ function ApprovalLineEditModal({ line, users, departments, onClose, onSave }) {
                                     onChange={e => { setUserQuery(e.target.value); setUserDropOpen(true); }}
                                     onFocus={() => setUserDropOpen(true)}
                                     onBlur={() => setTimeout(() => setUserDropOpen(false), 150)} />
-                                <span className="exc-search-icon">🔍</span>
+                                <span className="exc-search-icon"><IconSearch size={15}/></span>
                                 {userDropOpen && (
                                     <div className="exc-dropdown">
                                         {filteredUsers.slice(0, 8).map(u => (
@@ -598,7 +599,7 @@ function ApprovalLineEditModal({ line, users, departments, onClose, onSave }) {
                                     <button onClick={() => moveApprover(idx, -1)} disabled={idx === 0}>▲</button>
                                     <button onClick={() => moveApprover(idx, 1)} disabled={idx === approvers.length - 1}>▼</button>
                                 </div>
-                                <button className="tm-field-del" onClick={() => removeApprover(idx)}>✕</button>
+                                <button className="tm-field-del" onClick={() => removeApprover(idx)}><IconX size={13}/></button>
                             </div>
                         ))}
                     </div>
@@ -860,7 +861,7 @@ function TemplateStep3({ form, setForm }) {
                                 {(form.receivers || []).map((r, i) => (
                                     <div key={i} className="tm-target-row">
                                         <span>{r}</span>
-                                        <button onClick={() => setForm(f => ({ ...f, receivers: f.receivers.filter((_, j) => j !== i) }))}>🗑</button>
+                                        <button onClick={() => setForm(f => ({ ...f, receivers: f.receivers.filter((_, j) => j !== i) }))}><IconTrash size={13}/></button>
                                     </div>
                                 ))}
                             </div>
@@ -920,7 +921,7 @@ function TemplateStep3({ form, setForm }) {
                                 {(form.share_targets || []).map((s, i) => (
                                     <div key={i} className="tm-target-row">
                                         <span>{s}</span>
-                                        <button onClick={() => setForm(f => ({ ...f, share_targets: f.share_targets.filter((_, j) => j !== i) }))}>🗑</button>
+                                        <button onClick={() => setForm(f => ({ ...f, share_targets: f.share_targets.filter((_, j) => j !== i) }))}><IconTrash size={13}/></button>
                                     </div>
                                 ))}
                             </div>
@@ -969,7 +970,7 @@ function TemplateStep4({ form, setForm }) {
                                 {(form.view_targets || []).map((v, i) => (
                                     <div key={i} className="tm-target-row">
                                         <span>{v}</span>
-                                        <button onClick={() => setForm(f => ({ ...f, view_targets: f.view_targets.filter((_, j) => j !== i) }))}>🗑</button>
+                                        <button onClick={() => setForm(f => ({ ...f, view_targets: f.view_targets.filter((_, j) => j !== i) }))}><IconTrash size={13}/></button>
                                     </div>
                                 ))}
                             </div>
@@ -1198,7 +1199,7 @@ function TemplateManager() {
                             <div className="tm-preview-category">{tmpl.category_name}</div>
                             <div className="tm-preview-title">{tmpl.name}</div>
                         </div>
-                        <button className="tm-preview-close" onClick={() => setPreviewTemplate(null)}>✕</button>
+                        <button className="tm-preview-close" onClick={() => setPreviewTemplate(null)}><IconX size={14}/></button>
                     </div>
                     <div className="tm-preview-body">
                         {tmpl.regulation && (
@@ -1321,12 +1322,12 @@ function TemplateManager() {
                                 <td className="tm-center" onClick={e => e.stopPropagation()}>
                                     {tmpl.is_active && (
                                         <button className="tm-icon-btn" title="미리보기"
-                                            onClick={() => setPreviewTemplate(tmpl)}>👁</button>
+                                            onClick={() => setPreviewTemplate(tmpl)}><IconEye size={14}/></button>
                                     )}
                                 </td>
                                 <td className="tm-center" onClick={e => e.stopPropagation()}>
                                     <button className="tm-icon-btn delete" title="삭제"
-                                        onClick={e => handleDelete(tmpl.id, e)}>🗑</button>
+                                        onClick={e => handleDelete(tmpl.id, e)}><IconTrash size={13}/></button>
                                 </td>
                             </tr>
                         ))}
@@ -1363,7 +1364,7 @@ function TemplateManager() {
                                     <div className="tm-preview-category">{tmpl.category_name}</div>
                                     <div className="tm-preview-title">{tmpl.name}</div>
                                 </div>
-                                <button className="tm-preview-close" onClick={() => setPreviewTemplate(null)}>✕</button>
+                                <button className="tm-preview-close" onClick={() => setPreviewTemplate(null)}><IconX size={14}/></button>
                             </div>
                             <div className="tm-preview-body">
                                 {tmpl.regulation && (
@@ -1583,7 +1584,7 @@ function UserSearchInput({ users, value, onChange, placeholder, excludeId }) {
                     <span className="exc-user-avatar">{selected.name.charAt(0)}</span>
                     <span className="exc-user-name">{selected.name}</span>
                     <span className="exc-user-dept">{selected.department_name || ''}</span>
-                    <button className="exc-user-clear" onClick={handleClear}>✕</button>
+                    <button className="exc-user-clear" onClick={handleClear}><IconX size={14}/></button>
                 </div>
             ) : (
                 <div className="exc-user-search">
@@ -1596,7 +1597,7 @@ function UserSearchInput({ users, value, onChange, placeholder, excludeId }) {
                         onFocus={() => setOpen(true)}
                         onBlur={() => setTimeout(() => setOpen(false), 150)}
                     />
-                    <span className="exc-search-icon">🔍</span>
+                    <span className="exc-search-icon"><IconSearch size={15}/></span>
                     {open && (
                         <div className="exc-dropdown">
                             {filtered.length === 0 ? (
@@ -1663,7 +1664,7 @@ function ExceptionModal({ categories, templates, users, departments, onClose, on
                         <button className="exc-expand-btn" onClick={() => setExpanded(v => !v)}>
                             {expanded ? '기본 보기' : '크게 보기'}
                         </button>
-                        <button className="exc-close-btn" onClick={onClose}>✕</button>
+                        <button className="exc-close-btn" onClick={onClose}><IconX size={16}/></button>
                     </div>
                 </div>
 
@@ -1999,7 +2000,7 @@ function ApprovalAdmin() {
             {/* 좌측 사이드바 */}
             <aside className="aa-sidebar">
                 <div className="aa-sidebar-header">
-                    <span className="aa-sidebar-icon">✅</span>
+                    <span className="aa-sidebar-icon"><IconCheck size={14}/></span>
                     <span className="aa-sidebar-title">결재 관리</span>
                 </div>
                 <nav className="aa-nav">

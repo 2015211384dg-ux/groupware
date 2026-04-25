@@ -24,24 +24,31 @@ function hashName(name = '') {
 }
 
 function UserAvatar({ name, profileImage, size = 36, style = {} }) {
-    const API_URL = `http://${window.location.hostname}:5001`;
-
     if (profileImage) {
         return (
-            <img
-                src={`${API_URL}/${profileImage}`}
-                alt={name}
-                style={{
-                    width: size,
-                    height: size,
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    flexShrink: 0,
-                    ...style
-                }}
-            />
+            <div style={{
+                width: size,
+                height: size,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                flexShrink: 0,
+                ...style
+            }}>
+                <img
+                    src={`/${profileImage}`}
+                    alt={name}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transform: 'scale(1.15)',
+                        display: 'block',
+                    }}
+                />
+            </div>
         );
     }
+
 
     const idx = hashName(name) % GRADIENT_PAIRS.length;
     const [from, to] = GRADIENT_PAIRS[idx];

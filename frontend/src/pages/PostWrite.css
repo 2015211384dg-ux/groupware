@@ -91,6 +91,26 @@
   color: #999;
 }
 
+.pin-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #667eea;
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+  margin-left: auto;
+}
+
+.pin-checkbox-label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
 /* ===== Quill 에디터 영역 ===== */
 .editor-container {
   flex: 1;
@@ -272,6 +292,7 @@
 /* 하단 액션 버튼 */
 .form-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 20px;

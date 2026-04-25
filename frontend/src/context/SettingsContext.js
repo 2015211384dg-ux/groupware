@@ -1,5 +1,5 @@
-// SettingsContext.js - 전역 Context는 기본값만
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 const SettingsContext = createContext();
 
@@ -11,23 +11,32 @@ export const useSettings = () => {
     return context;
 };
 
+const DEFAULTS = {
+    site_name: '그룹웨어',
+    site_description: '우리 회사 그룹웨어 시스템',
+    max_upload_size: 10,
+    session_timeout: 60,
+    allow_registration: false,
+    require_email_verification: true,
+    maintenance_mode: false
+};
+
 export const SettingsProvider = ({ children }) => {
-    const [siteSettings, setSiteSettings] = useState({
-        site_name: '그룹웨어',
-        site_description: '우리 회사 그룹웨어 시스템',
-        max_upload_size: 10,
-        session_timeout: 60,
-        allow_registration: false,
-        require_email_verification: true,
-        maintenance_mode: false
-    });
+    const [siteSettings, setSiteSettings] = useState(DEFAULTS);
 
-    console.log('✅ SettingsProvider 마운트 (기본값 사용)');
+    useEffect(() => {
+        api.get('/settings/public').then(res => {
+            if (res.data?.success && res.data.data) {
+                const s = res.data.data;
+                setSiteSettings(prev => ({ ...prev, ...s }));
+                if (s.site_name) document.title = s.site_name;
+            }
+        }).catch(() => {});
+    }, []);
 
-    // 다른 컴포넌트에서 설정을 업데이트할 수 있도록 함수 제공
     const updateSettings = (newSettings) => {
         setSiteSettings(prev => ({ ...prev, ...newSettings }));
-        document.title = newSettings.site_name || prev.site_name;
+        if (newSettings.site_name) document.title = newSettings.site_name;
     };
 
     return (

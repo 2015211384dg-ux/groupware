@@ -102,7 +102,9 @@ app.use(express.urlencoded({ extended: true }));
 // Cookie Parser
 app.use(cookieParser());
 
-// 정적 파일 제공 (업로드된 파일) — 인증 필수
+// 정적 파일 제공 (업로드된 파일) — characters는 공개, 나머지는 인증 필수
+app.use('/uploads/characters', express.static(path.join(__dirname, 'uploads/characters')));
+
 app.use('/uploads', (req, res, next) => {
     const token = req.cookies?.accessToken ||
         (req.headers.authorization?.startsWith('Bearer ')

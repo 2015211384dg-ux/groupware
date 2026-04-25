@@ -4,8 +4,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/authService';
 import './PostDetail.css';
-import { useToast } from '../components/Toast';
-import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart } from '../components/Icons';
+import { useToast } from '../components/common/Toast';
+import { IconPaperclip, IconDownload, IconPin, IconPinOff, IconHeart } from '../components/common/Icons';
+import UserAvatar from '../components/common/UserAvatar';
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'HR_ADMIN'];
 
@@ -206,6 +207,7 @@ function PostDetail({ user }) {
       parentId,
       authorName: c?.author_name ?? c?.authorName ?? c?.writer_name ?? c?.user_name ?? '익명',
       authorPosition: c?.author_position ?? c?.authorPosition ?? c?.writer_position ?? '',
+      authorProfileImage: c?.author_profile_image ?? c?.authorProfileImage ?? null,
       content: c?.content ?? c?.comment ?? c?.body ?? '',
       createdAt: c?.created_at ?? c?.createdAt ?? c?.reg_dt ?? c?.date ?? '',
     };
@@ -311,9 +313,7 @@ const submitReply = async () => {
   const renderCommentCard = (c, isReply) => (
     <div className={`comment-card ${isReply ? 'reply' : ''}`}>
       <div className="comment-card-top">
-        <div className="comment-avatar-v2">
-          {(c.authorName || 'U').toString().charAt(0)}
-        </div>
+        <UserAvatar name={c.authorName} profileImage={c.authorProfileImage} size={34} />
         <div className="comment-body">
           <div className="comment-meta-row">
             <div className="comment-author">
@@ -403,7 +403,7 @@ const submitReply = async () => {
             <h1 className="post-title-v2">{cleanTitle(post.title)}</h1>
           </div>
           <div className="post-meta-row">
-            <div className="author-avatar-v2">{post.author_name?.charAt(0) || 'U'}</div>
+            <UserAvatar name={post.author_name} profileImage={post.author_profile_image} size={36} />
             <div className="post-meta-info">
               <span className="meta-author-name">{post.author_name}</span>
               {post.author_position && (
@@ -461,8 +461,12 @@ const submitReply = async () => {
         {/* ✅ 댓글 섹션 (토스 스타일 카드) */}
         <div className="comments-section-v3">
           <div className="comments-header-row">
-            <h3 className="comments-title-v3">댓글</h3>
-            <div className="comments-count-badge">{normalizedComments.length}</div>
+            <h3 className="comments-title-v3">
+              댓글
+              {normalizedComments.length > 0 && (
+                <span className="comments-count-inline">{normalizedComments.length}</span>
+              )}
+            </h3>
           </div>
 
           {/* 댓글 작성 */}

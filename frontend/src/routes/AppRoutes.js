@@ -90,7 +90,7 @@ function AppRoutes({ isAuthenticated, user, onLogin, onLogout, onPasswordChanged
 
                   <Route path="/boards" element={<BoardList />} />
                   <Route path="/boards/:boardId" element={<PostList user={user} />} />
-                  <Route path="/boards/:boardId/write" element={<PostWrite />} />
+                  <Route path="/boards/:boardId/write" element={<PostWrite user={user} />} />
                   <Route path="/boards/:boardId/posts/:postId" element={<PostDetail user={user} />} />
 
                   <Route path="/addressbook/organization" element={<Organization />} />

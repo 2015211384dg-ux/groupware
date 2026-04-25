@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/authService';
-import { useToast } from '../components/Toast';
+import { useToast } from '../components/common/Toast';
+import { IconSearch, IconPlus, IconEdit, IconTrash, IconBuilding, IconUser, IconPhone, IconMail, IconChat, IconAddressBook, IconHeart, IconStar } from '../components/common/Icons';
 import './PersonalContacts.css';
 
 function PersonalContacts() {
@@ -176,10 +177,10 @@ function PersonalContacts() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
-                        <button>🔍</button>
+                        <button><IconSearch size={16}/></button>
                     </div>
                     <button className="add-btn" onClick={() => handleOpenModal()}>
-                        ➕ 연락처 추가
+                        <IconPlus size={15}/> 연락처 추가
                     </button>
                 </div>
             </div>
@@ -198,11 +199,11 @@ function PersonalContacts() {
                                     className={`favorite-btn ${contact.is_favorite ? 'active' : ''}`}
                                     onClick={() => handleToggleFavorite(contact.id)}
                                 >
-                                    {contact.is_favorite ? '⭐' : '☆'}
+                                    <IconStar size={16} style={{ fill: contact.is_favorite ? '#f59e0b' : 'none', color: contact.is_favorite ? '#f59e0b' : '#cbd5e1' }} />
                                 </button>
                                 <div className="card-actions">
-                                    <button onClick={() => handleOpenModal(contact)}>✏️</button>
-                                    <button onClick={() => handleDelete(contact.id)}>🗑️</button>
+                                    <button onClick={() => handleOpenModal(contact)}><IconEdit size={14}/></button>
+                                    <button onClick={() => handleDelete(contact.id)}><IconTrash size={14}/></button>
                                 </div>
                             </div>
 
@@ -214,21 +215,21 @@ function PersonalContacts() {
 
                                 {contact.company && (
                                     <p className="contact-company">
-                                        🏢 {contact.company}
+                                        <IconBuilding size={13}/> {contact.company}
                                         {contact.department && ` / ${contact.department}`}
                                     </p>
                                 )}
 
                                 {contact.position && (
-                                    <p className="contact-position">👤 {contact.position}</p>
+                                    <p className="contact-position"><IconUser size={13}/> {contact.position}</p>
                                 )}
 
                                 {contact.phone && (
-                                    <p className="contact-info">📱 {contact.phone}</p>
+                                    <p className="contact-info"><IconPhone size={13}/> {contact.phone}</p>
                                 )}
 
                                 {contact.email && (
-                                    <p className="contact-info">📧 {contact.email}</p>
+                                    <p className="contact-info"><IconMail size={13}/> {contact.email}</p>
                                 )}
 
                                 {contact.tags && (
@@ -240,7 +241,7 @@ function PersonalContacts() {
                                 )}
 
                                 {contact.memo && (
-                                    <p className="contact-memo">💬 {contact.memo}</p>
+                                    <p className="contact-memo"><IconChat size={13}/> {contact.memo}</p>
                                 )}
                             </div>
                         </div>
@@ -249,7 +250,7 @@ function PersonalContacts() {
 
                 {filteredContacts.length === 0 && (
                     <div className="empty-state">
-                        <div className="empty-icon">📇</div>
+                        <div className="empty-icon"><IconAddressBook size={48} strokeWidth={1.2}/></div>
                         <p>{search ? '검색 결과가 없습니다.' : '등록된 연락처가 없습니다.'}</p>
                         {!search && (
                             <button className="empty-add-btn" onClick={() => handleOpenModal()}>

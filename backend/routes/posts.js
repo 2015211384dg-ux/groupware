@@ -31,6 +31,7 @@ router.get('/', cacheMiddleware(300), async (req, res) => {
                    u.name as author_name,
                    e.position as author_position,
                    e.department_id as author_department_id,
+                   e.profile_image as author_profile_image,
                    d.name as department_name,
                    b.name as board_name,
                    (SELECT COUNT(*) FROM comments WHERE post_id = p.id AND is_deleted = FALSE) as comment_count,
@@ -141,10 +142,11 @@ router.get('/:id', cacheMiddleware(60), async (req, res) => {
 
         // 게시글 조회
         const [posts] = await db.query(
-            `SELECT p.*, 
+            `SELECT p.*,
                     u.name as author_name,
                     e.position as author_position,
                     e.department_id as author_department_id,
+                    e.profile_image as author_profile_image,
                     d.name as department_name,
                     b.name as board_name,
                     b.id as board_id
@@ -278,7 +280,7 @@ router.get('/:id/adjacent', async (req, res) => {
 // ============================================
 router.post('/', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) => {
     try {
-        const { board_id, category, title, content, is_notice, attachment_ids } = req.body;
+        const { board_id, category, title, content, is_notice, is_pinned, attachment_ids } = req.body;
 
         if (!board_id || !title || !content) {
             return res.status(400).json({
@@ -287,13 +289,17 @@ router.post('/', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) =>
             });
         }
 
-        // 공지 설정은 관리자만 가능
+        // 공지/고정 설정은 관리자만 가능
         const canSetNotice = ['SUPER_ADMIN', 'HR_ADMIN'].includes(req.user.role);
 
         const [result] = await db.query(
-            `INSERT INTO posts (board_id, user_id, category, title, content, is_notice)
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [board_id, req.user.id, category || null, title, content, canSetNotice ? (is_notice || false) : false]
+            `INSERT INTO posts (board_id, user_id, category, title, content, is_notice, is_pinned)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                board_id, req.user.id, category || null, title, content,
+                canSetNotice ? (is_notice || false) : false,
+                canSetNotice ? (is_pinned || false) : false,
+            ]
         );
 
         const postId = result.insertId;
