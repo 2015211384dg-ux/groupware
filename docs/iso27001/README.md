@@ -7,6 +7,9 @@
 | 정보보안 정책서 | [SECURITY-POLICY.md](SECURITY-POLICY.md) | A.5, A.9, A.10 | 정보자산 분류, 접근통제, 암호화, 로그 정책 |
 | 인시던트 대응 절차 | [INCIDENT-RESPONSE.md](INCIDENT-RESPONSE.md) | A.16 | 인시던트 분류, 탐지·격리·복구·사후검토 절차 |
 | 백업 및 복구 계획 | [BACKUP-RECOVERY.md](BACKUP-RECOVERY.md) | A.17 | 백업 주기·절차, 복구 시나리오, RTO/RPO |
+| 위험평가 및 처리계획 | [RISK-ASSESSMENT.md](RISK-ASSESSMENT.md) | Clause 6.1 | 자산목록, 16개 위험 식별·평가·처리방안 (필수) |
+| 적용가능성 선언서 | [SOA.md](SOA.md) | Clause 6.1.3 | Annex A 93개 통제 적용여부 선언 (필수) |
+| 변경관리 절차서 | [CHANGE-MANAGEMENT.md](CHANGE-MANAGEMENT.md) | A.8.25, A.8.32 | 코드/DB/인프라 변경 절차, 보안 체크리스트 |
 
 ## 기술적 보안 통제 구현 현황
 

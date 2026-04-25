@@ -3,6 +3,7 @@
  * 비동기로 실행되며 실패해도 메인 흐름에 영향 없음
  */
 const db = require('../config/database');
+const bcrypt = require('bcryptjs');
 
 /**
  * @param {'info'|'warning'|'error'|'success'} type
@@ -43,4 +44,41 @@ async function validatePassword(password, db) {
     return { valid: true };
 }
 
-module.exports = { logActivity, validatePassword };
+/**
+ * 비밀번호 이력 검사 — 최근 3개 재사용 차단
+ */
+async function checkPasswordHistory(userId, newPassword, dbConn) {
+    const conn = dbConn || db;
+    const [rows] = await conn.query(
+        'SELECT password_hash FROM password_history WHERE user_id = ? ORDER BY created_at DESC LIMIT 3',
+        [userId]
+    );
+    for (const row of rows) {
+        if (await bcrypt.compare(newPassword, row.password_hash)) {
+            return { reused: true, message: '최근 3개의 비밀번호는 재사용할 수 없습니다.' };
+        }
+    }
+    return { reused: false };
+}
+
+/**
+ * 비밀번호 이력 저장 — 최대 10개 보관
+ */
+async function savePasswordHistory(userId, hashedPassword, dbConn) {
+    const conn = dbConn || db;
+    await conn.query(
+        'INSERT INTO password_history (user_id, password_hash) VALUES (?, ?)',
+        [userId, hashedPassword]
+    );
+    // 오래된 이력 정리 (10개 초과분 삭제)
+    await conn.query(
+        `DELETE FROM password_history WHERE user_id = ? AND id NOT IN (
+            SELECT id FROM (
+                SELECT id FROM password_history WHERE user_id = ? ORDER BY created_at DESC LIMIT 10
+            ) t
+        )`,
+        [userId, userId]
+    );
+}
+
+module.exports = { logActivity, validatePassword, checkPasswordHistory, savePasswordHistory };

@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
-const { logActivity, validatePassword } = require('../utils/logger');
+const { logActivity, validatePassword, checkPasswordHistory, savePasswordHistory } = require('../utils/logger');
 const { createNotification } = require('../utils/notificationHelper');
 const { cache } = require('../middleware/cache');
 
@@ -443,11 +443,18 @@ router.put('/change-password', [
             return res.status(400).json({ success: false, message: '현재 비밀번호가 일치하지 않습니다.' });
         }
 
+        // 비밀번호 이력 검사
+        const historyCheck = await checkPasswordHistory(req.user.id, newPassword);
+        if (historyCheck.reused) {
+            return res.status(400).json({ success: false, message: historyCheck.message });
+        }
+
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await db.query(
             'UPDATE users SET password = ?, require_password_change = 0 WHERE id = ?',
             [hashedPassword, req.user.id]
         );
+        await savePasswordHistory(req.user.id, hashedPassword);
 
         res.json({ success: true, message: '비밀번호가 변경되었습니다.' });
 

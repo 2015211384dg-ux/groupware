@@ -7,7 +7,7 @@ const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const { authMiddleware, checkRole } = require('../middleware/auth');
 const { cacheMiddleware, invalidateCache } = require('../middleware/cache');
-const { logActivity, validatePassword } = require('../utils/logger');
+const { logActivity, validatePassword, checkPasswordHistory, savePasswordHistory } = require('../utils/logger');
 const db = require('../config/database');
 
 const profileUploadDir = path.join(__dirname, '../uploads/profiles');
@@ -264,6 +264,9 @@ router.post('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), invalidateCache(/^api:.*\
             }
 
             await connection.commit();
+
+            // 초기 비밀번호 이력 시드
+            await savePasswordHistory(userId, hashedPassword);
 
             logActivity('success', `사용자 생성: ${username} (관리자: ${req.user.name})`, { userId: req.user.id, req });
 
@@ -527,12 +530,18 @@ router.put('/change-password', [
         }
 
         const isValidPassword = await bcrypt.compare(currentPassword, users[0].password);
-        
+
         if (!isValidPassword) {
             return res.status(400).json({
                 success: false,
                 message: '현재 비밀번호가 일치하지 않습니다.'
             });
+        }
+
+        // 비밀번호 이력 검사
+        const historyCheck = await checkPasswordHistory(req.user.id, newPassword);
+        if (historyCheck.reused) {
+            return res.status(400).json({ success: false, message: historyCheck.message });
         }
 
         // 새 비밀번호 해시화
@@ -543,6 +552,7 @@ router.put('/change-password', [
             'UPDATE users SET password = ? WHERE id = ?',
             [hashedPassword, req.user.id]
         );
+        await savePasswordHistory(req.user.id, hashedPassword);
 
         logActivity('info', `비밀번호 변경: ${req.user.name}`, { userId: req.user.id, req });
 

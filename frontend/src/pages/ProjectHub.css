@@ -1,0 +1,387 @@
+/* ================================================
+   ProjectHub.css — 프로젝트 허브
+   ================================================ */
+
+.hub-wrap {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ── 헤더 ── */
+.hub-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.hub-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: #191f28;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+.hub-title svg {
+    display: block;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.hub-title span {
+    color: #667eea;
+}
+
+.hub-btn-new {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.12s;
+}
+
+.hub-btn-new:hover {
+    background: #5a6fd6;
+    transform: translateY(-1px);
+}
+
+/* ── 탭 ── */
+.hub-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #f2f4f8;
+    padding-bottom: 0;
+}
+
+.hub-tab {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8b8fa8;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.hub-tab.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
+}
+
+.hub-tab:hover:not(.active) { color: #4a5568; }
+
+/* ── 프로젝트 카드 그리드 ── */
+.hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.project-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1.5px solid #edf0f7;
+    padding: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.18s, transform 0.12s, border-color 0.18s;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.project-card:hover {
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+    transform: translateY(-2px);
+    border-color: #d4d8f0;
+}
+
+.project-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.project-emoji {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.project-color-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--proj-color, #667eea);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-card-info { flex: 1; min-width: 0; }
+
+.project-card-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #191f28;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.project-card-desc {
+    font-size: 12.5px;
+    color: #8b8fa8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.project-card-role {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #f0f2ff;
+    color: #667eea;
+    flex-shrink: 0;
+}
+
+/* ── 진행률 바 ── */
+.project-progress {
+    margin-bottom: 14px;
+}
+
+.project-progress-bar {
+    height: 5px;
+    background: #f2f4f8;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.project-progress-fill {
+    height: 100%;
+    background: var(--proj-color, #667eea);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.project-progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: #8b8fa8;
+}
+
+/* ── 카드 푸터 ── */
+.project-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-avatar-stack {
+    display: flex;
+}
+
+.project-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    margin-left: -6px;
+    flex-shrink: 0;
+}
+
+.project-avatar:first-child { margin-left: 0; }
+
+.project-avatar-more {
+    background: #f0f2ff;
+    color: #667eea;
+    font-size: 10px;
+}
+
+.project-task-count {
+    font-size: 12px;
+    color: #8b8fa8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.project-task-count .done { color: #48bb78; font-weight: 600; }
+
+/* ── 빈 상태 ── */
+.hub-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8b8fa8;
+}
+
+.hub-empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.hub-empty h3 { font-size: 16px; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+.hub-empty p  { font-size: 13.5px; }
+
+/* ── 내가 담당중인 업무 ── */
+.hub-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #191f28;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hub-task-list {
+    background: #fff;
+    border-radius: 14px;
+    border: 1.5px solid #edf0f7;
+    overflow: hidden;
+}
+
+.hub-task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid #f7f8fc;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.hub-task-item:last-child { border-bottom: none; }
+.hub-task-item:hover { background: #fafbff; }
+
+.hub-task-project {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+}
+
+.hub-task-project-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hub-task-project-name {
+    font-size: 12px;
+    color: #8b8fa8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+}
+
+.hub-task-title {
+    flex: 1;
+    font-size: 13.5px;
+    color: #191f28;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hub-task-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.task-status-badge {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+}
+
+.status-todo       { background: #f2f4f8; color: #8b8fa8; }
+.status-in_progress { background: #eef0ff; color: #667eea; }
+.status-done       { background: #f0fff4; color: #38a169; }
+.status-on_hold    { background: #fffaf0; color: #c05621; }
+
+.hub-task-due {
+    font-size: 12px;
+    color: #8b8fa8;
+}
+
+.hub-task-due.overdue { color: #e53e3e; font-weight: 600; }
+.hub-task-due.soon    { color: #dd6b20; font-weight: 600; }
+
+/* 로딩 */
+.hub-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: #8b8fa8;
+    gap: 10px;
+}
+
+/* 참여 버튼 */
+.hub-join-btn {
+    padding: 5px 14px;
+    background: #667eea; color: #fff;
+    border: none; border-radius: 8px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.hub-join-btn:hover:not(:disabled) { background: #5a6fd6; }
+.hub-join-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.hub-join-pending {
+    font-size: 11px; font-weight: 600;
+    color: #f59e0b; background: #fef3c7;
+    padding: 4px 10px; border-radius: 8px;
+    white-space: nowrap; flex-shrink: 0;
+}
+
+.hub-joined-badge {
+    font-size: 11px; font-weight: 600;
+    color: #10b981; background: #d1fae5;
+    padding: 4px 10px; border-radius: 8px;
+    white-space: nowrap; flex-shrink: 0;
+}

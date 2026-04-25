@@ -1,0 +1,381 @@
+import React, { useState, useEffect } from 'react';
+import api from '../../services/authService';
+import './UserModal.css';
+import { useToast } from './Toast';
+
+function UserModal({ isOpen, onClose, user, onSuccess, currentUser }) {
+    const toast = useToast();
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        name: '',
+        password: '',
+        confirmPassword: '',
+        role: 'USER',
+        employee_number: '',
+        department_id: '',
+        position: '',
+        phone: '',
+        mobile: ''
+    });
+
+    const [departments, setDepartments] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (isOpen) {
+            fetchDepartments();
+
+            if (user) {
+                // 수정 모드
+                setFormData({
+                    username: user.username || '',
+                    email: user.email || '',
+                    name: user.name || '',
+                    password: '',
+                    confirmPassword: '',
+                    role: user.role || 'USER',
+                    employee_number: user.employee_number || '',
+                    department_id: user.department_id || '',
+                    position: user.position || '',
+                    phone: user.phone || '',
+                    mobile: user.mobile || ''
+                });
+            } else {
+                // 생성 모드 - 초기화
+                setFormData({
+                    username: '',
+                    email: '',
+                    name: '',
+                    password: '',
+                    confirmPassword: '',
+                    role: 'USER',
+                    employee_number: '',
+                    department_id: '',
+                    position: '',
+                    phone: '',
+                    mobile: ''
+                });
+            }
+
+            setErrors({});
+        }
+    }, [isOpen, user]);
+
+    const normalizeDepartments = (res) => {
+        // 가능한 케이스들을 모두 배열로 정규화
+        const raw =
+            res?.data?.data ??
+            res?.data ??
+            res;
+
+        const list =
+            Array.isArray(raw) ? raw :
+            Array.isArray(raw?.departments) ? raw.departments :
+            Array.isArray(raw?.rows) ? raw.rows :
+            Array.isArray(raw?.items) ? raw.items :
+            Array.isArray(raw?.data) ? raw.data :
+            [];
+
+        // 옵션: 이상한 값(예: null) 방지
+        return list.filter(Boolean);
+    };
+
+    const fetchDepartments = async () => {
+        try {
+            const response = await api.get('/departments');
+
+            const normalized = normalizeDepartments(response);
+
+            // 디버깅 필요하면 잠깐 켜두세요
+            // console.log('departments normalized:', normalized, 'raw response:', response?.data);
+
+            setDepartments(normalized);
+        } catch (error) {
+            console.error('부서 목록 조회 실패:', error);
+            setDepartments([]); // 실패 시에도 map 터지지 않게
+        }
+    };
+
+    const validate = () => {
+        const newErrors = {};
+
+        if (!formData.username.trim()) {
+            newErrors.username = '아이디를 입력하세요';
+        } else if (formData.username.length < 4) {
+            newErrors.username = '아이디는 4자 이상이어야 합니다';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = '이메일을 입력하세요';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = '올바른 이메일 형식이 아닙니다';
+        }
+
+        if (!formData.name.trim()) {
+            newErrors.name = '이름을 입력하세요';
+        }
+
+        // 신규 등록 시에만 비밀번호 필수
+        if (!user) {
+            if (!formData.password) {
+                newErrors.password = '비밀번호를 입력하세요';
+            } else if (formData.password.length < 6) {
+                newErrors.password = '비밀번호는 6자 이상이어야 합니다';
+            }
+
+            if (formData.password !== formData.confirmPassword) {
+                newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
+            }
+        } else {
+            // 수정 시 비밀번호 입력했으면 확인
+            if (formData.password && formData.password.length < 6) {
+                newErrors.password = '비밀번호는 6자 이상이어야 합니다';
+            }
+            if (formData.password && formData.password !== formData.confirmPassword) {
+                newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validate()) {
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const submitData = { ...formData };
+
+            // 수정 모드에서 비밀번호 미입력 시 제거
+            if (user && !formData.password) {
+                delete submitData.password;
+                delete submitData.confirmPassword;
+            }
+
+            if (user) {
+                await api.put(`/users/${user.id}`, submitData);
+                toast.success('사용자 정보가 수정되었습니다.');
+            } else {
+                await api.post('/users', submitData);
+                toast.success('사용자가 등록되었습니다.');
+            }
+
+            onSuccess();
+            onClose();
+        } catch (error) {
+            console.error('사용자 저장 실패:', error);
+            toast.error(error.response?.data?.message || '저장에 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal-overlay">
+            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>{user ? '사용자 수정' : '사용자 등록'}</h2>
+                    <button className="modal-close" onClick={onClose}>✕</button>
+                </div>
+
+                <form className="modal-body" onSubmit={handleSubmit}>
+                    <div className="form-grid">
+                        <div className="form-section">
+                            <h3>계정 정보</h3>
+
+                            <div className="form-group">
+                                <label>아이디 *</label>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    disabled={!!user}
+                                    className={errors.username ? 'error' : ''}
+                                />
+                                {errors.username && <span className="error-message">{errors.username}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>이메일 *</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={errors.email ? 'error' : ''}
+                                />
+                                {errors.email && <span className="error-message">{errors.email}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>이름 *</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className={errors.name ? 'error' : ''}
+                                />
+                                {errors.name && <span className="error-message">{errors.name}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>비밀번호 {!user && '*'}</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder={user ? '변경 시에만 입력' : ''}
+                                    className={errors.password ? 'error' : ''}
+                                />
+                                {errors.password && <span className="error-message">{errors.password}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>비밀번호 확인 {!user && '*'}</label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className={errors.confirmPassword ? 'error' : ''}
+                                />
+                                {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                            </div>
+
+                            {currentUser?.role !== 'HR_ADMIN' && (
+                            <div className="form-group">
+                                <label>권한</label>
+                                <select
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleChange}
+                                >
+                                    <option value="USER">일반 사용자</option>
+                                    <option value="DEPT_ADMIN">부서 관리자</option>
+                                    <option value="HR_ADMIN">인사 담당자</option>
+                                    <option value="SUPER_ADMIN">시스템 관리자 (IT)</option>
+                                </select>
+                            </div>
+                            )}
+                        </div>
+
+                        <div className="form-section">
+                            <h3>직원 정보</h3>
+
+                            {/* 사번 입력 필드 - 미사용 처리
+                            <div className="form-group">
+                                <label>사번</label>
+                                <input
+                                    type="text"
+                                    name="employee_number"
+                                    value={formData.employee_number}
+                                    onChange={handleChange}
+                                    placeholder="EMP001"
+                                />
+                            </div>
+                            */}
+
+                            <div className="form-group">
+                                <label>부서</label>
+                                <select
+                                    name="department_id"
+                                    value={formData.department_id}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">선택 안 함</option>
+                                    {Array.isArray(departments) && departments.map(dept => (
+                                        <option key={dept.id} value={dept.id}>
+                                            {dept.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>직급</label>
+                                <select
+                                    name="position"
+                                    value={formData.position}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">선택 안 함</option>
+                                    <option value="사원">사원</option>
+                                    <option value="대리">대리</option>
+                                    <option value="과장">과장</option>
+                                    <option value="차장">차장</option>
+                                    <option value="부장">부장</option>
+                                    <option value="이사">이사</option>
+                                    <option value="상무">상무</option>
+                                    <option value="전무">전무</option>
+                                    <option value="부사장">부사장</option>
+                                    <option value="사장">사장</option>
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>내선번호</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="02-1234-5678"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>휴대폰</label>
+                                <input
+                                    type="text"
+                                    name="mobile"
+                                    value={formData.mobile}
+                                    onChange={handleChange}
+                                    placeholder="010-1234-5678"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="modal-footer">
+                        <button type="button" className="btn-cancel" onClick={onClose}>
+                            취소
+                        </button>
+                        <button type="submit" className="btn-submit" disabled={loading}>
+                            {loading ? '처리 중...' : (user ? '수정' : '등록')}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default UserModal;

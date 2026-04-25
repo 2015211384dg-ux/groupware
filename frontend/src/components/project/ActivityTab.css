@@ -1,0 +1,148 @@
+.act-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+.act-loading,
+.act-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.act-timeline {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ── 날짜 구분선 ── */
+.act-day-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.act-day-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8eaf0;
+}
+
+/* ── 활동 항목 ── */
+.act-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    position: relative;
+}
+
+.act-item::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 44px;
+    bottom: -10px;
+    width: 1px;
+    background: #e8eaf0;
+}
+
+.act-item:last-child::before { display: none; }
+
+.act-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.act-body {
+    flex: 1;
+    min-width: 0;
+    padding-top: 5px;
+}
+
+.act-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.act-icon {
+    font-size: 14px;
+}
+
+.act-user {
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.act-text {
+    color: #4a5568;
+}
+
+.act-task-title {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 12px;
+    background: #ede9fe;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.act-detail {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #6b7280;
+    background: #f8f9fb;
+    border-left: 2px solid #e8eaf0;
+    padding: 3px 8px;
+    border-radius: 0 4px 4px 0;
+    display: inline-block;
+}
+
+.act-time {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.act-load-more {
+    margin: 16px auto;
+    display: block;
+    padding: 8px 24px;
+    background: none;
+    border: 1px solid #e8eaf0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #667eea;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.act-load-more:hover { background: #ede9fe; }
+.act-load-more:disabled { opacity: 0.5; cursor: not-allowed; }

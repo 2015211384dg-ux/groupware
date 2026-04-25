@@ -625,6 +625,48 @@ db.query(`
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 `).catch(err => console.error('chatbot_feedback 테이블 생성 실패:', err.message));
 
+// ─── 비밀번호 이력 ──────────────────────────────────────────────
+db.query(`
+    CREATE TABLE IF NOT EXISTS \`password_history\` (
+        id            INT AUTO_INCREMENT PRIMARY KEY,
+        user_id       INT NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_ph_user (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('password_history 테이블 생성 실패:', err.message));
+
+// ─── 접근권한 반기 검토 ─────────────────────────────────────────
+db.query(`
+    CREATE TABLE IF NOT EXISTS \`access_reviews\` (
+        id           INT AUTO_INCREMENT PRIMARY KEY,
+        review_year  INT NOT NULL,
+        review_half  TINYINT NOT NULL COMMENT '1=상반기, 2=하반기',
+        reviewer_id  INT NOT NULL,
+        status       ENUM('in_progress','completed') DEFAULT 'in_progress',
+        started_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+        completed_at DATETIME NULL,
+        notes        TEXT NULL,
+        INDEX idx_arv_status (status)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('access_reviews 테이블 생성 실패:', err.message));
+
+db.query(`
+    CREATE TABLE IF NOT EXISTS \`access_review_items\` (
+        id             INT AUTO_INCREMENT PRIMARY KEY,
+        review_id      INT NOT NULL,
+        user_id        INT NOT NULL,
+        original_role  VARCHAR(30) NOT NULL,
+        confirmed_role VARCHAR(30) NOT NULL,
+        action         ENUM('pending','confirmed','modified','deactivated') DEFAULT 'pending',
+        reviewed_at    DATETIME NULL,
+        reviewer_id    INT NULL,
+        notes          VARCHAR(500) NULL,
+        INDEX idx_ari_review (review_id),
+        INDEX idx_ari_user (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+`).catch(err => console.error('access_review_items 테이블 생성 실패:', err.message));
+
 // ============================================
 // 점검 모드 미들웨어
 // ============================================
@@ -695,6 +737,7 @@ const arRoutes              = require('./routes/ar');
 const chatbotRoutes         = require('./routes/chatbot');
 const voucherRoutes         = require('./routes/voucher');
 const projectRoutes         = require('./routes/projects');
+const accessReviewRoutes    = require('./routes/accessReview');
 
 app.use('/api/v1/auth',            authRoutes);
 app.use('/api/v1/users',           userRoutes);
@@ -718,6 +761,7 @@ app.use('/api/v1/ar',              arRoutes);
 app.use('/api/v1/chatbot',        chatbotRoutes);
 app.use('/api/v1/voucher',        voucherRoutes);
 app.use('/api/v1/projects',       projectRoutes);
+app.use('/api/v1/access-reviews', accessReviewRoutes);
 
 // ============================================
 // 에러 핸들링

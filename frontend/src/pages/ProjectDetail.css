@@ -1,0 +1,505 @@
+/* ================================================
+   ProjectDetail.css — 프로젝트 상세 (업무 탭)
+   ================================================ */
+
+.pd-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #f8f9ff;
+    min-height: 0;
+}
+
+/* ── 프로젝트 헤더 ── */
+.pd-header {
+    background: #fff;
+    border-bottom: 1px solid #edf0f7;
+    padding: 20px 28px 0;
+    flex-shrink: 0;
+}
+
+.pd-header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.pd-project-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.pd-project-meta { flex: 1; min-width: 0; }
+
+.pd-project-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pd-project-desc {
+    font-size: 13px;
+    color: #8b8fa8;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pd-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pd-member-avatars {
+    display: flex;
+}
+
+.pd-member-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    margin-left: -6px;
+    cursor: pointer;
+}
+
+.pd-member-avatar:first-child { margin-left: 0; }
+.pd-member-avatar-more { background: #f0f2ff; color: #667eea; font-size: 11px; }
+
+.pd-btn-invite {
+    padding: 8px 14px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.pd-btn-invite:hover { background: #f8f9ff; border-color: #667eea; color: #667eea; }
+
+.pd-btn-settings {
+    padding: 8px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+.pd-btn-settings:hover { background: #f8f9ff; border-color: #667eea; color: #667eea; }
+
+/* ── 탭 바 ── */
+.pd-tabs {
+    display: flex;
+    gap: 2px;
+}
+
+.pd-tab {
+    padding: 12px 18px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #8b8fa8;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pd-tab.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
+}
+
+.pd-tab:hover:not(.active) { color: #4a5568; }
+
+.pd-tab-badge {
+    background: #eef0ff;
+    color: #667eea;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+/* ── 콘텐츠 영역 ── */
+.pd-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    min-height: 0;
+}
+
+/* ── 업무 탭 툴바 ── */
+.task-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    background: #fff;
+    border-bottom: 1px solid #edf0f7;
+    flex-shrink: 0;
+}
+
+.task-filter-select {
+    padding: 7px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #4a5568;
+    background: #fff;
+    cursor: pointer;
+}
+
+.task-filter-select:focus { outline: none; border-color: #667eea; }
+
+.task-search-input {
+    padding: 7px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #191f28;
+    background: #fff;
+    width: 200px;
+}
+
+.task-search-input:focus { outline: none; border-color: #667eea; }
+
+.task-toolbar-spacer { flex: 1; }
+
+.btn-add-group {
+    padding: 8px 14px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-add-group:hover { border-color: #667eea; color: #667eea; }
+
+/* ── 업무 목록 ── */
+.task-list-area {
+    flex: 1;
+    padding: 20px 28px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── 그룹 ── */
+.task-group {
+    background: #fff;
+    border-radius: 14px;
+    border: 1.5px solid #edf0f7;
+    overflow: hidden;
+}
+
+.task-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f2f8;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s;
+}
+
+.task-group-header:hover { background: #fafbff; }
+
+.task-group-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.task-group-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #191f28;
+    flex: 1;
+}
+
+.task-group-count {
+    font-size: 12px;
+    color: #8b8fa8;
+    background: #f2f4f8;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.task-group-toggle { color: #8b8fa8; transition: transform 0.2s; }
+.task-group-toggle.open { transform: rotate(180deg); }
+
+.btn-add-task {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    border: none;
+    background: none;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #667eea;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.btn-add-task:hover { background: #eef0ff; }
+
+/* ── 업무 행 ── */
+.task-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    border-bottom: 1px solid #f7f8fc;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.task-row:last-child { border-bottom: none; }
+.task-row:hover { background: #fafbff; }
+.task-row.done { opacity: 0.6; }
+
+.task-row-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #d1d5db;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.task-row-check:hover { border-color: #48bb78; }
+.task-row-check.done  { border-color: #48bb78; background: #48bb78; }
+
+.task-row-check.done::after {
+    content: '';
+    width: 9px;
+    height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+}
+
+.task-row-title {
+    flex: 1;
+    font-size: 13.5px;
+    color: #191f28;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.task-row.done .task-row-title { text-decoration: line-through; color: #8b8fa8; }
+
+.task-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* 담당자 아바타 */
+.task-assignees { display: flex; }
+
+.task-assignee-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #fff;
+    margin-left: -5px;
+    flex-shrink: 0;
+}
+
+.task-assignee-avatar:first-child { margin-left: 0; }
+
+/* 마감일 */
+.task-due {
+    font-size: 12px;
+    color: #8b8fa8;
+    min-width: 54px;
+    text-align: right;
+}
+
+.task-due.overdue { color: #e53e3e; font-weight: 600; }
+.task-due.soon    { color: #dd6b20; font-weight: 600; }
+
+/* 우선순위 */
+.task-priority {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.priority-urgent { background: #fff5f5; color: #c53030; }
+.priority-high   { background: #fffaf0; color: #c05621; }
+.priority-normal { background: #eef0ff; color: #667eea; }
+.priority-low    { background: #f7f8fc; color: #8b8fa8; }
+
+/* 상태 */
+.task-status {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    min-width: 56px;
+    text-align: center;
+}
+
+/* 진행률 */
+.task-progress-wrap {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.task-progress-bar-mini {
+    flex: 1;
+    height: 4px;
+    background: #f2f4f8;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.task-progress-fill-mini {
+    height: 100%;
+    background: #667eea;
+    border-radius: 2px;
+}
+
+/* 업무 추가 인라인 */
+.task-add-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-top: 1px dashed #e2e5ef;
+}
+
+.task-add-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #191f28;
+    background: #fff;
+}
+
+.task-add-input:focus { outline: none; border-color: #667eea; }
+
+.task-add-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #667eea;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.task-add-btn:hover { background: #5a6fd6; }
+
+.task-add-cancel {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    color: #4a5568;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* 로딩 */
+.pd-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: #8b8fa8;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* 빈 업무 */
+.task-empty {
+    text-align: center;
+    padding: 32px;
+    color: #8b8fa8;
+    font-size: 13.5px;
+}
+
+/* 준비중 탭 */
+.pd-coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: #b0b5c4;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.pd-coming-soon-icon { font-size: 40px; opacity: 0.4; }

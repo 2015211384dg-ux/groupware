@@ -1,0 +1,311 @@
+.ar-review-page {
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.ar-review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.ar-review-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px;
+}
+
+.ar-review-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+}
+
+.ar-review-start-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.ar-review-start-btn:hover { background: #5a67d8; }
+
+/* 진행 중 패널 */
+.ar-review-active-panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.ar-review-progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ar-review-period {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-right: 8px;
+}
+
+.ar-review-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.ar-review-badge.in-progress { background: #eff6ff; color: #2563eb; }
+.ar-review-badge.completed   { background: #f0fdf4; color: #16a34a; }
+
+.ar-review-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.ar-review-complete-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    background: #22c55e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ar-review-complete-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+.ar-review-complete-btn:not(:disabled):hover { background: #16a34a; }
+
+/* 진행 바 */
+.ar-review-progress-bar-wrap {
+    height: 6px;
+    background: #f1f5f9;
+    border-radius: 3px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.ar-review-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #22c55e);
+    border-radius: 3px;
+    transition: width .3s ease;
+}
+
+/* 부서 필터 */
+.ar-review-dept-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+.ar-review-dept-chip {
+    padding: 4px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    cursor: pointer;
+}
+.ar-review-dept-chip.active {
+    background: #667eea;
+    color: #fff;
+    border-color: #667eea;
+}
+
+/* 테이블 */
+.ar-review-table-wrap { overflow-x: auto; }
+
+.ar-review-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.ar-review-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+.ar-review-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+.ar-review-row:hover td { background: #f8fafc; }
+.ar-review-row.action-deactivated td { opacity: .55; }
+
+.ar-review-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ar-review-user-name { font-weight: 600; color: #1e293b; }
+.ar-review-username  { font-size: 11px; color: #94a3b8; }
+.ar-review-dept      { font-size: 12px; color: #334155; }
+.ar-review-position  { font-size: 11px; color: #94a3b8; }
+
+/* 권한 뱃지 */
+.ar-review-role-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.ar-review-role-badge.role-SUPER_ADMIN { background: #fef3c7; color: #b45309; }
+.ar-review-role-badge.role-ADMIN       { background: #ede9fe; color: #7c3aed; }
+.ar-review-role-badge.role-HR_ADMIN    { background: #dbeafe; color: #1d4ed8; }
+.ar-review-role-badge.role-USER        { background: #f1f5f9; color: #475569; }
+
+.ar-review-role-select {
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #334155;
+    background: #fff;
+    cursor: pointer;
+}
+
+.ar-review-action-badge {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* 작업 버튼 */
+.ar-review-actions { display: flex; gap: 6px; }
+
+.ar-review-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.ar-review-btn.confirm    { background: #f0fdf4; color: #16a34a; }
+.ar-review-btn.confirm:hover { background: #dcfce7; }
+.ar-review-btn.deactivate { background: #fff1f2; color: #dc2626; }
+.ar-review-btn.deactivate:hover { background: #ffe4e6; }
+
+/* 이력 */
+.ar-review-history { margin-top: 8px; }
+
+.ar-review-history-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+    margin: 0 0 12px;
+}
+
+.ar-review-empty { font-size: 13px; color: #94a3b8; }
+
+.ar-review-history-list { display: flex; flex-direction: column; gap: 8px; }
+
+.ar-review-history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+}
+.ar-review-history-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+}
+.ar-review-history-item.active { border-color: #667eea; background: #f5f3ff; }
+
+.ar-review-history-period { font-size: 14px; font-weight: 600; color: #1e293b; }
+.ar-review-history-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #64748b; }
+.ar-review-history-date  { color: #94a3b8; }
+.ar-review-history-count { font-weight: 600; color: #334155; }
+
+/* 완료 모달 */
+.ar-review-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.ar-review-modal {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 20px 50px rgba(0,0,0,.2);
+}
+.ar-review-modal h3 { margin: 0 0 10px; font-size: 16px; color: #1e293b; }
+.ar-review-modal p  { font-size: 13px; color: #475569; margin: 0 0 16px; line-height: 1.6; }
+.ar-review-notes-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+.ar-review-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.ar-review-btn-cancel {
+    padding: 9px 16px;
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ar-review-btn-confirm-complete {
+    padding: 9px 16px;
+    background: #22c55e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ar-review-btn-confirm-complete:disabled { background: #cbd5e1; cursor: not-allowed; }

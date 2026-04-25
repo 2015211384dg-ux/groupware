@@ -1,0 +1,117 @@
+.vai-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.vai-header { margin-bottom: 24px; }
+.vai-title  { font-size: 22px; font-weight: 700; color: #191f28; margin-bottom: 6px; }
+.vai-desc   { font-size: 14px; color: #4e5968; line-height: 1.7; }
+
+.vai-notice {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #EBF3FF; border: 1px solid #B5D4F4; border-radius: 8px;
+    padding: 11px 14px; font-size: 13px; color: #1B64DA;
+    margin-bottom: 20px; line-height: 1.6;
+}
+
+.vai-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+.vai-card-title { font-size: 12px; font-weight: 700; color: #8b95a1; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
+
+.vai-dropzone {
+    border: 2px dashed #cbd5e1; border-radius: 10px;
+    padding: 36px 20px; text-align: center; cursor: pointer;
+    background: #f9fafb; transition: all .15s;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.vai-dropzone:hover, .vai-dropzone.drag { border-color: #3182F6; background: #EBF3FF; }
+.vai-dropzone p    { font-size: 14px; color: #4e5968; }
+.vai-dropzone span { font-size: 12px; color: #8b95a1; }
+
+.vai-file-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.vai-file-item {
+    display: flex; align-items: center; gap: 10px;
+    background: #f9fafb; border: 1px solid #e5e8eb;
+    border-radius: 8px; padding: 9px 12px;
+}
+.vai-file-ext {
+    width: 34px; height: 34px; border-radius: 7px;
+    background: #EBF3FF; color: #3182F6;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; flex-shrink: 0;
+}
+.vai-file-ext-pdf { background: #FFE8E8; color: #C41C1C; }
+.vai-file-info { flex: 1; min-width: 0; }
+.vai-file-name { font-size: 13px; font-weight: 500; color: #191f28; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vai-file-size { font-size: 11px; color: #8b95a1; margin-top: 2px; }
+.vai-file-rm   { background: none; border: none; cursor: pointer; color: #8b95a1; font-size: 20px; padding: 2px 6px; border-radius: 4px; }
+.vai-file-rm:hover { background: #f0f2f5; color: #191f28; }
+
+.vai-btn-primary {
+    width: 100%; padding: 13px; font-size: 15px; font-weight: 600;
+    border: none; border-radius: 9px; cursor: pointer;
+    background: #3182F6; color: #fff; transition: background .15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 20px;
+}
+.vai-btn-primary:hover:not(:disabled) { background: #1B64DA; }
+.vai-btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+
+.vai-spinner {
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+    animation: vai-spin .7s linear infinite;
+}
+@keyframes vai-spin { to { transform: rotate(360deg); } }
+
+.vai-error {
+    display: flex; align-items: center; gap: 8px;
+    background: #FFE8E8; border: 1px solid #FCA5A5; border-radius: 8px;
+    padding: 12px 16px; font-size: 13px; color: #C41C1C;
+    margin-bottom: 16px;
+}
+
+/* 결과 */
+.vai-result { }
+
+.vai-stat-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 16px;
+}
+@media (max-width: 600px) { .vai-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+.vai-stat { background: #fff; border: 1px solid #e5e8eb; border-radius: 10px; padding: 14px 16px; }
+.vai-stat-label { font-size: 11px; color: #8b95a1; font-weight: 600; margin-bottom: 6px; }
+.vai-stat-value { font-size: 22px; font-weight: 700; color: #191f28; }
+.vai-stat-sm    { font-size: 15px; }
+.vai-stat-green { color: #2CB967; }
+
+.vai-tbl-card { background: #fff; border: 1px solid #e5e8eb; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+.vai-tbl-wrap { overflow-x: auto; }
+.vai-table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+.vai-table thead tr { background: #f9fafb; }
+.vai-table th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #4e5968; border-bottom: 1px solid #e5e8eb; }
+.vai-table td { padding: 10px 12px; color: #191f28; border-bottom: 1px solid #f0f2f5; }
+.vai-table tr:last-child td { border-bottom: none; }
+.vai-table tr:hover td { background: #f9fafb; }
+.vai-td-num     { text-align: right; font-variant-numeric: tabular-nums; }
+.vai-td-ellipsis { max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
+
+.vai-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.badge-ok   { background: #E8FAF0; color: #12774A; }
+.badge-warn { background: #FFF4D9; color: #9E6400; }
+.badge-low  { background: #FFE8E8; color: #C41C1C; }
+
+.vai-action-row { display: flex; gap: 10px; }
+.vai-btn-dl {
+    flex: 1; padding: 12px; font-size: 14px; font-weight: 600;
+    border: none; border-radius: 9px; cursor: pointer;
+    background: #2CB967; color: #fff; transition: background .15s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.vai-btn-dl:hover { background: #1A7A40; }
+.vai-btn-reset {
+    padding: 12px 22px; font-size: 14px; font-weight: 500;
+    border: 1px solid #e5e8eb; border-radius: 9px;
+    background: #fff; color: #4e5968; cursor: pointer; transition: background .15s;
+}
+.vai-btn-reset:hover { background: #f9fafb; }

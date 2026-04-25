@@ -1,0 +1,442 @@
+/* FeedTab.css */
+
+/* ── 레이아웃 ── */
+.feed-tab-wrap {
+    flex: 1;
+    overflow-y: auto;
+    background: #f1f3f7;
+    padding: 0;
+}
+
+/* 중앙 컬럼 컨테이너 */
+.feed-col {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.feed-list { display: flex; flex-direction: column; gap: 10px; }
+
+.feed-loading, .feed-empty {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; padding: 60px; color: #94a3b8; font-size: 14px;
+}
+.feed-empty p { margin: 0; }
+
+.feed-load-more {
+    margin: 4px auto; display: block;
+    padding: 8px 24px; background: none;
+    border: 1px solid #e8eaf0; border-radius: 8px;
+    font-size: 13px; color: #667eea; cursor: pointer;
+}
+.feed-load-more:hover { background: #ede9fe; }
+.feed-load-more:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 고정 게시글 섹션 ── */
+.feed-pinned-section {
+    background: #f5f0e6;
+    border: 1px solid #e8dfc8;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.feed-pinned-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-bottom: 1px solid #ede5d0;
+    cursor: pointer;
+    transition: background 0.12s;
+    font-size: 13px;
+    color: #374151;
+}
+.feed-pinned-item:last-child { border-bottom: none; }
+.feed-pinned-item:hover { background: #ede5d0; }
+
+.feed-pinned-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.feed-pinned-type {
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    background: #6b7280;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* ── 작성 폼 ── */
+.fc-composer {
+    background: #fff;
+    border: 1px solid #e2e5ef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.fc-type-tabs {
+    display: flex;
+    border-bottom: 1.5px solid #f0f2f8;
+    padding: 0 16px;
+}
+
+.fc-type-tab {
+    display: flex; align-items: center; gap: 5px;
+    padding: 10px 14px;
+    background: none; border: none;
+    font-size: 13px; font-weight: 600;
+    color: #94a3b8; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    transition: color 0.15s;
+}
+.fc-type-tab:hover { color: #374151; }
+.fc-type-tab.active { font-weight: 700; }
+
+.fc-form-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+.fc-title-input {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid #e8eaf0; border-radius: 8px;
+    font-size: 15px; font-weight: 600; color: #1a1a2e;
+    outline: none; transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+.fc-title-input:focus { border-color: #667eea; }
+
+.fc-content-textarea {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid #e8eaf0; border-radius: 8px;
+    font-size: 13px; color: #374151;
+    outline: none; resize: none; font-family: inherit;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+.fc-content-textarea:focus { border-color: #667eea; }
+
+/* 할 일 */
+.fc-todo-list { display: flex; flex-direction: column; gap: 6px; }
+
+.fc-todo-row {
+    display: flex; align-items: center; gap: 8px;
+}
+
+.fc-todo-check-icon {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid #d1d5db; flex-shrink: 0;
+}
+
+.fc-todo-input {
+    flex: 1; padding: 6px 10px;
+    border: 1.5px solid #e8eaf0; border-radius: 7px;
+    font-size: 13px; color: #374151; outline: none;
+    transition: border-color 0.15s;
+}
+.fc-todo-input:focus { border-color: #10b981; }
+
+.fc-todo-del {
+    background: none; border: none; cursor: pointer;
+    color: #94a3b8; padding: 3px; border-radius: 4px;
+    display: flex; align-items: center;
+}
+.fc-todo-del:hover { background: #fee2e2; color: #ef4444; }
+
+.fc-add-item-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 6px 10px; background: none;
+    border: 1.5px dashed #e8eaf0; border-radius: 8px;
+    color: #94a3b8; font-size: 12px; cursor: pointer;
+    width: fit-content; transition: all 0.15s;
+}
+.fc-add-item-btn:hover { border-color: #667eea; color: #667eea; background: #f0f2ff; }
+
+/* 일정 */
+.fc-schedule-fields { display: flex; flex-direction: column; gap: 8px; }
+.fc-sched-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fc-sched-sep { color: #94a3b8; font-size: 13px; }
+.fc-sched-sep-sm { color: #94a3b8; font-size: 12px; }
+
+.fc-sched-input {
+    padding: 6px 10px;
+    border: 1.5px solid #e8eaf0; border-radius: 7px;
+    font-size: 12px; color: #374151; outline: none;
+    background: #f8f9fb;
+}
+.fc-sched-input:focus { border-color: #f59e0b; background: #fff; }
+
+.fc-sched-text {
+    flex: 1; padding: 6px 10px;
+    border: 1.5px solid #e8eaf0; border-radius: 7px;
+    font-size: 13px; color: #374151; outline: none;
+    min-width: 0;
+}
+.fc-sched-text:focus { border-color: #f59e0b; }
+
+/* 투표 */
+.fc-poll-wrap { display: flex; flex-direction: column; gap: 10px; }
+.fc-poll-opts { display: flex; flex-direction: column; gap: 6px; }
+.fc-poll-opt-row { display: flex; align-items: center; gap: 8px; }
+.fc-poll-opt-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #ede9fe; color: #7c3aed;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fc-poll-opt-input {
+    flex: 1; padding: 6px 10px;
+    border: 1.5px solid #e8eaf0; border-radius: 7px;
+    font-size: 13px; color: #374151; outline: none;
+}
+.fc-poll-opt-input:focus { border-color: #8b5cf6; }
+
+.fc-poll-settings {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    padding: 10px 0 4px;
+    border-top: 1px solid #f0f2f8;
+}
+.fc-poll-check {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: #4a5568; cursor: pointer;
+}
+.fc-poll-check input[type="checkbox"] { accent-color: #8b5cf6; }
+
+/* 파일 프리뷰 */
+.fc-file-preview { display: flex; flex-wrap: wrap; gap: 6px; }
+.fc-file-chip {
+    display: flex; align-items: center; gap: 5px;
+    padding: 4px 8px; border-radius: 6px;
+    background: #f1f3f7; font-size: 11px; color: #4a5568;
+    max-width: 180px;
+}
+.fc-file-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fc-file-chip button { background:none; border:none; cursor:pointer; color:#94a3b8; padding:1px; display:flex; }
+.fc-file-chip button:hover { color:#ef4444; }
+
+/* 하단 */
+.fc-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    border-top: 1px solid #f0f2f8;
+}
+.fc-footer-left { display: flex; gap: 4px; }
+
+.fc-icon-btn {
+    background: none; border: none; cursor: pointer;
+    color: #94a3b8; padding: 6px; border-radius: 7px;
+    display: flex; align-items: center;
+    transition: background 0.12s, color 0.12s;
+}
+.fc-icon-btn:hover { background: #f1f3f7; color: #374151; }
+
+.fc-submit-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px; color: #fff; border: none;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s;
+}
+.fc-submit-btn:hover:not(:disabled) { opacity: 0.88; }
+.fc-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── 피드 카드 ── */
+.fc-card {
+    background: #fff;
+    border: 1px solid #e2e5ef;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.fc-card.pinned { border-color: #e2e5ef; }
+
+.fc-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fc-avatar-sm { width: 28px; height: 28px; font-size: 11px; }
+
+.fc-card-head { display: flex; align-items: center; gap: 10px; }
+.fc-card-meta { flex: 1; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.fc-card-author { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+.fc-card-pos    { font-size: 11px; color: #94a3b8; }
+.fc-card-time   { font-size: 11px; color: #b0b5c4; }
+
+.fc-card-actions { display: flex; align-items: center; gap: 4px; }
+
+.fc-type-badge {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 6px;
+    background: #f1f3f7; color: #6b7280;
+    white-space: nowrap;
+}
+
+.fc-pin-badge {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 10px; color: #6b7280;
+    background: #f1f3f7; padding: 2px 6px; border-radius: 6px;
+}
+
+.fc-action-btn {
+    background: none; border: none; cursor: pointer;
+    color: #94a3b8; padding: 5px; border-radius: 6px;
+    display: flex; align-items: center;
+    transition: background 0.12s, color 0.12s;
+}
+.fc-action-btn:hover       { background: #f1f3f7; color: #374151; }
+.fc-action-btn.danger:hover { background: #fee2e2; color: #ef4444; }
+
+.fc-card-title { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+
+.fc-card-content {
+    font-size: 13px; color: #374151; line-height: 1.7;
+    white-space: pre-wrap; word-break: break-word;
+}
+
+/* 수정 */
+.fc-edit-wrap { display: flex; flex-direction: column; gap: 6px; }
+.fc-edit-textarea {
+    width: 100%; padding: 8px 10px;
+    border: 1.5px solid #c7d2fe; border-radius: 8px;
+    font-size: 13px; font-family: inherit; outline: none; resize: none;
+    box-sizing: border-box;
+}
+.fc-edit-btns { display: flex; gap: 6px; justify-content: flex-end; }
+.fc-edit-cancel { padding:5px 12px; border-radius:7px; border:1.5px solid #e2e5ef; background:#fff; font-size:12px; cursor:pointer; }
+.fc-edit-save   { padding:5px 12px; border-radius:7px; border:none; background:#667eea; color:#fff; font-size:12px; font-weight:600; cursor:pointer; }
+
+/* 첨부파일 */
+.fc-attachments { display: flex; flex-direction: column; gap: 8px; }
+.fc-images { display: flex; flex-wrap: wrap; gap: 6px; }
+.fc-img {
+    width: 120px; height: 90px; object-fit: cover;
+    border-radius: 8px; cursor: pointer; border: 1px solid #e8eaf0;
+    transition: opacity 0.15s;
+}
+.fc-img:hover { opacity: 0.88; }
+.fc-file-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px; background: #f8f9fb;
+    border-radius: 7px; border: 1px solid #e8eaf0;
+    font-size: 12px; color: #4a5568;
+}
+.fc-file-size { margin-left: auto; color: #94a3b8; font-size: 11px; }
+
+/* ── 할 일 카드 ── */
+.fc-card-todo { display: flex; flex-direction: column; gap: 6px; }
+
+.fc-card-todo-progress {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 4px;
+}
+.fc-card-todo-bar {
+    flex: 1; height: 6px; background: #f1f3f7;
+    border-radius: 99px; overflow: hidden;
+}
+.fc-card-todo-fill { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
+.fc-card-todo-count { font-size: 11px; color: #6b7280; white-space: nowrap; }
+
+.fc-card-todo-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; border-radius: 8px;
+    cursor: pointer; transition: background 0.12s;
+    font-size: 13px; color: #374151;
+    border: 1px solid #f0f2f8;
+}
+.fc-card-todo-item:hover { background: #f8f9fb; }
+.fc-card-todo-item.done  { color: #94a3b8; }
+.fc-card-todo-item.done span { text-decoration: line-through; }
+
+.fc-card-todo-chk {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid #d1d5db; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+}
+.fc-card-todo-chk.checked { border-color: transparent; }
+
+/* ── 일정 카드 ── */
+.fc-card-schedule {
+    background: #fff; border: 1px solid #e8eaf0;
+    border-radius: 10px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 7px;
+}
+.fc-sched-info-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; flex-wrap: wrap; }
+
+/* ── 투표 카드 ── */
+.fc-card-poll { display: flex; flex-direction: column; gap: 6px; }
+
+.fc-poll-deadline {
+    font-size: 11px; color: #94a3b8;
+    padding: 2px 0; width: fit-content;
+}
+.fc-poll-deadline.expired { color: #94a3b8; }
+
+.fc-poll-opt {
+    position: relative;
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px; border-radius: 8px;
+    border: 1.5px solid #e8eaf0;
+    cursor: pointer; overflow: hidden;
+    transition: border-color 0.15s;
+    font-size: 13px;
+}
+.fc-poll-opt:hover:not(.ended) { border-color: #8b5cf6; }
+.fc-poll-opt.voted  { border-color: #8b5cf6; }
+.fc-poll-opt.ended  { cursor: default; }
+
+.fc-poll-opt-bar {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: #f1f3f7;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+    pointer-events: none;
+}
+
+.fc-poll-opt-text { flex: 1; position: relative; z-index: 1; color: #374151; }
+.fc-poll-opt-pct  { font-size: 12px; font-weight: 700; color: #6b7280; z-index: 1; }
+.fc-poll-opt-cnt  { font-size: 11px; color: #94a3b8; z-index: 1; white-space: nowrap; }
+.fc-poll-voted-mark { color: #8b5cf6; font-weight: 700; font-size: 13px; z-index: 1; }
+.fc-poll-total { font-size: 11px; color: #94a3b8; text-align: right; }
+
+/* ── 댓글 ── */
+.fc-comments-wrap { border-top: 1px solid #f0f2f8; padding-top: 8px; }
+
+.fc-comment-toggle {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-size: 12px; color: #94a3b8; padding: 2px 4px;
+    border-radius: 5px; transition: color 0.12s;
+}
+.fc-comment-toggle:hover { color: #667eea; }
+
+.fc-comment-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.fc-comment-loading { font-size: 12px; color: #94a3b8; padding: 4px; }
+
+.fc-comment-item { display: flex; gap: 8px; align-items: flex-start; }
+.fc-comment-body { flex: 1; }
+.fc-comment-meta { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+.fc-comment-name { font-size: 12px; font-weight: 700; color: #374151; }
+.fc-comment-time { font-size: 11px; color: #b0b5c4; }
+.fc-comment-text { font-size: 13px; color: #4a5568; line-height: 1.5; white-space: pre-wrap; }
+
+.fc-comment-input-row { display: flex; gap: 8px; align-items: flex-start; margin-top: 4px; }
+.fc-comment-input {
+    flex: 1; padding: 7px 10px;
+    border: 1.5px solid #e8eaf0; border-radius: 8px;
+    font-size: 13px; font-family: inherit; outline: none; resize: none;
+    transition: border-color 0.15s;
+}
+.fc-comment-input:focus { border-color: #667eea; }

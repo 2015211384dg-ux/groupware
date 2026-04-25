@@ -1,0 +1,186 @@
+.cba-page {
+    padding: 28px;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 헤더 */
+.cba-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+.cba-header-left { display: flex; align-items: center; gap: 14px; }
+.cba-header-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
+.cba-title { font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 2px; }
+.cba-subtitle { font-size: 13px; color: #6b7280; margin: 0; }
+
+.cba-reindex-btn {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 16px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s, background 0.15s;
+}
+.cba-reindex-btn:hover:not(:disabled) { border-color: #667eea; color: #667eea; background: #f5f3ff; }
+.cba-reindex-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* 통계 */
+.cba-stats {
+    display: flex; gap: 12px;
+}
+.cba-stat {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.cba-stat-num { font-size: 16px; font-weight: 700; color: #111827; }
+.cba-stat-label { font-size: 12px; color: #9ca3af; }
+
+/* 업로드 드롭존 */
+.cba-dropzone {
+    border: 2px dashed #e5e7eb;
+    border-radius: 14px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: #fafafa;
+    transition: border-color 0.2s, background 0.2s;
+}
+.cba-dropzone:hover { border-color: #667eea; background: #f5f3ff; }
+.cba-dropzone.drag-over { border-color: #667eea; background: #ede9fe; }
+.cba-dropzone.uploading { cursor: not-allowed; background: #f5f5f5; }
+.cba-drop-uploading { display: flex; align-items: center; gap: 10px; color: #667eea; font-size: 14px; }
+.cba-drop-text { margin: 0; font-size: 14px; color: #4b5563; }
+.cba-drop-text span { color: #667eea; font-weight: 600; }
+.cba-drop-hint { margin: 0; font-size: 12px; color: #9ca3af; }
+
+/* 문서 목록 */
+.cba-doc-list {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    overflow: hidden;
+}
+.cba-doc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.1s;
+}
+.cba-doc-row:last-child { border-bottom: none; }
+.cba-doc-row:hover { background: #fafafa; }
+.cba-doc-row.skel { gap: 12px; }
+
+.cba-ext-badge {
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+.cba-doc-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cba-doc-name { font-size: 13px; font-weight: 500; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cba-doc-meta { font-size: 12px; color: #9ca3af; }
+
+.cba-del-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    flex-shrink: 0;
+}
+.cba-del-btn:hover { color: #ef4444; border-color: #fecaca; background: #fef2f2; }
+
+.cba-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 24px;
+    color: #9ca3af;
+}
+.cba-empty p { margin: 0; font-size: 14px; font-weight: 500; }
+.cba-empty span { font-size: 12px; }
+
+/* 삭제 확인 모달 */
+.cba-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9000;
+    animation: cba-fadein 0.15s ease;
+}
+.cba-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    animation: cba-popin 0.2s ease;
+}
+.cba-modal-icon {
+    width: 52px; height: 52px;
+    background: #fef2f2;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+.cba-modal-title { font-size: 16px; font-weight: 700; color: #111827; margin: 0; }
+.cba-modal-desc { font-size: 13px; color: #6b7280; margin: 0; text-align: center; line-height: 1.6; }
+.cba-modal-actions { display: flex; gap: 8px; width: 100%; margin-top: 4px; }
+.cba-modal-cancel {
+    flex: 1; padding: 10px;
+    border: 1.5px solid #e5e7eb; border-radius: 10px;
+    background: #fff; color: #374151;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+}
+.cba-modal-cancel:hover { background: #f9fafb; }
+.cba-modal-confirm {
+    flex: 1; padding: 10px;
+    border: none; border-radius: 10px;
+    background: #ef4444; color: #fff;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s;
+}
+.cba-modal-confirm:hover { background: #dc2626; }
+
+@keyframes cba-spin { to { transform: rotate(360deg); } }
+@keyframes cba-fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cba-popin { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }

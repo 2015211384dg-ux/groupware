@@ -1,0 +1,290 @@
+/* ProjectCreateModal.css */
+.pcm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.pcm-box {
+    background: #fff;
+    border-radius: 20px;
+    width: 520px;
+    max-width: calc(100vw - 32px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+    animation: pcmIn 0.2s ease;
+}
+
+@keyframes pcmIn {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.pcm-header {
+    padding: 28px 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pcm-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+}
+
+.pcm-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: #f2f4f8;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.pcm-close:hover { background: #e2e5ef; }
+
+.pcm-body {
+    padding: 24px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.pcm-field { display: flex; flex-direction: column; gap: 7px; }
+
+.pcm-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.pcm-input,
+.pcm-textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #191f28;
+    background: #fff;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+    font-family: inherit;
+    resize: none;
+}
+
+.pcm-input:focus,
+.pcm-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+}
+
+.pcm-input::placeholder,
+.pcm-textarea::placeholder { color: #b0b5c4; }
+
+/* 이모지 + 색상 */
+.pcm-emoji-color {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.pcm-emoji-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s, transform 0.15s;
+    flex-shrink: 0;
+}
+
+.pcm-emoji-btn:hover { opacity: 0.85; transform: scale(1.05); }
+
+.pcm-color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1;
+}
+
+.pcm-color-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.12s, border-color 0.12s;
+}
+
+.pcm-color-dot.selected { border-color: #fff; box-shadow: 0 0 0 2px var(--c); transform: scale(1.1); }
+.pcm-color-dot:hover { transform: scale(1.1); }
+
+/* 홈탭 선택 */
+.pcm-tabs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.pcm-tab-btn {
+    padding: 9px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.pcm-tab-btn.selected {
+    border-color: #667eea;
+    background: #f0f2ff;
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* 토글 */
+.pcm-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #f8f9ff;
+    border: 1.5px solid #edf0f7;
+}
+
+.pcm-toggle-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #191f28;
+}
+
+.pcm-toggle-sub {
+    font-size: 11.5px;
+    color: #8b8fa8;
+    margin-top: 2px;
+}
+
+.pcm-toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.pcm-toggle input { opacity: 0; width: 0; height: 0; }
+
+.pcm-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pcm-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.pcm-toggle input:checked + .pcm-toggle-slider { background: #667eea; }
+.pcm-toggle input:checked + .pcm-toggle-slider::before { transform: translateX(20px); }
+
+/* 제출 버튼 */
+.pcm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 4px;
+}
+
+.pcm-btn-cancel {
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e5ef;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.pcm-btn-cancel:hover { background: #f2f4f8; }
+
+.pcm-btn-submit {
+    padding: 11px 24px;
+    border-radius: 10px;
+    border: none;
+    background: #667eea;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.pcm-btn-submit:hover:not(:disabled) { background: #5a6fd6; }
+.pcm-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* 이모지 피커 팝업 */
+.pcm-emoji-picker {
+    position: absolute;
+    z-index: 10;
+    background: #fff;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: repeat(5, 40px);
+    gap: 6px;
+    margin-top: 6px;
+    top: 100%;
+    left: 0;
+}
+
+.pcm-emoji-opt {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.1s;
+    color: #4a5568;
+}
+
+.pcm-emoji-opt:hover { background: #f0f2ff; color: #667eea; }
+.pcm-emoji-opt.selected { color: #fff; }

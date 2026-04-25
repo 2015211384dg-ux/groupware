@@ -1,0 +1,428 @@
+/* TaskDetailPanel.css */
+.tdp-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 500;
+}
+
+.tdp-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 440px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 32px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    z-index: 501;
+    animation: tdpIn 0.22s ease;
+}
+
+@keyframes tdpIn {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+}
+
+/* ── 패널 헤더 ── */
+.tdp-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0f2f8;
+    flex-shrink: 0;
+}
+
+.tdp-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: #f2f4f8;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.tdp-close:hover { background: #e2e5ef; }
+
+.tdp-title-input {
+    flex: 1;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    color: #191f28;
+    background: transparent;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    outline: none;
+}
+
+.tdp-title-input:hover { background: #f7f8fc; }
+.tdp-title-input:focus { background: #f0f2ff; }
+
+.tdp-delete {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    color: #e53e3e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.tdp-delete:hover { background: #fff5f5; opacity: 1; }
+
+/* ── 스크롤 바디 ── */
+.tdp-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── 메타 행 ── */
+.tdp-meta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tdp-select {
+    padding: 7px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+
+.tdp-select:focus { outline: none; border-color: #667eea; }
+
+/* 상태 드롭다운 색상 */
+.tdp-select.s-todo       { border-color: #d1d5db; color: #8b8fa8; }
+.tdp-select.s-in_progress { border-color: #667eea; color: #667eea; background: #f0f2ff; }
+.tdp-select.s-done       { border-color: #48bb78; color: #38a169; background: #f0fff4; }
+.tdp-select.s-on_hold    { border-color: #f6ad55; color: #c05621; background: #fffaf0; }
+
+/* ── 섹션 ── */
+.tdp-section { display: flex; flex-direction: column; gap: 8px; }
+
+.tdp-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8b8fa8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── 담당자 ── */
+.tdp-assignees {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.tdp-assignee-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 6px;
+    background: #f0f2ff;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.tdp-assignee-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tdp-assignee-remove {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.08);
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    padding: 0;
+    transition: background 0.12s;
+}
+
+.tdp-assignee-remove:hover { background: #e53e3e; color: #fff; }
+
+.tdp-btn-add-assignee {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1.5px dashed #d1d5db;
+    background: none;
+    font-size: 12.5px;
+    color: #8b8fa8;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.tdp-btn-add-assignee:hover { border-color: #667eea; color: #667eea; }
+
+/* 담당자 검색 드롭다운 */
+.tdp-member-dropdown {
+    background: #fff;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.tdp-member-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: #191f28;
+    transition: background 0.1s;
+}
+
+.tdp-member-item:hover { background: #f7f8fc; }
+.tdp-member-item.selected { background: #f0f2ff; color: #667eea; }
+
+/* ── 날짜 ── */
+.tdp-date-row {
+    display: flex;
+    gap: 10px;
+}
+
+.tdp-date-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tdp-date-label {
+    font-size: 11.5px;
+    color: #8b8fa8;
+    font-weight: 500;
+}
+
+.tdp-date-input {
+    padding: 8px 10px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #191f28;
+    background: #fff;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.tdp-date-input:focus { outline: none; border-color: #667eea; }
+
+/* ── 진행률 ── */
+.tdp-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tdp-progress-slider {
+    flex: 1;
+    accent-color: #667eea;
+    cursor: pointer;
+}
+
+.tdp-progress-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #667eea;
+    min-width: 36px;
+    text-align: right;
+}
+
+/* ── 설명 ── */
+.tdp-desc-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: #191f28;
+    background: #fff;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    line-height: 1.5;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+}
+
+.tdp-desc-textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+.tdp-desc-textarea::placeholder { color: #b0b5c4; }
+
+/* ── 저장 버튼 ── */
+.tdp-save-btn {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #667eea;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+}
+
+.tdp-save-btn:hover { background: #5a6fd6; }
+.tdp-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── 댓글 구분선 ── */
+.tdp-divider {
+    height: 1px;
+    background: #f0f2f8;
+    margin: 4px 0;
+}
+
+/* ── 댓글 ── */
+.tdp-comments { display: flex; flex-direction: column; gap: 12px; }
+
+.tdp-comment {
+    display: flex;
+    gap: 9px;
+}
+
+.tdp-comment-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tdp-comment-body {
+    flex: 1;
+    background: #f7f8fc;
+    border-radius: 0 10px 10px 10px;
+    padding: 9px 12px;
+}
+
+.tdp-comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.tdp-comment-author {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #191f28;
+}
+
+.tdp-comment-time {
+    font-size: 11px;
+    color: #b0b5c4;
+}
+
+.tdp-comment-content {
+    font-size: 13px;
+    color: #4a5568;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ── 댓글 입력 ── */
+.tdp-comment-form {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    padding: 14px 20px;
+    border-top: 1px solid #f0f2f8;
+    flex-shrink: 0;
+    background: #fff;
+}
+
+.tdp-comment-input {
+    flex: 1;
+    padding: 9px 12px;
+    border: 1.5px solid #e2e5ef;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: #191f28;
+    background: #fff;
+    resize: none;
+    min-height: 38px;
+    max-height: 100px;
+    font-family: inherit;
+    line-height: 1.4;
+    transition: border-color 0.15s;
+}
+
+.tdp-comment-input:focus { outline: none; border-color: #667eea; }
+.tdp-comment-input::placeholder { color: #b0b5c4; }
+
+.tdp-comment-send {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: #667eea;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.tdp-comment-send:hover:not(:disabled) { background: #5a6fd6; }
+.tdp-comment-send:disabled { opacity: 0.5; cursor: not-allowed; }
