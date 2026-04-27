@@ -19,6 +19,7 @@ function PostList({ user }) {
 
     const [search, setSearch] = useState(searchParams.get('search') || '');
     const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+    const isUnreadFilter = searchParams.get('unread') === 'true';
 
     useEffect(() => {
         fetchBoard();
@@ -30,9 +31,10 @@ function PostList({ user }) {
         const params = {};
         if (page > 1) params.page = page;
         if (search) params.search = search;
+        if (isUnreadFilter) params.unread = 'true';
         setSearchParams(params, { replace: true });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [boardId, page]);
+    }, [boardId, page, isUnreadFilter]);
 
     const fetchBoard = async () => {
         try {
@@ -47,7 +49,7 @@ function PostList({ user }) {
         try {
             setLoading(true);
             const response = await api.get('/posts', {
-                params: { board_id: boardId, page, search, limit: 10 }
+                params: { board_id: boardId, page, search, limit: 10, ...(isUnreadFilter && { unread: 'true' }) }
             });
             setPinnedPosts(response.data.data.pinnedPosts || []);
             setPosts(response.data.data.posts || []);
@@ -65,6 +67,7 @@ function PostList({ user }) {
         fetchPosts();
         const params = {};
         if (search) params.search = search;
+        if (isUnreadFilter) params.unread = 'true';
         setSearchParams(params, { replace: true });
     };
 
@@ -209,6 +212,19 @@ function PostList({ user }) {
                 </div>
             </div>
 
+            {/* 미확인 공지 필터 배너 */}
+            {isUnreadFilter && (
+                <div className="unread-filter-banner">
+                    <span>미확인 공지만 표시 중</span>
+                    <button
+                        className="unread-filter-clear"
+                        onClick={() => navigate(`/boards/${boardId}`)}
+                    >
+                        전체 보기
+                    </button>
+                </div>
+            )}
+
             {/* 컨텐츠 */}
             <div className="posts-container">
                 <div className="posts-table-wrap">
@@ -252,13 +268,28 @@ function PostList({ user }) {
                         {allEmpty && (
                             <div className="empty-state">
                                 <div className="empty-icon"><IconFolder size={40} strokeWidth={1.2} /></div>
-                                <p>{search ? '검색 결과가 없습니다.' : '게시글이 없습니다.'}</p>
-                                {!search && (
+                                <p>
+                                    {isUnreadFilter
+                                        ? '미확인 공지사항이 없습니다.'
+                                        : search
+                                            ? '검색 결과가 없습니다.'
+                                            : '게시글이 없습니다.'
+                                    }
+                                </p>
+                                {!search && !isUnreadFilter && (
                                     <button
                                         className="empty-write-btn"
                                         onClick={() => navigate(`/boards/${boardId}/write`)}
                                     >
                                         첫 글 작성하기
+                                    </button>
+                                )}
+                                {isUnreadFilter && (
+                                    <button
+                                        className="empty-write-btn"
+                                        onClick={() => navigate(`/boards/${boardId}`)}
+                                    >
+                                        전체 공지 보기
                                     </button>
                                 )}
                             </div>

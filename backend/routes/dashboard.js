@@ -97,4 +97,40 @@ router.get('/stats', async (req, res) => {
     }
 });
 
+// ============================================
+// 새 댓글 목록 조회 (내 글에 달린 미확인 댓글이 있는 게시글)
+// ============================================
+router.get('/my-comments', async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const [posts] = await db.query(`
+            SELECT
+                p.id, p.title, p.created_at, p.board_id,
+                b.name AS board_name,
+                COUNT(DISTINCT c.id) AS new_comment_count,
+                (SELECT COUNT(*) FROM comments WHERE post_id = p.id AND is_deleted = FALSE) AS total_comment_count,
+                MAX(c.created_at) AS latest_comment_at
+            FROM posts p
+            JOIN comments c ON c.post_id = p.id
+            LEFT JOIN boards b ON p.board_id = b.id
+            WHERE p.user_id = ?
+              AND c.user_id != ?
+              AND c.is_deleted = FALSE
+              AND c.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+              AND c.created_at > (
+                  SELECT COALESCE(MAX(last_check), '2000-01-01')
+                  FROM comment_checks
+                  WHERE user_id = ?
+              )
+            GROUP BY p.id, p.title, p.created_at, p.board_id, b.name
+            ORDER BY MAX(c.created_at) DESC
+        `, [userId, userId, userId]);
+
+        res.json({ success: true, data: posts });
+    } catch (error) {
+        console.error('Dashboard my-comments error:', error);
+        res.status(500).json({ success: false, message: '조회 실패' });
+    }
+});
+
 module.exports = router;

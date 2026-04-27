@@ -5,7 +5,7 @@ import './Dashboard.css';
 import {
     IconBoard, IconApproval, IconAddressBook,
     IconCalendar, IconUser, IconHR, IconChat
-} from '../components/Icons';
+} from '../components/common/Icons';
 import { getCategoryColor } from '../utils/categoryColor';
 
 const Dashboard = memo(({ user }) => {
@@ -142,7 +142,11 @@ const Dashboard = memo(({ user }) => {
                             <span className="dash-card-title">나의 현황</span>
                         </div>
                         <div className="stats-grid-2x2">
-                            <div className="stats-cell">
+                            <div
+                                className="stats-cell stats-cell--clickable"
+                                onClick={() => navigate('/boards/1?unread=true')}
+                                title="미확인 공지 보기"
+                            >
                                 <span className="stats-cell-value">{stats.unreadNotices}</span>
                                 <span className="stats-cell-label">미확인 공지</span>
                             </div>
@@ -150,11 +154,19 @@ const Dashboard = memo(({ user }) => {
                                 <span className="stats-cell-value">{stats.myPosts}</span>
                                 <span className="stats-cell-label">내가 쓴 글</span>
                             </div>
-                            <div className="stats-cell">
+                            <div
+                                className="stats-cell stats-cell--clickable"
+                                onClick={() => navigate('/my-comments')}
+                                title="새 댓글 보기"
+                            >
                                 <span className="stats-cell-value">{stats.newComments}</span>
                                 <span className="stats-cell-label">새 댓글</span>
                             </div>
-                            <div className="stats-cell">
+                            <div
+                                className="stats-cell stats-cell--clickable"
+                                onClick={() => navigate('/approval?box=inbox')}
+                                title="결재 대기 보기"
+                            >
                                 <span className="stats-cell-value">{stats.ongoingTasks}</span>
                                 <span className="stats-cell-label">결재 대기</span>
                             </div>

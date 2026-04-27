@@ -12,17 +12,22 @@ router.use(authMiddleware);
 // ============================================
 // 게시글 목록 조회 (캐싱 5분)
 // ============================================
-router.get('/', cacheMiddleware(300), async (req, res) => {
+router.get('/', (req, res, next) => {
+    // unread 필터는 사용자별로 결과가 다르므로 캐시 건너뜀
+    if (req.query.unread === 'true') return next();
+    return cacheMiddleware(300)(req, res, next);
+}, async (req, res) => {
     try {
         const {
             board_id,
             search,
             category,
+            unread,
             page = 1,
             limit = 20
         } = req.query;
 
-        console.log('📋 게시글 목록 조회:', { board_id, search, category, page });
+        console.log('📋 게시글 목록 조회:', { board_id, search, category, unread, page });
 
         const offset = (page - 1) * limit;
 
@@ -49,6 +54,10 @@ router.get('/', cacheMiddleware(300), async (req, res) => {
         if (board_id) { filterClause += ' AND p.board_id = ?'; filterParams.push(board_id); }
         if (category) { filterClause += ' AND p.category = ?'; filterParams.push(category); }
         if (search) { filterClause += ' AND (p.title LIKE ? OR p.content LIKE ?)'; filterParams.push(`%${search}%`, `%${search}%`); }
+        if (unread === 'true') {
+            filterClause += ' AND p.is_notice = TRUE AND p.id NOT IN (SELECT post_id FROM post_views WHERE user_id = ?)';
+            filterParams.push(req.user.id);
+        }
 
         // 고정글: 항상 모든 페이지에 표시 (페이지네이션 제외)
         const pinnedQuery = baseSelect + filterClause + ' AND p.is_pinned = TRUE ORDER BY p.created_at DESC';

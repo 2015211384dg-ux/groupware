@@ -148,6 +148,14 @@
     background: #f8f9ff;
 }
 
+.stats-cell--clickable {
+    cursor: pointer;
+}
+
+.stats-cell--clickable:hover {
+    background: #f0f0f0;
+}
+
 .stats-cell-value {
     font-size: 30px;
     font-weight: 700;

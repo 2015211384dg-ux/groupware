@@ -103,6 +103,36 @@
     background: #5568d3;
 }
 
+/* 미확인 공지 필터 배너 */
+.unread-filter-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    background: #eef2ff;
+    border-bottom: 1px solid #c5d0f5;
+    font-size: 13px;
+    color: #3b5bdb;
+    font-weight: 500;
+}
+
+.unread-filter-clear {
+    margin-left: auto;
+    padding: 4px 12px;
+    border: 1px solid #3b5bdb;
+    border-radius: 20px;
+    background: transparent;
+    color: #3b5bdb;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.unread-filter-clear:hover {
+    background: #3b5bdb;
+    color: #fff;
+}
+
 /* 컨텐츠 영역 */
 .posts-container {
     flex: 1;

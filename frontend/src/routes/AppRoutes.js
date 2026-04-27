@@ -33,6 +33,7 @@ const Feedback         = lazy(() => import('../pages/Feedback'));
 const NotFound         = lazy(() => import('../pages/NotFound'));
 const ProjectHub       = lazy(() => import('../pages/ProjectHub'));
 const ProjectDetail    = lazy(() => import('../pages/ProjectDetail'));
+const MyComments       = lazy(() => import('../pages/MyComments'));
 
 // 관리자 페이지 — 일반 사용자는 절대 로드되지 않음
 const UserManagement      = lazy(() => import('../pages/UserManagement'));
@@ -114,6 +115,8 @@ function AppRoutes({ isAuthenticated, user, onLogin, onLogout, onPasswordChanged
                   <Route path="/budget/voucher-ai" element={<VoucherAI />} />
                   <Route path="/budget" element={<Navigate to="/budget/ar" replace />} />
                   <Route path="/admin/ar" element={<AdminRoute user={user}><ARAdmin user={user} /></AdminRoute>} />
+
+                  <Route path="/my-comments" element={<MyComments />} />
 
                   <Route path="/chatbot" element={<Chatbot />} />
                   <Route path="/feedback" element={<Feedback />} />
