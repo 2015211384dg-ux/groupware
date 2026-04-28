@@ -69,7 +69,8 @@ router.post('/login', [
         const { username, password } = req.body;
 
         const [users] = await db.query(
-            `SELECT u.*, e.employee_number, e.department_id, e.position, e.job_title
+            `SELECT u.*, e.employee_number, e.department_id, e.position, e.job_title,
+                    e.profile_image, e.phone, e.mobile
              FROM users u
              LEFT JOIN employees e ON u.id = e.user_id
              WHERE u.username = ? AND u.is_active = TRUE`,
