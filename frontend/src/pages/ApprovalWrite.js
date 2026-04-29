@@ -4,8 +4,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import api from '../services/authService';
 import './ApprovalWrite.css';
-import { IconHR, IconBuilding, IconPen, IconPaperclip, IconFile } from '../components/Icons';
-import { useToast } from '../components/Toast';
+import { IconHR, IconBuilding, IconPen, IconPaperclip, IconFile } from '../components/common/Icons';
+import { useToast } from '../components/common/Toast';
 
 // ─── 조직도 팝업 ────────────────────────────
 function OrgPopup({ onSelect, onClose, excludeIds = [] }) {
@@ -553,7 +553,10 @@ function ApprovalWrite() {
                     {/* 본문 에디터 */}
                     <div className="aw-section">
                         <div className="aw-field-group">
-                            <label className="aw-label">내용</label>
+                            <label className="aw-label">
+                                {selectedTmpl?.form_fields?.some(f => f.key === 'content' || f.label === '내용')
+                                    ? '비고' : '내용'}
+                            </label>
                             <div className="aw-editor-wrap">
                                 <ReactQuill
                                     ref={quillRef}

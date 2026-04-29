@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { reportClientError } from '../utils/errorReporter';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -49,6 +50,18 @@ api.interceptors.response.use(
             } finally {
                 isRefreshing = false;
             }
+        }
+
+        // 5xx 서버 오류 — 로그 엔드포인트 자체는 제외(무한 루프 방지)
+        const status = error.response?.status;
+        const url = error.config?.url || '';
+        if (status >= 500 && !url.includes('/logs/client-error')) {
+            reportClientError({
+                message: `서버 오류 ${status}: ${error.config?.method?.toUpperCase()} ${url}`,
+                page: window.location.pathname,
+                action: `${error.config?.method?.toUpperCase()} ${url}`,
+                errorType: 'API_ERROR',
+            });
         }
 
         return Promise.reject(error);

@@ -9,8 +9,13 @@ import { authService } from './services/authService';
 import api from './services/api';
 import MaintenancePage from './pages/MaintenancePage';
 import AppRoutes from './routes/AppRoutes';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import { setupGlobalErrorHandlers } from './utils/errorReporter';
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'];
+
+// 전역 JS 에러 핸들러 — 모듈 로드 시 1회 등록
+setupGlobalErrorHandlers();
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -104,21 +109,23 @@ function App() {
   }
 
   return (
-    <SettingsProvider>
-      <ToastProvider>
-      <ConfirmProvider>
-        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <AppRoutes
-            isAuthenticated={isAuthenticated}
-            user={user}
-            onLogin={handleLogin}
-            onLogout={handleLogout}
-            onPasswordChanged={handlePasswordChanged}
-          />
-        </Router>
-      </ConfirmProvider>
-      </ToastProvider>
-    </SettingsProvider>
+    <ErrorBoundary>
+      <SettingsProvider>
+        <ToastProvider>
+          <ConfirmProvider>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <AppRoutes
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+                onPasswordChanged={handlePasswordChanged}
+              />
+            </Router>
+          </ConfirmProvider>
+        </ToastProvider>
+      </SettingsProvider>
+    </ErrorBoundary>
   );
 }
 

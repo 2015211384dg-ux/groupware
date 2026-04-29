@@ -28,21 +28,21 @@
 .ap-write-side-btn {
     width: 100%;
     padding: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: #fff;
     border: none;
     border-radius: 10px;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: opacity 0.15s;
+    transition: background 0.18s, transform 0.12s;
 }
 
-.ap-write-side-btn:hover { opacity: 0.9; }
+.ap-write-side-btn:hover { background: #5a6fd6; transform: translateY(-1px); }
 
 .ap-nav { padding: 8px 0; }
 

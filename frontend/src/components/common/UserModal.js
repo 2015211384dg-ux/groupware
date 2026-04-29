@@ -105,6 +105,8 @@ function UserModal({ isOpen, onClose, user, onSuccess, currentUser }) {
             newErrors.username = '아이디를 입력하세요';
         } else if (formData.username.length < 4) {
             newErrors.username = '아이디는 4자 이상이어야 합니다';
+        } else if (!/^[a-zA-Z0-9_.]+$/.test(formData.username)) {
+            newErrors.username = '아이디는 영문, 숫자, 밑줄(_), 점(.)만 사용 가능합니다';
         }
 
         if (!formData.email.trim()) {

@@ -386,11 +386,13 @@ router.put('/:id', invalidateCache(/^api:.*\/api\/v1\/posts/), async (req, res) 
         }
 
         await db.query(
-            `UPDATE posts 
+            `UPDATE posts
              SET category = ?, title = ?, content = ?
              WHERE id = ?`,
             [category || null, title, content, req.params.id]
         );
+
+        logActivity('info', `게시글 수정: ID ${req.params.id} "${title}" (수정자: ${req.user.name})`, { userId: req.user.id, req });
 
         res.json({
             success: true,

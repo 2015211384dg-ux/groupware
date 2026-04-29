@@ -10,8 +10,19 @@ const { sendApprovalRequest, sendApprovalComplete, sendApprovalRejected } = requ
 const { validateMimeType } = require('../utils/mimeCheck');
 const { logAudit } = require('../utils/auditLog');
 
-// 이메일 fire-and-forget 헬퍼
-function mailSilent(fn) { fn().catch(err => console.error('메일 발송 실패:', err.message)); }
+// 이메일 fire-and-forget 헬퍼 — 성공/실패 모두 system_logs에 기록
+// context: { type, to, docTitle, docNumber, userId }
+function sendMailWithLog(fn, { type, to, docTitle, docNumber, userId } = {}) {
+    const label = `[${type}] "${docTitle}"(${docNumber || '-'}) → ${to}`;
+    fn()
+        .then(() => {
+            logActivity('info', `메일 발송 성공: ${label}`, { userId });
+        })
+        .catch(err => {
+            console.error('메일 발송 실패:', err.message);
+            logActivity('error', `메일 발송 실패: ${label} | 오류: ${err.message}`, { userId });
+        });
+}
 
 // 유저 이메일 조회
 async function getUserEmail(userId) {
@@ -358,14 +369,14 @@ router.post('/documents', async (req, res) => {
                     getUserEmail(req.user.id),
                 ]);
                 if (approver?.email) {
-                    mailSilent(() => sendApprovalRequest({
+                    sendMailWithLog(() => sendApprovalRequest({
                         to: approver.email,
                         approverName: approver.name,
                         drafterName: drafter?.name || req.user.name,
                         docTitle: title,
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
-                    }));
+                    }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
         }
@@ -426,6 +437,33 @@ router.put('/documents/:id', async (req, res) => {
                 `INSERT INTO approval_recipients (document_id, type, user_id) VALUES (?, ?, ?)`,
                 [req.params.id, r.type || 'CC', r.user_id]
             );
+        }
+
+        // 상신 시 첫 결재자에게 알림 + 이메일
+        if (submit && lines.length > 0) {
+            const firstApprover = lines.find(l => l.step === 1);
+            if (firstApprover) {
+                await db.query(
+                    `INSERT INTO approval_notifications (user_id, document_id, type, message)
+                     VALUES (?, ?, 'REQUEST', ?)`,
+                    [firstApprover.approver_id, req.params.id, `'${title}' 결재 요청이 도착했습니다.`]
+                );
+                const [approver, drafter] = await Promise.all([
+                    getUserEmail(firstApprover.approver_id),
+                    getUserEmail(req.user.id),
+                ]);
+                if (approver?.email) {
+                    sendMailWithLog(() => sendApprovalRequest({
+                        to: approver.email,
+                        approverName: approver.name,
+                        drafterName: drafter?.name || req.user.name,
+                        docTitle: title,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                    }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
+                }
+            }
+            logActivity('info', `결재 상신: "${title}" (문서번호: ${docNumber}, 기안자: ${req.user.name})`, { userId: req.user.id, req });
         }
 
         res.json({ success: true, data: { doc_number: docNumber } });
@@ -530,7 +568,7 @@ router.post('/documents/:id/action', async (req, res) => {
             );
             const drafter = await getUserEmail(doc.drafter_id);
             if (drafter?.email) {
-                mailSilent(() => sendApprovalRejected({
+                sendMailWithLog(() => sendApprovalRejected({
                     to: drafter.email,
                     drafterName: drafter.name,
                     docTitle: doc.title,
@@ -538,7 +576,7 @@ router.post('/documents/:id/action', async (req, res) => {
                     rejectorName: req.user.name,
                     comment,
                     docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
-                }));
+                }), { type: '결재반려', to: drafter.email, docTitle: doc.title, docNumber: doc.doc_number, userId: req.user.id });
             }
         } else {
             // 승인 → 다음 결재자 활성화
@@ -565,14 +603,14 @@ router.post('/documents/:id/action', async (req, res) => {
                 );
                 const nextApprover = await getUserEmail(nextLine.approver_id);
                 if (nextApprover?.email) {
-                    mailSilent(() => sendApprovalRequest({
+                    sendMailWithLog(() => sendApprovalRequest({
                         to: nextApprover.email,
                         approverName: nextApprover.name,
                         drafterName: req.user.name,
                         docTitle: doc.title,
                         docNumber: doc.doc_number,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
-                    }));
+                    }), { type: '결재요청', to: nextApprover.email, docTitle: doc.title, docNumber: doc.doc_number, userId: req.user.id });
                 }
             } else {
                 // 모든 결재 완료
@@ -588,13 +626,13 @@ router.post('/documents/:id/action', async (req, res) => {
                 );
                 const drafter = await getUserEmail(doc.drafter_id);
                 if (drafter?.email) {
-                    mailSilent(() => sendApprovalComplete({
+                    sendMailWithLog(() => sendApprovalComplete({
                         to: drafter.email,
                         drafterName: drafter.name,
                         docTitle: doc.title,
                         docNumber: doc.doc_number,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
-                    }));
+                    }), { type: '결재완료', to: drafter.email, docTitle: doc.title, docNumber: doc.doc_number, userId: req.user.id });
                 }
             }
         }

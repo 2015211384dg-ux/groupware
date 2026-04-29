@@ -191,7 +191,7 @@ router.get('/:id', cacheMiddleware(120), async (req, res) => {
 router.post('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), invalidateCache(/^api:.*\/api\/v1\/users/), invalidateCache(/^api:.*\/api\/v1\/departments/), invalidateCache(/^api:.*\/api\/v1\/addressbook/), [
     body('username').trim().notEmpty().withMessage('아이디를 입력해주세요.')
         .isLength({ min: 3, max: 50 }).withMessage('아이디는 3~50자여야 합니다.')
-        .matches(/^[a-zA-Z0-9_]+$/).withMessage('아이디는 영문, 숫자, 밑줄만 사용 가능합니다.'),
+        .matches(/^[a-zA-Z0-9_.]+$/).withMessage('아이디는 영문, 숫자, 밑줄, 점(.)만 사용 가능합니다.'),
     body('email').isEmail().withMessage('올바른 이메일 형식이 아닙니다.').normalizeEmail(),
     body('name').trim().notEmpty().withMessage('이름을 입력해주세요.').isLength({ max: 50 }),
     body('password').isLength({ min: 6, max: 100 }).withMessage('비밀번호는 6자 이상 100자 이하여야 합니다.'),

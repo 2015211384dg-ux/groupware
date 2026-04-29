@@ -120,12 +120,21 @@ app.use('/uploads', (req, res, next) => {
 }, express.static(path.join(__dirname, 'uploads')));
 
 // 요청 로깅
+const { logActivity } = require('./utils/logger');
 app.use((req, res, next) => {
     const hasCookie = !!req.cookies?.accessToken;
     res.on('finish', () => {
-        const mark = res.statusCode >= 400 ? '⚠️ ' : '';
+        const mark = res.statusCode >= 400 ? '[W] ' : '';
         const cookieInfo = req.url.startsWith('/api/') ? ` [cookie:${hasCookie ? 'O' : 'X'}]` : '';
         console.log(`${mark}[${new Date().toISOString()}] ${req.method} ${req.url} ${res.statusCode}${cookieInfo}`);
+
+        // 5xx 서버 오류는 DB 로그에도 기록
+        if (res.statusCode >= 500 && req.url.startsWith('/api/')) {
+            logActivity('error',
+                `서버 오류 ${res.statusCode}: ${req.method} ${req.url}`,
+                { userId: req.user?.id || null, req }
+            );
+        }
     });
     next();
 });
@@ -740,6 +749,7 @@ const chatbotRoutes         = require('./routes/chatbot');
 const voucherRoutes         = require('./routes/voucher');
 const projectRoutes         = require('./routes/projects');
 const accessReviewRoutes    = require('./routes/accessReview');
+const clientLogsRoutes      = require('./routes/clientLogs');
 
 app.use('/api/v1/auth',            authRoutes);
 app.use('/api/v1/users',           userRoutes);
@@ -764,6 +774,7 @@ app.use('/api/v1/chatbot',        chatbotRoutes);
 app.use('/api/v1/voucher',        voucherRoutes);
 app.use('/api/v1/projects',       projectRoutes);
 app.use('/api/v1/access-reviews', accessReviewRoutes);
+app.use('/api/v1/logs',          clientLogsRoutes);
 
 // ============================================
 // 에러 핸들링
