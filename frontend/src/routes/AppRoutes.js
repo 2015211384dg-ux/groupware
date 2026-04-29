@@ -9,6 +9,7 @@ import PopupNotice from '../components/common/PopupNotice';
 // 셸 바깥 진입점 — eager
 import Login from '../pages/Login';
 import MagicLogin from '../pages/MagicLogin';
+import PrivacyPolicy from '../pages/PrivacyPolicy';
 
 // 페이지 — lazy (방문할 때만 로드)
 const Dashboard        = lazy(() => import('../pages/Dashboard'));
@@ -69,6 +70,7 @@ function AppRoutes({ isAuthenticated, user, onLogin, onLogout, onPasswordChanged
   return (
     <Routes>
       <Route path="/auth/magic" element={<MagicLogin />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
       <Route
         path="/login"

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import ChatbotWidget from '../common/ChatbotWidget';
 import './Layout.css';
 
 function Layout({ children, user, onLogout }) {
@@ -25,7 +26,11 @@ function Layout({ children, user, onLogout }) {
             />
             <main className="main-content">
                 {children}
+                <footer className="layout-footer">
+                    <Link to="/privacy-policy" className="layout-privacy-link">개인정보 처리방침</Link>
+                </footer>
             </main>
+            <ChatbotWidget />
         </div>
     );
 }

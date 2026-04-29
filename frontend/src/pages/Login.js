@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { authService } from '../services/authService';
 import './Login.css';
 
@@ -93,6 +94,7 @@ function Login({ onLogin }) {
 
                 <div className="login-footer">
                     <p>© 2024 Company Groupware</p>
+                    <Link to="/privacy-policy" className="login-privacy-link">개인정보 처리방침</Link>
                 </div>
             </div>
         </div>

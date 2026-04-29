@@ -10,6 +10,7 @@
 | 위험평가 및 처리계획 | [RISK-ASSESSMENT.md](RISK-ASSESSMENT.md) | Clause 6.1 | 자산목록, 16개 위험 식별·평가·처리방안 (필수) |
 | 적용가능성 선언서 | [SOA.md](SOA.md) | Clause 6.1.3 | Annex A 93개 통제 적용여부 선언 (필수) |
 | 변경관리 절차서 | [CHANGE-MANAGEMENT.md](CHANGE-MANAGEMENT.md) | A.8.25, A.8.32 | 코드/DB/인프라 변경 절차, 보안 체크리스트 |
+| 개인정보 처리방침 | [PRIVACY-POLICY.md](PRIVACY-POLICY.md) | A.5.31, A.5.34 | 개인정보보호법 제30조에 따른 처리방침 (그룹웨어 footer 공개) |
 
 ## 기술적 보안 통제 구현 현황
 
