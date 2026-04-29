@@ -15,92 +15,185 @@
 
 - 코드 위치: `C:\groupware`
 - GitHub: https://github.com/2015211384dg-ux/groupware (main 브랜치)
-- 접속: `http://[서버IP]:3000` (백엔드 port 5001이 빌드된 React dist/ 함께 서빙)
-- PM2로 운영: `groupware-backend`(port 5001) + `groupware-frontend`(Vite dev, port 3000)
-- DB 포트: 3300 (기본 3306 아님)
+- 사용자 접속: `http://[서버IP]:3000` (Vite dev server가 프론트 서빙 + `/api/v1/*` → port 5001 프록시)
+- DB 포트: **3300** (기본 3306 아님 — 주의)
 
-### 주요 기능 목록
+### PM2 프로세스 구조 (ecosystem.config.js)
 
-| 기능 | 경로/파일 |
-|------|-----------|
-| 인증 (JWT + refresh token) | `backend/routes/auth.js` |
-| 게시판 (공지/업무/일반) | `backend/routes/posts.js`, `frontend/src/pages/PostList.js` |
-| 전자결재 (서식/결재선/승인/반려) | `backend/routes/approval.js`, `frontend/src/pages/Approval.js` |
-| 주소록/조직도 | `backend/routes/addressbook.js`, `frontend/src/pages/Organization.js` |
-| 부서 관리 | `backend/routes/departments.js` |
-| 사용자 관리 | `backend/routes/users.js`, `frontend/src/components/common/UserModal.js` |
-| 예산관리 (AR) | `backend/routes/ar.js`, `frontend/src/pages/AR.js` |
-| 프로젝트 관리 | `backend/routes/projects.js`, `frontend/src/pages/ProjectHub.js` |
-| 캘린더 | `backend/routes/calendar.js` |
-| 알림 (인앱 벨 + Electron 팝업) | `backend/routes/notifications.js`, `frontend/src/components/Layout/Header.js` |
-| 메일 발송 (nodemailer, Office365) | `backend/utils/mailer.js` |
-| 시스템 로그 | `backend/utils/logger.js`, `backend/routes/clientLogs.js` |
-| AI 챗봇 (RAG) | `backend/routes/chatbot.js` (별도 Python 서비스 `http://localhost:8001`) |
-| AI 전표 자동화 | `frontend/src/pages/VoucherAI.js` (Ollama 연동) |
-| IT 자산관리 | 별도 프로젝트 (동일 서버 다른 포트) |
-| ISO 27001 보안 | `docs/iso27001/`, `backend/routes/accessReview.js` |
-| 데스크탑 앱 (Electron) | `desktop/main.js` |
+| PM2 이름 | 포트 | 역할 |
+|----------|------|------|
+| `groupware-backend` | 5001 | Node.js/Express API 서버 (NODE_ENV=production) |
+| `groupware-frontend` | 3000 | Vite dev server (`--port 3000 --host`) — 사용자 진입점 |
+| `rag-service` | 8001 | Python FastAPI — AI 챗봇 RAG 파이프라인 (`rag_service/main.py`) |
 
-### DB 주요 테이블
+> Vite가 `/api/v1/*` 요청을 `http://localhost:5001`로 프록시합니다 (`vite.config.js` proxy 설정).
+
+### 전체 기능 목록
+
+| 기능 | 백엔드 라우트 | 프론트 페이지 | 비고 |
+|------|--------------|--------------|------|
+| 인증 (JWT + refresh) | `routes/auth.js` | `pages/Login.js` | httpOnly 쿠키, 15분/7일 |
+| 매직링크 로그인 | `routes/auth.js` | `pages/MagicLogin.js` | 1회용 토큰 |
+| 강제 비밀번호 변경 | `routes/users.js` | `components/common/ForcePasswordChange.js` | 로그인 후 오버레이 |
+| 게시판 | `routes/posts.js`, `routes/boards.js`, `routes/comments.js`, `routes/attachments.js` | `pages/PostList.js`, `PostDetail.js`, `PostWrite.js` | 게시글 고정(is_pinned), 댓글, 첨부파일 |
+| 전체 검색 | `routes/search.js` | `pages/Search.js` | 게시글·사용자·결재 통합 |
+| 전자결재 | `routes/approval.js`, `routes/approvalAdmin.js` | `pages/Approval.js`, `ApprovalWrite.js`, `ApprovalDetail.js` | 서식 빌더, 결재선, 승인/반려, 메일 발송 |
+| 결재 관리자 | `routes/approvalAdmin.js` | `pages/ApprovalAdmin.js` | 서식 관리, 전체 문서 조회 |
+| 주소록 (전체/조직도) | `routes/addressbook.js` | `pages/Organization.js`, `AddressBook.js` | 트리형/카드형 조직도, 팀 리더 |
+| 개인 주소록 | `routes/addressbook.js` | `pages/PersonalContacts.js` | 즐겨찾기, 그룹 관리 |
+| HR (내 정보) | `routes/hr.js` | `pages/MyInfo.js` | 프로필 조회·수정 |
+| 캘린더 | `routes/events.js` | `pages/Calendar.js` | 개인/공유 이벤트 |
+| 예산관리 AR | `routes/ar.js` | `pages/AR.js` | 프로젝트별 예산·지출, 가계부 스타일 대시보드 |
+| AR 관리자 | `routes/ar.js` | `pages/ARAdmin.js` | 전체 프로젝트 관리 |
+| AI 전표 자동화 | `routes/voucher.js` | `pages/VoucherAI.js` | PDF 텍스트 추출 + Ollama 로컬 LLM |
+| 프로젝트 관리 | `routes/projects.js` | `pages/ProjectHub.js`, `ProjectDetail.js` | 업무 탭(간트/캘린더/인사이트) + 피드 탭 |
+| AI 챗봇 | `routes/chatbot.js` | `pages/Chatbot.js`, `ChatbotWidget.js` | RAG 파이프라인 (rag-service Python) |
+| 챗봇 관리자 | `routes/chatbot.js` | `pages/ChatbotAdmin.js` | 문서 업로드, 인덱스 관리 |
+| 피드백 | `routes/feedback.js` | `pages/Feedback.js` | 사용자 의견 제출 |
+| 피드백 관리자 | `routes/feedback.js` | `pages/FeedbackAdmin.js` | 답변 처리 |
+| 알림 (인앱 벨) | `routes/notifications.js`, `routes/approval.js` | `components/Layout/Header.js` | 30초 폴링, 결재·게시글·댓글·AR |
+| 새 댓글 알림 목록 | `routes/dashboard.js` | `pages/MyComments.js` | 내 글에 달린 새 댓글 목록 |
+| 대시보드 | `routes/dashboard.js` | `pages/Dashboard.js` | 통계 셀 클릭 → 상세 화면 이동 |
+| 팝업 공지 | `routes/settings.js` | `components/common/PopupNotice.js` | 관리자 설정, 로그인 후 표시 |
+| 점검 모드 | `routes/settings.js` | `pages/MaintenancePage.js` | ON 시 일반 사용자 차단, 30초 폴링 |
+| 시스템 설정 | `routes/settings.js` | `pages/Settings.js` | 사이트명, 세션 타임아웃, 점검 모드 등 |
+| 사용자 관리 | `routes/users.js` | `pages/UserManagement.js` | 등록/수정/잠금/비밀번호 이력 |
+| 부서 관리 | `routes/departments.js` | `pages/DepartmentManagement.js` | 부서 CRUD, 팀 리더 지정 |
+| 접근권한 검토 | `routes/accessReview.js` | `pages/AccessReview.js` | ISO 27001 반기 검토 (SUPER_ADMIN) |
+| 에러 수집 | `routes/clientLogs.js` | `utils/errorReporter.js`, `components/common/ErrorBoundary.jsx` | JS/API 오류 → system_logs |
+| 데스크탑 앱 | — | `desktop/main.js` | Electron, 15초 폴링 → 토스트 팝업 |
+
+### DB 전체 테이블
 
 ```
-users                  — 직원 계정 (role: USER/DEPT_ADMIN/HR_ADMIN/SUPER_ADMIN)
-employees              — 직원 상세 (부서/직급/연락처 등, users와 1:1)
-departments            — 부서 (leader_id FK→employees)
-posts / post_views     — 게시글 / 열람 기록
-approval_documents     — 결재문서
-approval_forms         — 결재 서식 (form_fields JSON)
-approval_notifications — 결재 알림 + AR 팀 배정 알림
-notifications          — 게시글·댓글·피드백 알림
-ar_projects / ar_expenses / ar_project_teams — 예산관리
-projects / tasks / task_groups — 프로젝트 관리
-system_logs            — 서버 오류, 클라이언트 오류, 이메일 발송 결과 로그
-audit_logs             — 민감 데이터 접근 로그
-password_history       — 비밀번호 이력 (최근 3개 재사용 차단)
-refresh_tokens         — JWT refresh 토큰
+# 인증·사용자
+users                    — 계정 (role: USER/DEPT_ADMIN/HR_ADMIN/SUPER_ADMIN, require_password_change)
+employees                — 직원 상세 (부서/직급/연락처, users와 1:1)
+departments              — 부서 (leader_id FK→employees)
+refresh_tokens           — JWT refresh 토큰
+password_history         — 비밀번호 이력 (최근 3개 재사용 차단, 10개 보관)
+magic_links              — 매직링크 1회용 토큰
+
+# 게시판
+boards                   — 게시판 정의 (name, description)
+posts                    — 게시글 (is_pinned, is_notice)
+post_views               — 게시글 열람 기록 (사용자별)
+comments                 — 게시글 댓글
+comment_checks           — 댓글 확인 기록 (새 댓글 탐지용)
+attachments              — 게시글 첨부파일
+
+# 캘린더
+calendar_events          — 캘린더 이벤트
+
+# 주소록
+personal_contacts        — 개인 주소록
+personal_contact_groups  — 개인 주소록 그룹
+
+# 전자결재
+approval_documents       — 결재문서 (status: draft/pending/approved/rejected)
+approval_forms           — 결재 서식 (form_fields JSON 배열)
+approval_lines           — 결재선 (결재자 순서)
+approval_steps           — 결재 단계별 처리 이력
+approval_notifications   — 결재 알림 + AR 팀 배정 알림 (document_id nullable, url, type)
+
+# 예산관리 AR
+ar_projects              — AR 프로젝트 (예산, 상태)
+ar_expenses              — 지출 내역
+ar_project_teams         — 프로젝트 열람 팀 (재경팀 id=4 자동 포함)
+ar_activity_logs         — AR 활동 히스토리
+
+# 프로젝트 관리
+projects                 — 프로젝트
+project_members          — 프로젝트 멤버
+task_groups              — 업무 그룹
+tasks                    — 업무 (status, priority, progress, dates)
+task_assignees           — 업무 담당자
+task_comments            — 업무 댓글
+project_activity_logs    — 프로젝트 활동 로그
+project_feeds            — 피드 탭 게시물
+feed_attachments         — 피드 첨부파일
+feed_comments            — 피드 댓글
+
+# 알림·피드백
+notifications            — 게시글·댓글·피드백·AR 80% 경고 알림
+feedback                 — 사용자 피드백
+popup_notices            — 팝업 공지 (활성 기간 설정)
+
+# 시스템·보안
+system_settings          — 전역 설정 (사이트명, 세션 타임아웃, 점검 모드, 팝업 공지 등)
+system_logs              — 서버/클라이언트 오류, 이메일 발송 결과 (90일 자동 삭제)
+audit_logs               — 민감 데이터 접근 로그
+access_reviews           — 접근권한 반기 검토 (ISO 27001)
+access_review_items      — 검토 항목별 처리 결과
 ```
 
-재경팀 `department_id = 4` (AR 권한 관련 하드코딩 주의)
+> **재경팀 `department_id = 4`** — AR 프로젝트 권한에 하드코딩. DB 변경 시 `ar.js` 코드도 함께 수정 필요.
 
 ### 핵심 아키텍처 패턴
 
-- **API 베이스**: `http://[서버IP]:5001/api/v1` (프론트에서는 `/api/v1` 상대경로 사용)
-- **인증**: httpOnly 쿠키 (accessToken 15분 + refreshToken 7일), Axios 인터셉터가 401 시 자동 refresh
-- **파일 서빙**: `backend/uploads/` → `/uploads/` 공개 (아바타, 결재 첨부, AI 결과물)
-- **아바타**: `backend/uploads/characters/` — 20개 캐릭터 이미지, 신규 사용자 랜덤 배정
-- **이메일**: `backend/utils/mailer.js` Office365 SMTP. 발송은 fire-and-forget (await 없음) + `sendMailWithLog()`로 system_logs 기록
-- **로깅**: `backend/utils/logger.js` → `logActivity(type, message, {userId, req})` → system_logs INSERT
-- **클라이언트 오류 수집**: `frontend/src/utils/errorReporter.js` → `POST /api/v1/logs/client-error`
-- **React ErrorBoundary**: `frontend/src/components/common/ErrorBoundary.jsx`
-- **점검 모드**: system_settings 테이블 → 관리자 아닌 사용자에게 MaintenancePage 표시
-- **세션 자동 로그아웃**: App.js 유휴 타이머 (기본 60분, Settings에서 조정 가능)
-- **svG 규칙**: 이모지 사용 금지, 모든 아이콘은 인라인 SVG (stroke="#667eea" 주색)
-- **border-left 색띠 금지**: 카드/항목에 색 장식선 사용 금지 (UI 피드백 규칙)
-- **username 허용 문자**: 영문·숫자·밑줄·점(.) — `/^[a-zA-Z0-9_.]+$/`
+**인증·보안**
+- httpOnly 쿠키 (accessToken 15분 + refreshToken 7일)
+- Axios 인터셉터: 401 → `/auth/refresh` 자동 시도, 실패 시 `/login` 리디렉트
+- 로그인 실패 N회 → 계정 잠금 (`users.failed_login_count`)
+- 비밀번호 이력 검사: `utils/logger.js` `checkPasswordHistory()` — 최근 3개 재사용 차단
+- CSRF 쿠키 플래그, CSP 헤더 (`helmet`), 감사 로그 (`audit_logs`)
+- Rate limit: 전체 API 3000/15분, 내부망 IP(10.x.x.x, 192.168.x.x) 면제, 클라이언트 로그 20/분
 
-### ecosystem.config.js 구조
+**파일·미디어**
+- 업로드: `multer` → `backend/uploads/` 하위 폴더 (approval/, characters/ 등)
+- `/uploads/*` 공개 접근 (인증 불필요) — 아바타, 결재 첨부, AI 결과물
+- 아바타: `uploads/characters/` 20개 캐릭터, 신규 사용자 랜덤 배정
 
-```js
-// groupware-backend: node backend/server.js, PORT=5001, NODE_ENV=production
-// groupware-frontend: vite preview (또는 serve), PORT=3000
-```
+**로깅**
+- `backend/utils/logger.js` → `logActivity(type, message, {userId, req})` → system_logs INSERT
+- 클라이언트 오류: `frontend/src/utils/errorReporter.js` → `POST /api/v1/logs/client-error` (5초 dedup)
+- React 렌더 오류: `ErrorBoundary.jsx` → `componentDidCatch` → reportClientError
+- Axios 응답 인터셉터: 5xx → reportClientError 자동 호출
+- 이메일: `sendMailWithLog(fn, ctx)` — fire-and-forget + 성공/실패 system_logs 기록
+
+**자동 정리 (server.js)**
+- `refresh_tokens` 만료 항목: 1시간마다 삭제 (`setInterval`)
+- `system_logs` 90일 이상: 매일 새벽 3시 삭제 (`scheduleDailyCleanup`)
+- 모든 테이블: 서버 시작 시 `initDB()` 자동 생성 (없으면 CREATE TABLE IF NOT EXISTS)
+
+**캐시**
+- `cacheMiddleware(ttl)`: 일부 라우트(조직도 제외)에 1분 메모리 캐시 적용
+
+**UI 규칙 (피드백으로 확정된 규칙 — 반드시 준수)**
+- 이모지 사용 금지 → 인라인 SVG로 대체 (`stroke="#667eea"` 주색)
+- `border-left` 색띠 카드 장식 금지
+- 버튼 배경: 그라디언트 → `#667eea` solid 단색
+- `text-transform: uppercase` 금지
+- 터치 타겟 최소 36px
+- username 허용 문자: `/^[a-zA-Z0-9_.]+$/` (영문·숫자·밑줄·점)
+
+**점검 모드**
+- `system_settings.maintenance = 1` → 미들웨어가 API 503 반환 (15초 캐시)
+- 관리자 아닌 사용자는 `MaintenancePage` 렌더 (App.js 30초 폴링)
+- 화이트리스트: `/auth/login`, `/auth/me`, `/auth/refresh`, `/settings/public`, `/settings/maintenance`
+
+**세션 타임아웃**
+- App.js 유휴 타이머: 기본 60분, `system_settings.session_timeout`으로 조정
+- `Settings.js` 관리자 페이지에서 변경 가능
 
 ### 자주 쓰는 PM2 명령
 
 ```powershell
-pm2 list                          # 상태 확인
-pm2 logs groupware-backend --lines 50   # 백엔드 로그
-pm2 restart groupware-backend --update-env  # 환경변수 반영 재시작
-pm2 flush                         # 로그 초기화
+pm2 list                                     # 전체 상태 (backend/frontend/rag-service)
+pm2 logs groupware-backend --lines 50        # 백엔드 로그
+pm2 logs rag-service --lines 30              # RAG 서비스 로그
+pm2 restart groupware-backend --update-env   # .env 변경 후 재시작
+pm2 flush                                    # 로그 초기화
+pm2 save                                     # 현재 프로세스 상태 저장 (재부팅 대비)
 ```
 
 ### 2026-04-29 기준 최근 추가된 기능
 
-1. **에러 로깅 시스템**: 클라이언트 JS 오류·5xx API 오류 → system_logs 자동 기록
+1. **에러 로깅 시스템**: 클라이언트 JS·5xx API 오류 → system_logs 자동 기록
 2. **이메일 발송 로그**: 결재 메일 성공/실패 → system_logs (`sendMailWithLog`)
-3. **결재 PUT 라우트 메일 누락 수정**: 초안 수정 후 상신 시에도 메일 발송
-4. **전자결재 UI 수정**: 내용 라벨 표시, 공문서 발신 신청의 중복 '내용' → '비고' 분기
-5. **아이디 점(.) 허용**: username 정규식 업데이트 (프론트/백엔드 모두)
+3. **결재 PUT 라우트 메일 누락 수정**: 초안 수정 후 재상신 시에도 메일 발송
+4. **전자결재 내용 라벨**: 서식 `form_fields`에 content 필드 있으면 '비고', 없으면 '내용'으로 동적 분기
+5. **username 점(.) 허용**: 정규식 업데이트 (백엔드 `users.js` + 프론트 `UserModal.js`)
 
 ---
 
