@@ -285,9 +285,9 @@
 | 항목 | 내용 |
 |------|------|
 | 부서명 | IT팀 |
-| 담당자 | 노송균 |
-| 이메일 | songgyun.noh@amphenol-sensors.com |
-| 전화 | 내선 776 |
+| 담당자 | 노송균 / 조중현 |
+| 이메일 | songgyun.noh@amphenol-sensors.com / jake.cho@amphenol-sensors.com |
+| 전화 | 내선 776 / 내선 777 |
 
 ---
 

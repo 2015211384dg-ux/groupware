@@ -320,9 +320,9 @@ function PrivacyPolicy() {
                         <h3>개인정보 담당부서</h3>
                         <ul>
                             <li>부서명: IT팀</li>
-                            <li>담당자: 노송균</li>
-                            <li>이메일: songgyun.noh@amphenol-sensors.com</li>
-                            <li>전화: 내선 776</li>
+                            <li>담당자: 노송균 / 조중현</li>
+                            <li>이메일: songgyun.noh@amphenol-sensors.com / jake.cho@amphenol-sensors.com</li>
+                            <li>전화: 내선 776 / 내선 777</li>
                         </ul>
                     </div>
                 </section>
