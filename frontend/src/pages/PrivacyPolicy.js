@@ -125,11 +125,11 @@ function PrivacyPolicy() {
                             <tr><th>구분</th><th>보유 기간</th><th>근거</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>임직원 계정 정보</td><td>재직 기간 + 퇴직 후 1년</td><td>회사 인사 규정</td></tr>
+                            <tr><td>임직원 계정 정보</td><td>재직 기간 + 퇴직 후 3년</td><td>근로기준법 제42조 (3년 보존), 임금채권 소멸시효 3년 준용</td></tr>
                             <tr><td>전자결재 문서</td><td>10년</td><td>상법 제33조, 국세기본법 제85조의3</td></tr>
-                            <tr><td>예산관리(AR) 지출 내역</td><td>5년</td><td>전자상거래법 시행령 제6조</td></tr>
-                            <tr><td>게시판·캘린더·프로젝트</td><td>작성자 퇴직 시까지</td><td>회사 업무 규정</td></tr>
-                            <tr><td>시스템 로그</td><td>90일 (자동 삭제)</td><td>매일 새벽 3시 자동 삭제</td></tr>
+                            <tr><td>예산관리(AR) 지출 내역</td><td>5년</td><td>국세기본법 제85조의3</td></tr>
+                            <tr><td>게시판·캘린더·프로젝트</td><td>시스템 운영 종료 시까지 (퇴직자 계정 비활성화, 데이터는 회사 자산으로 보관)</td><td>회사 업무 규정 (업무 연속성·인수인계 목적)</td></tr>
+                            <tr><td>시스템 로그</td><td>1년 (자동 삭제)</td><td>개인정보의 안전성 확보조치 기준 제8조 (접속기록 1년 이상 보관 의무)</td></tr>
                             <tr><td>감사 로그</td><td>3년</td><td>정보통신망법 시행령 제15조 준용</td></tr>
                             <tr><td>비밀번호 이력</td><td>최근 10개 보관</td><td>안전성 확보조치 기준</td></tr>
                             <tr><td>Refresh Token</td><td>발급 후 7일</td><td>인증 정책</td></tr>
@@ -155,7 +155,7 @@ function PrivacyPolicy() {
                     <h3>4.3 자동 파기 작업</h3>
                     <ul>
                         <li>refresh_tokens 만료 항목: 1시간마다 자동 삭제</li>
-                        <li>system_logs 90일 이상: 매일 새벽 3시 자동 삭제</li>
+                        <li>system_logs 1년(365일) 이상: 매일 새벽 3시 자동 삭제</li>
                     </ul>
                 </section>
 
@@ -312,15 +312,17 @@ function PrivacyPolicy() {
                     <div className="privacy-officer">
                         <h3>개인정보 보호책임자</h3>
                         <ul>
-                            <li>성명: (담당자명, 별도 지정)</li>
-                            <li>직위: IT팀장 또는 정보보호 담당 임원</li>
-                            <li>연락처: (전화번호) / (이메일)</li>
+                            <li>성명: 노송균</li>
+                            <li>직위: 선임</li>
+                            <li>이메일: songgyun.noh@amphenol-sensors.com</li>
+                            <li>전화: 내선 776</li>
                         </ul>
                         <h3>개인정보 담당부서</h3>
                         <ul>
                             <li>부서명: IT팀</li>
-                            <li>담당자: (담당자명)</li>
-                            <li>연락처: (전화번호) / (이메일)</li>
+                            <li>담당자: 노송균</li>
+                            <li>이메일: songgyun.noh@amphenol-sensors.com</li>
+                            <li>전화: 내선 776</li>
                         </ul>
                     </div>
                 </section>

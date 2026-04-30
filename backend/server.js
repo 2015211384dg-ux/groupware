@@ -812,7 +812,8 @@ setInterval(async () => {
     }
 }, 60 * 60 * 1000);
 
-// 90일 이상된 system_logs 매일 새벽 3시 삭제
+// 1년(365일) 이상된 system_logs 매일 새벽 3시 삭제
+// 근거: 개인정보의 안전성 확보조치 기준 제8조 (접속기록 1년 이상 보관 의무)
 function scheduleDailyCleanup() {
     const now = new Date();
     const next3am = new Date();
@@ -823,10 +824,10 @@ function scheduleDailyCleanup() {
     setTimeout(async function tick() {
         try {
             const [result] = await db.query(
-                'DELETE FROM system_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 90 DAY)'
+                'DELETE FROM system_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 365 DAY)'
             );
             if (result.affectedRows > 0) {
-                console.log(`[cleanup] 90일 이상 system_logs ${result.affectedRows}개 삭제`);
+                console.log(`[cleanup] 1년 이상 system_logs ${result.affectedRows}개 삭제`);
             }
         } catch (err) {
             console.error('[cleanup] system_logs 정리 실패:', err.message);
