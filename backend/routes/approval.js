@@ -7,6 +7,7 @@ const { authMiddleware } = require('../middleware/auth');
 const db = require('../config/database');
 const { logActivity } = require('../utils/logger');
 const { sendApprovalRequest, sendApprovalComplete, sendApprovalRejected } = require('../utils/mailer');
+const { sendTeamsCard } = require('../utils/teamsNotifier');
 const { validateMimeType } = require('../utils/mimeCheck');
 const { logAudit } = require('../utils/auditLog');
 
@@ -24,9 +25,16 @@ function sendMailWithLog(fn, { type, to, docTitle, docNumber, userId } = {}) {
         });
 }
 
-// 유저 이메일 조회
+// 유저 이메일 + Teams 멘션 표시명 + 알림 수단 조회
 async function getUserEmail(userId) {
-    const [[u]] = await db.query('SELECT email, name FROM users WHERE id = ?', [userId]);
+    const [[u]] = await db.query(
+        `SELECT u.email, u.name, u.m365_display_name,
+                COALESCE(s.approval_notify_method, 'EMAIL') AS notify_method
+         FROM users u
+         LEFT JOIN user_settings s ON s.user_id = u.id
+         WHERE u.id = ?`,
+        [userId]
+    );
     return u || null;
 }
 const multer = require('multer');
@@ -368,7 +376,19 @@ router.post('/documents', async (req, res) => {
                     getUserEmail(firstApprover.approver_id),
                     getUserEmail(req.user.id),
                 ]);
-                if (approver?.email) {
+                if (approver?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'REQUEST',
+                        lineType: firstApprover.type || 'APPROVAL',
+                        title,
+                        drafterName: drafter?.name || req.user.name,
+                        approverName: approver?.name,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                        mentionEmail: approver?.email,
+                        mentionDisplayName: approver?.m365_display_name,
+                    });
+                } else if (approver?.email) {
                     sendMailWithLog(() => sendApprovalRequest({
                         to: approver.email,
                         approverName: approver.name,
@@ -377,6 +397,33 @@ router.post('/documents', async (req, res) => {
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
                     }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
+                }
+            }
+            // 참조(REFERENCE) 라인도 상신 시점에 알림 발송
+            const refLines = lines.filter(l => l.type === 'REFERENCE');
+            for (const refLine of refLines) {
+                const ref = await getUserEmail(refLine.approver_id);
+                if (ref?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'REQUEST',
+                        lineType: 'REFERENCE',
+                        title,
+                        drafterName: drafter?.name || req.user.name,
+                        approverName: ref?.name,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                        mentionEmail: ref?.email,
+                        mentionDisplayName: ref?.m365_display_name,
+                    });
+                } else if (ref?.email) {
+                    sendMailWithLog(() => sendApprovalRequest({
+                        to: ref.email,
+                        approverName: ref.name,
+                        drafterName: drafter?.name || req.user.name,
+                        docTitle: title,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                    }), { type: '참조요청', to: ref.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
         }
@@ -452,7 +499,19 @@ router.put('/documents/:id', async (req, res) => {
                     getUserEmail(firstApprover.approver_id),
                     getUserEmail(req.user.id),
                 ]);
-                if (approver?.email) {
+                if (approver?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'REQUEST',
+                        lineType: firstApprover.type || 'APPROVAL',
+                        title,
+                        drafterName: drafter?.name || req.user.name,
+                        approverName: approver?.name,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        mentionEmail: approver?.email,
+                        mentionDisplayName: approver?.m365_display_name,
+                    });
+                } else if (approver?.email) {
                     sendMailWithLog(() => sendApprovalRequest({
                         to: approver.email,
                         approverName: approver.name,
@@ -461,6 +520,33 @@ router.put('/documents/:id', async (req, res) => {
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
                     }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
+                }
+            }
+            // 참조(REFERENCE) 라인 알림
+            const refLines = lines.filter(l => l.type === 'REFERENCE');
+            for (const refLine of refLines) {
+                const ref = await getUserEmail(refLine.approver_id);
+                if (ref?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'REQUEST',
+                        lineType: 'REFERENCE',
+                        title,
+                        drafterName: drafter?.name || req.user.name,
+                        approverName: ref?.name,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        mentionEmail: ref?.email,
+                        mentionDisplayName: ref?.m365_display_name,
+                    });
+                } else if (ref?.email) {
+                    sendMailWithLog(() => sendApprovalRequest({
+                        to: ref.email,
+                        approverName: ref.name,
+                        drafterName: drafter?.name || req.user.name,
+                        docTitle: title,
+                        docNumber,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                    }), { type: '참조요청', to: ref.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
             logActivity('info', `결재 상신: "${title}" (문서번호: ${docNumber}, 기안자: ${req.user.name})`, { userId: req.user.id, req });
@@ -567,7 +653,19 @@ router.post('/documents/:id/action', async (req, res) => {
                 [doc.drafter_id, req.params.id, `'${doc.title}' 문서가 반려되었습니다.`]
             );
             const drafter = await getUserEmail(doc.drafter_id);
-            if (drafter?.email) {
+            if (drafter?.notify_method === 'TEAMS') {
+                sendTeamsCard({
+                    kind: 'REJECTED',
+                    title: `[결재반려] ${doc.title}`,
+                    drafterName: drafter?.name,
+                    rejectorName: req.user.name,
+                    comment,
+                    docNumber: doc.doc_number,
+                    docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                    mentionEmail: drafter?.email,
+                    mentionDisplayName: drafter?.m365_display_name,
+                });
+            } else if (drafter?.email) {
                 sendMailWithLog(() => sendApprovalRejected({
                     to: drafter.email,
                     drafterName: drafter.name,
@@ -602,7 +700,19 @@ router.post('/documents/:id/action', async (req, res) => {
                     [nextLine.approver_id, req.params.id, `'${doc.title}' 결재 요청이 도착했습니다.`]
                 );
                 const nextApprover = await getUserEmail(nextLine.approver_id);
-                if (nextApprover?.email) {
+                if (nextApprover?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'REQUEST',
+                        lineType: nextLine.type || 'APPROVAL',
+                        title: doc.title,
+                        drafterName: req.user.name,
+                        approverName: nextApprover?.name,
+                        docNumber: doc.doc_number,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        mentionEmail: nextApprover?.email,
+                        mentionDisplayName: nextApprover?.m365_display_name,
+                    });
+                } else if (nextApprover?.email) {
                     sendMailWithLog(() => sendApprovalRequest({
                         to: nextApprover.email,
                         approverName: nextApprover.name,
@@ -625,7 +735,18 @@ router.post('/documents/:id/action', async (req, res) => {
                     [doc.drafter_id, req.params.id, `'${doc.title}' 문서가 최종 승인되었습니다.`]
                 );
                 const drafter = await getUserEmail(doc.drafter_id);
-                if (drafter?.email) {
+                if (drafter?.notify_method === 'TEAMS') {
+                    sendTeamsCard({
+                        kind: 'APPROVED',
+                        title: `[결재완료] ${doc.title}`,
+                        drafterName: drafter?.name,
+                        approverName: req.user.name,
+                        docNumber: doc.doc_number,
+                        docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        mentionEmail: drafter?.email,
+                        mentionDisplayName: drafter?.m365_display_name,
+                    });
+                } else if (drafter?.email) {
                     sendMailWithLog(() => sendApprovalComplete({
                         to: drafter.email,
                         drafterName: drafter.name,

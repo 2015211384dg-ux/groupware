@@ -45,7 +45,7 @@ router.get('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), cacheMiddleware(120), asyn
 
         let query = `
             SELECT u.id, u.username, u.name, u.email, u.role, u.is_active, u.last_login,
-                   u.login_fail_count, u.locked_until,
+                   u.login_fail_count, u.locked_until, u.m365_display_name,
                    e.employee_number, e.department_id, e.position, e.job_title,
                    e.mobile, e.status as employee_status, e.profile_image,
                    d.name as department_name
@@ -111,7 +111,7 @@ router.get('/', checkRole('SUPER_ADMIN', 'HR_ADMIN'), cacheMiddleware(120), asyn
 router.get('/my-settings', async (req, res) => {
     try {
         const [settings] = await db.query(
-            'SELECT id, user_id, email_notifications, desktop_notifications, post_notifications, comment_notifications, theme, language, show_birthday, show_profile, updated_at FROM user_settings WHERE user_id = ?',
+            'SELECT id, user_id, email_notifications, desktop_notifications, post_notifications, comment_notifications, theme, language, show_birthday, show_profile, approval_notify_method, updated_at FROM user_settings WHERE user_id = ?',
             [req.user.id]
         );
 
@@ -127,7 +127,8 @@ router.get('/my-settings', async (req, res) => {
                     theme: 'light',
                     language: 'ko',
                     show_birthday: true,
-                    show_profile: true
+                    show_profile: true,
+                    approval_notify_method: 'EMAIL'
                 }
             });
         }
@@ -151,8 +152,8 @@ router.get('/my-settings', async (req, res) => {
 router.get('/:id', cacheMiddleware(120), async (req, res) => {
     try {
         const [users] = await db.query(
-            `SELECT u.id, u.username, u.name, u.email, u.role, u.is_active, 
-                    u.created_at, u.last_login,
+            `SELECT u.id, u.username, u.name, u.email, u.role, u.is_active,
+                    u.created_at, u.last_login, u.m365_display_name,
                     e.employee_number, e.department_id, e.position, e.job_title,
                     e.extension, e.mobile, e.birth_date, e.hire_date,
                     e.status, e.seat_location, e.profile_image,
@@ -414,6 +415,7 @@ router.delete('/me/signature', async (req, res) => {
 router.put('/my-settings', [
     body('theme').optional().isIn(VALID_THEMES).withMessage('유효하지 않은 테마입니다.'),
     body('language').optional().isIn(VALID_LANGS).withMessage('유효하지 않은 언어입니다.'),
+    body('approval_notify_method').optional().isIn(['EMAIL', 'TEAMS']).withMessage('유효하지 않은 알림 방식입니다.'),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -429,7 +431,8 @@ router.put('/my-settings', [
             theme,
             language,
             show_birthday,
-            show_profile
+            show_profile,
+            approval_notify_method
         } = req.body;
 
         // 기존 설정 확인
@@ -450,6 +453,7 @@ router.put('/my-settings', [
                     language = ?,
                     show_birthday = ?,
                     show_profile = ?,
+                    approval_notify_method = COALESCE(?, approval_notify_method),
                     updated_at = NOW()
                 WHERE user_id = ?
             `, [
@@ -461,6 +465,7 @@ router.put('/my-settings', [
                 language,
                 show_birthday,
                 show_profile,
+                approval_notify_method,
                 req.user.id
             ]);
         } else {
@@ -475,8 +480,9 @@ router.put('/my-settings', [
                     theme,
                     language,
                     show_birthday,
-                    show_profile
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    show_profile,
+                    approval_notify_method
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
                 req.user.id,
                 email_notifications,
@@ -486,7 +492,8 @@ router.put('/my-settings', [
                 theme,
                 language,
                 show_birthday,
-                show_profile
+                show_profile,
+                approval_notify_method || 'EMAIL'
             ]);
         }
 
@@ -586,7 +593,8 @@ router.put('/:id', checkRole('SUPER_ADMIN', 'HR_ADMIN'), invalidateCache(/^api:.
             department_id,
             position,
             phone,
-            mobile
+            mobile,
+            m365_display_name
         } = req.body;
 
         // 사용자 존재 확인
@@ -620,6 +628,12 @@ router.put('/:id', checkRole('SUPER_ADMIN', 'HR_ADMIN'), invalidateCache(/^api:.
                 const hashedPassword = await bcrypt.hash(password, 10);
                 updateQuery += ', password = ?';
                 updateParams.push(hashedPassword);
+            }
+
+            // M365 표시명 override (Teams @멘션용)
+            if (m365_display_name !== undefined) {
+                updateQuery += ', m365_display_name = ?';
+                updateParams.push(m365_display_name && m365_display_name.trim() ? m365_display_name.trim() : null);
             }
 
             updateQuery += ' WHERE id = ?';

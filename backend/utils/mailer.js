@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer');
 
+const b64 = (svg) => `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+
+const ICON_REQUEST = b64(`<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#3182f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`);
+const ICON_APPROVED = b64(`<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#2cb967" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>`);
+const ICON_REJECTED = b64(`<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f04452" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>`);
+
 const transporter = nodemailer.createTransport({
     host: 'smtp.office365.com',
     port: 587,
@@ -19,6 +25,7 @@ async function sendApprovalRequest({ to, approverName, drafterName, docTitle, do
         subject: `[결재요청] ${docTitle}`,
         html: `
         <div style="font-family:'Malgun Gothic',sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e5e8eb;border-radius:12px">
+          <img src="${ICON_REQUEST}" width="44" height="44" alt="" style="display:block;margin-bottom:14px"/>
           <p style="font-size:18px;font-weight:700;color:#191f28;margin:0 0 8px">${docTitle}</p>
           <p style="font-size:13px;color:#8b95a1;margin:0 0 24px">문서번호 ${docNumber || '-'}</p>
 
@@ -42,6 +49,7 @@ async function sendApprovalComplete({ to, drafterName, docTitle, docNumber, docU
         subject: `[결재완료] ${docTitle}`,
         html: `
         <div style="font-family:'Malgun Gothic',sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e5e8eb;border-radius:12px">
+          <img src="${ICON_APPROVED}" width="44" height="44" alt="" style="display:block;margin-bottom:14px"/>
           <p style="font-size:18px;font-weight:700;color:#191f28;margin:0 0 8px">${docTitle}</p>
           <p style="font-size:13px;color:#8b95a1;margin:0 0 24px">문서번호 ${docNumber || '-'}</p>
 
@@ -64,6 +72,7 @@ async function sendApprovalRejected({ to, drafterName, docTitle, docNumber, reje
         subject: `[결재반려] ${docTitle}`,
         html: `
         <div style="font-family:'Malgun Gothic',sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e5e8eb;border-radius:12px">
+          <img src="${ICON_REJECTED}" width="44" height="44" alt="" style="display:block;margin-bottom:14px"/>
           <p style="font-size:18px;font-weight:700;color:#191f28;margin:0 0 8px">${docTitle}</p>
           <p style="font-size:13px;color:#8b95a1;margin:0 0 24px">문서번호 ${docNumber || '-'}</p>
 

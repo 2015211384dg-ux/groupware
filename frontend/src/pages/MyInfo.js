@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import api from '../services/authService';
-import { useToast } from '../components/Toast';
+import { useToast } from '../components/common/Toast';
 import './MyInfo.css';
-import { IconUser, IconEdit, IconCalendar } from '../components/Icons';
-import UserAvatar from '../components/UserAvatar';
+import { IconUser, IconEdit, IconCalendar, IconMail, IconChat } from '../components/common/Icons';
+import UserAvatar from '../components/common/UserAvatar';
 
 // ─── 서명 패드 모달 ───────────────────────
 function SignaturePad({ currentSignature, onSave, onClose }) {
@@ -169,6 +169,8 @@ function MyInfo({ user }) {
 
     const [formData, setFormData] = useState({ phone: '', mobile: '', email: '' });
     const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    const [notifyMethod, setNotifyMethod] = useState('EMAIL');
+    const [notifySaving, setNotifySaving] = useState(false);
 
     useEffect(() => { fetchUserInfo(); }, []);
 
@@ -187,18 +189,35 @@ function MyInfo({ user }) {
 
     const fetchUserInfo = async () => {
         try {
-            const res = await api.get('/auth/me');
-            setUserInfo(res.data.user);
+            const [meRes, settingsRes] = await Promise.all([
+                api.get('/auth/me'),
+                api.get('/users/my-settings').catch(() => ({ data: { data: {} } })),
+            ]);
+            setUserInfo(meRes.data.user);
             setFormData({
-                phone:  res.data.user.phone  || '',
-                mobile: res.data.user.mobile || '',
-                email:  res.data.user.email  || ''
+                phone:  meRes.data.user.phone  || '',
+                mobile: meRes.data.user.mobile || '',
+                email:  meRes.data.user.email  || ''
             });
+            setNotifyMethod(settingsRes.data?.data?.approval_notify_method || 'EMAIL');
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
     };
 
     const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+
+    const handleNotifyMethodChange = async (method) => {
+        setNotifyMethod(method);
+        setNotifySaving(true);
+        try {
+            await api.put('/users/my-settings', { approval_notify_method: method });
+            toast.success(method === 'TEAMS' ? 'Teams 알림으로 변경되었습니다.' : '이메일 알림으로 변경되었습니다.');
+        } catch {
+            toast.error('알림 설정을 저장하지 못했습니다.');
+        } finally {
+            setNotifySaving(false);
+        }
+    };
 
     const handleProfileImageChange = async (e) => {
         const file = e.target.files[0];
@@ -350,6 +369,43 @@ function MyInfo({ user }) {
                             <span className="sig-empty-sub">결재 승인/반려 시 서명이 표시됩니다.</span>
                         </div>
                     )}
+                </div>
+
+                {/* 알림 설정 */}
+                <div className="info-section">
+                    <h3 className="section-title">결재 알림 설정</h3>
+                    <div className="notify-method-group">
+                        <label className={`notify-method-option${notifyMethod === 'EMAIL' ? ' active' : ''}`}>
+                            <input
+                                type="radio"
+                                name="notifyMethod"
+                                value="EMAIL"
+                                checked={notifyMethod === 'EMAIL'}
+                                onChange={() => handleNotifyMethodChange('EMAIL')}
+                                disabled={notifySaving}
+                            />
+                            <span className="notify-method-icon"><IconMail size={20} /></span>
+                            <span className="notify-method-label">
+                                이메일
+                                <span className="notify-method-desc">결재 요청·승인·반려 알림을 이메일로 받습니다</span>
+                            </span>
+                        </label>
+                        <label className={`notify-method-option${notifyMethod === 'TEAMS' ? ' active' : ''}`}>
+                            <input
+                                type="radio"
+                                name="notifyMethod"
+                                value="TEAMS"
+                                checked={notifyMethod === 'TEAMS'}
+                                onChange={() => handleNotifyMethodChange('TEAMS')}
+                                disabled={notifySaving}
+                            />
+                            <span className="notify-method-icon"><IconChat size={20} /></span>
+                            <span className="notify-method-label">
+                                Microsoft Teams
+                                <span className="notify-method-desc">Teams 채널 @멘션으로 알림을 받습니다</span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
 
                 {/* 계정 정보 */}
