@@ -9,7 +9,7 @@ function PrivacyPolicy() {
                 <header className="privacy-header">
                     <h1>개인정보 처리방침</h1>
                     <div className="privacy-meta">
-                        <span>버전 1.0</span>
+                        <span>버전 1.1</span>
                         <span>·</span>
                         <span>시행일 2026-04-29</span>
                     </div>
@@ -353,6 +353,7 @@ function PrivacyPolicy() {
                         </thead>
                         <tbody>
                             <tr><td>1.0</td><td>2026-04-29</td><td>최초 제정</td></tr>
+                            <tr><td>1.1</td><td>2026-04-30</td><td>bcrypt salt round 수정, 계정 비활성화 절차 명확화, 담당부서 담당자 추가</td></tr>
                         </tbody>
                     </table>
                 </section>
