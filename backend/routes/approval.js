@@ -396,6 +396,7 @@ router.post('/documents', async (req, res) => {
                         docTitle: title,
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                        lineType: firstApprover.type || 'APPROVAL',
                     }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
@@ -423,6 +424,7 @@ router.post('/documents', async (req, res) => {
                         docTitle: title,
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${docId}`,
+                        lineType: 'REFERENCE',
                     }), { type: '참조요청', to: ref.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
@@ -519,6 +521,7 @@ router.put('/documents/:id', async (req, res) => {
                         docTitle: title,
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        lineType: firstApprover.type || 'APPROVAL',
                     }), { type: '결재요청', to: approver.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
@@ -546,6 +549,7 @@ router.put('/documents/:id', async (req, res) => {
                         docTitle: title,
                         docNumber,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        lineType: 'REFERENCE',
                     }), { type: '참조요청', to: ref.email, docTitle: title, docNumber, userId: req.user.id });
                 }
             }
@@ -720,6 +724,7 @@ router.post('/documents/:id/action', async (req, res) => {
                         docTitle: doc.title,
                         docNumber: doc.doc_number,
                         docUrl: `${process.env.APP_URL}/approval/documents/${req.params.id}`,
+                        lineType: nextLine.type || 'APPROVAL',
                     }), { type: '결재요청', to: nextApprover.email, docTitle: doc.title, docNumber: doc.doc_number, userId: req.user.id });
                 }
             } else {

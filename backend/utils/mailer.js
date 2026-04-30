@@ -17,12 +17,19 @@ const transporter = nodemailer.createTransport({
     tls: { rejectUnauthorized: false },
 });
 
+const REQUEST_LABEL = {
+    APPROVAL:  { subject: '결재요청', body: '결재 요청이 도착했습니다.', btn: '결재하러 가기' },
+    AGREEMENT: { subject: '합의요청', body: '합의 요청이 도착했습니다.', btn: '합의하러 가기' },
+    REFERENCE: { subject: '참조요청', body: '참조 문서가 도착했습니다.', btn: '문서 확인하기' },
+};
+
 // ── 결재 요청 이메일 (결재자에게) ──────────────────
-async function sendApprovalRequest({ to, approverName, drafterName, docTitle, docNumber, docUrl }) {
+async function sendApprovalRequest({ to, approverName, drafterName, docTitle, docNumber, docUrl, lineType }) {
+    const lbl = REQUEST_LABEL[lineType] || REQUEST_LABEL.APPROVAL;
     await transporter.sendMail({
         from: `"${process.env.SMTP_FROM_NAME || '그룹웨어'}" <${process.env.SMTP_USER}>`,
         to,
-        subject: `[결재요청] ${docTitle}`,
+        subject: `[${lbl.subject}] ${docTitle}`,
         html: `
         <div style="font-family:'Malgun Gothic',sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e5e8eb;border-radius:12px">
           <img src="${ICON_REQUEST}" width="44" height="44" alt="" style="display:block;margin-bottom:14px"/>
@@ -30,11 +37,11 @@ async function sendApprovalRequest({ to, approverName, drafterName, docTitle, do
           <p style="font-size:13px;color:#8b95a1;margin:0 0 24px">문서번호 ${docNumber || '-'}</p>
 
           <div style="background:#f9fafb;border-radius:8px;padding:16px 20px;margin-bottom:24px;font-size:13px;color:#4e5968;line-height:1.8">
-            <b>${approverName}</b>님께 결재 요청이 도착했습니다.<br>
+            <b>${approverName}</b>님께 ${lbl.body}<br>
             기안자: <b>${drafterName}</b>
           </div>
 
-          <a href="${docUrl}" style="display:inline-block;background:#3182f6;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600">결재하러 가기</a>
+          <a href="${docUrl}" style="display:inline-block;background:#3182f6;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600">${lbl.btn}</a>
 
           <p style="font-size:11px;color:#8b95a1;margin-top:28px">본 메일은 그룹웨어 결재 시스템에서 자동 발송되었습니다.</p>
         </div>`,
