@@ -268,7 +268,7 @@ function PrivacyPolicy() {
                         <tbody>
                             <tr><td>개인정보 열람</td><td><Link to="/hr/myinfo">내 정보</Link> 메뉴에서 직접 조회</td></tr>
                             <tr><td>개인정보 정정</td><td><Link to="/hr/myinfo">내 정보</Link>에서 직접 수정 (사번·부서는 인사 담당자 통해 요청)</td></tr>
-                            <tr><td>개인정보 삭제</td><td>퇴직 시 자동 비활성화 후 보유 기간 경과 시 삭제, 그 외는 보호책임자에게 요청</td></tr>
+                            <tr><td>개인정보 삭제</td><td>퇴직 처리 시 관리자(SUPER_ADMIN)가 계정 비활성화 처리 후 보유 기간 경과 시 삭제, 그 외는 보호책임자에게 요청</td></tr>
                             <tr><td>처리정지</td><td>보호책임자에게 서면·이메일 요청</td></tr>
                             <tr><td>전송 요구</td><td>보호책임자에게 요청 시 표준 형식으로 제공</td></tr>
                             <tr><td>동의 철회</td><td>개인 주소록 등 동의 기반 항목은 해당 화면에서 즉시 삭제 가능</td></tr>

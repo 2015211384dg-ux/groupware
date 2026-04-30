@@ -836,6 +836,7 @@ function scheduleDailyCleanup() {
     }, msUntil3am);
 }
 scheduleDailyCleanup();
+require('./utils/backup').scheduleDailyBackup();
 
 // ============================================
 // 서버 시작
