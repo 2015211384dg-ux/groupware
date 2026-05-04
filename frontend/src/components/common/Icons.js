@@ -77,6 +77,9 @@ export const IconDownload    = (p) => <Icon {...p} d={["M21 15v4a2 2 0 01-2 2H5a
 // 글로브 (언어)
 export const IconGlobe      = (p) => <Icon {...p} d={["M12 2a10 10 0 1010 10A10 10 0 0012 2z","M2 12h20","M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"]} />;
 
+// 모니터링
+export const IconMonitor    = (p) => <Icon {...p} d={["M2 3h20a1 1 0 011 1v13a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1z","M8 21h8","M12 17v4"]} />;
+
 // 저장
 export const IconSave       = (p) => <Icon {...p} d={["M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z","M17 21v-8H7v8","M7 3v5h8"]} />;
 

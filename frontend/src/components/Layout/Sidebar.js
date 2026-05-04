@@ -8,7 +8,7 @@ import UserAvatar from '../common/UserAvatar';
 import {
     IconHome, IconBoard, IconAddressBook, IconHR, IconCalendar,
     IconApproval, IconAdmin, IconSearch, IconMessageSquare,
-    IconBell, IconUser, IconSettings, IconLogout, IconBudget, IconProject
+    IconBell, IconUser, IconSettings, IconLogout, IconBudget, IconProject, IconMonitor
 } from '../common/Icons';
 
 const ROLE_LABEL = {
@@ -133,6 +133,7 @@ const Sidebar = memo(({ isOpen, onToggle, user, onLogout }) => {
                     { title: '피드백 관리', path: '/admin/feedback' },
                     ...(['SUPER_ADMIN','ADMIN'].includes(user?.role) ? [{ title: 'AR 관리', path: '/admin/ar' }] : []),
                     ...(['SUPER_ADMIN','ADMIN'].includes(user?.role) ? [{ title: 'AI 문서 관리', path: '/admin/chatbot' }] : []),
+                    ...(user?.role === 'SUPER_ADMIN' ? [{ title: '시스템 모니터', path: '/admin/monitor' }] : []),
                 ]
             });
         }

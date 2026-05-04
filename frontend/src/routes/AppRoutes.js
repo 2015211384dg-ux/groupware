@@ -45,6 +45,7 @@ const ARAdmin             = lazy(() => import('../pages/ARAdmin'));
 const FeedbackAdmin       = lazy(() => import('../pages/FeedbackAdmin'));
 const ChatbotAdmin        = lazy(() => import('../pages/ChatbotAdmin'));
 const AccessReview        = lazy(() => import('../pages/AccessReview'));
+const SystemMonitor       = lazy(() => import('../pages/SystemMonitor'));
 
 const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN', 'HR_ADMIN'];
 
@@ -131,6 +132,7 @@ function AppRoutes({ isAuthenticated, user, onLogin, onLogout, onPasswordChanged
                   <Route path="/admin/feedback" element={<AdminRoute user={user}><FeedbackAdmin /></AdminRoute>} />
                   <Route path="/admin/chatbot" element={<AdminRoute user={user}><ChatbotAdmin /></AdminRoute>} />
                   <Route path="/admin/access-review" element={<AdminRoute user={user}><AccessReview /></AdminRoute>} />
+                  <Route path="/admin/monitor" element={<AdminRoute user={user}><SystemMonitor user={user} /></AdminRoute>} />
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>

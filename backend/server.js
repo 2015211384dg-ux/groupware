@@ -750,6 +750,7 @@ const voucherRoutes         = require('./routes/voucher');
 const projectRoutes         = require('./routes/projects');
 const accessReviewRoutes    = require('./routes/accessReview');
 const clientLogsRoutes      = require('./routes/clientLogs');
+const systemMonitorRoutes   = require('./routes/systemMonitor');
 
 app.use('/api/v1/auth',            authRoutes);
 app.use('/api/v1/users',           userRoutes);
@@ -775,6 +776,7 @@ app.use('/api/v1/voucher',        voucherRoutes);
 app.use('/api/v1/projects',       projectRoutes);
 app.use('/api/v1/access-reviews', accessReviewRoutes);
 app.use('/api/v1/logs',          clientLogsRoutes);
+app.use('/api/v1/admin/monitor', systemMonitorRoutes);
 
 // ============================================
 // 에러 핸들링
